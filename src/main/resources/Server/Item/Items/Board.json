@@ -24,7 +24,7 @@
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/Example_Card.png",
+  "Icon": "Icons/ItemsGenerated/Example_Block.png",
   "Categories": [
     "Furniture.Benches"
   ],
@@ -34,7 +34,7 @@
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Blocks/board/Board.blockymodel",
+    "CustomModel": "Blocks/Board/Board.blockymodel",
     "CustomModelTexture": [
       {
         "Texture": "BlockTextures/Board.png",

@@ -1,5 +1,6 @@
 package com.giusdp.htduels;
 
+import com.giusdp.htduels.commands.ResetCameraCommand;
 import com.giusdp.htduels.interactions.BoardInteraction;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
