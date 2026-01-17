@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 public class ResetCameraCommand extends CommandBase {
 
     public ResetCameraCommand() {
-        super("resetcamera", "Resets your camera to normal first-person view");
+        super("reset", "Resets your camera to normal first-person view");
         this.setPermissionGroup(GameMode.Adventure);
     }
 

@@ -29,9 +29,10 @@ import javax.annotation.Nullable;
 public class BoardInteraction extends SimpleBlockInteraction {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private static final double X_OFFSET = 0.0;
+    private static final double X_OFFSET = 1.0;
     private static final double Y_OFFSET = 1.75;
     private static final double Z_OFFSET = 0.5;
+    private static final float CAMERA_YAW = 0.0f; // Change this to 90, 180, or 270 to rotate the view
     private static final float CAMERA_PITCH = -90.0f;
 
     public static final BuilderCodec<BoardInteraction> CODEC =
@@ -99,12 +100,12 @@ public class BoardInteraction extends SimpleBlockInteraction {
         settings.positionType = PositionType.Custom;
         settings.position = cameraPosition;
 
-        // Look straight down
+        // Look straight down with fixed orientation
         settings.rotationType = RotationType.Custom;
-        settings.rotation = new Direction(0, CAMERA_PITCH, 0);
+        settings.rotation = new Direction(CAMERA_YAW, CAMERA_PITCH, 0);
 
         // Freeze player movement
-        settings.movementMultiplier = new Vector3f(0, 0, 0);
+        settings.movementMultiplier = new com.hypixel.hytale.protocol.Vector3f(0, 0, 0);
         settings.applyMovementType = ApplyMovementType.Position;
 
         // Configure UI elements
@@ -112,10 +113,10 @@ public class BoardInteraction extends SimpleBlockInteraction {
         settings.displayReticle = false;
         settings.skipCharacterPhysics = true;
 
-        // Enable mouse input for clicking
+        // Enable mouse input for clicking on cards
         settings.sendMouseMotion = true;
-        settings.mouseInputType = MouseInputType.LookAtPlane;
-        settings.planeNormal = new Vector3f(0, 1, 0); // Y-up plane (table surface)
+        settings.mouseInputType = MouseInputType.LookAtTargetEntity; // Only detect card entities
+        settings.planeNormal = new com.hypixel.hytale.protocol.Vector3f(0, 1, 0); // Y-up plane (table surface)
 
         return settings;
     }

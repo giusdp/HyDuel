@@ -1,0 +1,24 @@
+{
+  "Model": "NPC/MISC/Card/Models/Card.blockymodel",
+  "Texture": "NPC/MISC/Card/Models/Card.png",
+  "EyeHeight": 0.1,
+  "MinScale": 1.0,
+  "MaxScale": 1.0,
+  "HitBox": {
+    "Min": {
+      "X": -0.15,
+      "Y": 0.0,
+      "Z": -0.2
+    },
+    "Max": {
+      "X": 0.15,
+      "Y": 0.5,
+      "Z": 0.2
+    }
+  },
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [15.0, 25.0, 0.0],
+    "Translation": [0.0, -10.0]
+  }
+}
