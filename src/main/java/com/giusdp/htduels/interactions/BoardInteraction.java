@@ -27,7 +27,10 @@ import javax.annotation.Nullable;
  */
 public class BoardInteraction extends SimpleBlockInteraction {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final double CAMERA_HEIGHT_OFFSET = 3.0;
+
+    private static final double X_OFFSET = 1.75;
+    private static final double Y_OFFSET = 1.75;
+    private static final double Z_OFFSET = 0.5;
     private static final float CAMERA_PITCH = -90.0f;
 
     public static final BuilderCodec<BoardInteraction> CODEC =
@@ -82,9 +85,9 @@ public class BoardInteraction extends SimpleBlockInteraction {
     }
 
     private Position calculateCameraPosition(@NonNull Vector3i boardPosition) {
-        double centerX = boardPosition.x + 0.5;
-        double centerY = boardPosition.y + CAMERA_HEIGHT_OFFSET;
-        double centerZ = boardPosition.z + 0.5;
+        double centerX = boardPosition.x + X_OFFSET;
+        double centerY = boardPosition.y + Y_OFFSET;
+        double centerZ = boardPosition.z + Z_OFFSET;
         return new Position(centerX, centerY, centerZ);
     }
 
