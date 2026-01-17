@@ -1,4 +1,3 @@
-# Hytale Plugin Template
+# HytaleDuels
 
-A template for Hytale java plugins. Created by Up, and slightly modified by Kaupenjoe. 
-
+A Hytale card game plugin.
