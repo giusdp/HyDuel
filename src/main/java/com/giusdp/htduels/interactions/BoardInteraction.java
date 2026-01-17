@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.*;
+import com.hypixel.hytale.protocol.MouseInputType;
 import com.hypixel.hytale.protocol.packets.camera.SetServerCamera;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -28,7 +29,7 @@ import javax.annotation.Nullable;
 public class BoardInteraction extends SimpleBlockInteraction {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private static final double X_OFFSET = 1.75;
+    private static final double X_OFFSET = 0.0;
     private static final double Y_OFFSET = 1.75;
     private static final double Z_OFFSET = 0.5;
     private static final float CAMERA_PITCH = -90.0f;
@@ -110,6 +111,11 @@ public class BoardInteraction extends SimpleBlockInteraction {
         settings.displayCursor = true;
         settings.displayReticle = false;
         settings.skipCharacterPhysics = true;
+
+        // Enable mouse input for clicking
+        settings.sendMouseMotion = true;
+        settings.mouseInputType = MouseInputType.LookAtPlane;
+        settings.planeNormal = new Vector3f(0, 1, 0); // Y-up plane (table surface)
 
         return settings;
     }

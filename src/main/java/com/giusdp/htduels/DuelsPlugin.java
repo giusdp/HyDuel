@@ -23,6 +23,12 @@ public class DuelsPlugin extends JavaPlugin {
         // Register custom interactions
         this.getCodecRegistry(Interaction.CODEC).register("BoardActivation", BoardInteraction.class, BoardInteraction.CODEC);
 
+        // Register handler
+        this.getEventRegistry().registerGlobal(
+            com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent.class,
+            BoardMouseHandler::handleMouseClick
+        );
+
         LOGGER.atInfo().log("HytaleDuels plugin initialized successfully!");
     }
 }
