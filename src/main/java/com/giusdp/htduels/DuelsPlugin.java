@@ -3,9 +3,11 @@ package com.giusdp.htduels;
 import com.giusdp.htduels.commands.ResetCameraCommand;
 import com.giusdp.htduels.commands.SpawnCardCommand;
 import com.giusdp.htduels.components.CardComponent;
+import com.giusdp.htduels.events.BoardMouseHandler;
 import com.giusdp.htduels.interactions.BoardInteraction;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -34,11 +36,8 @@ public class DuelsPlugin extends JavaPlugin {
         this.getCodecRegistry(Interaction.CODEC).register("BoardActivation", BoardInteraction.class, BoardInteraction.CODEC);
 
         // Register handler
-        this.getEventRegistry().registerGlobal(
-            com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent.class,
-            BoardMouseHandler::handleMouseClick
-        );
+        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
 
-        LOGGER.atInfo().log("HytaleDuels plugin initialized successfully!");
+        LOGGER.atInfo().log("Hytale Duels plugin initialized successfully!");
     }
 }

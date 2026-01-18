@@ -29,9 +29,9 @@ import javax.annotation.Nullable;
 public class BoardInteraction extends SimpleBlockInteraction {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private static final double X_OFFSET = 1.0;
+    private static final double X_OFFSET = 0.0;   // Center of 1-block width
     private static final double Y_OFFSET = 1.75;
-    private static final double Z_OFFSET = 0.5;
+    private static final double Z_OFFSET = 0.5;   // Center of 2-block depth
     private static final float CAMERA_YAW = 0.0f; // Change this to 90, 180, or 270 to rotate the view
     private static final float CAMERA_PITCH = -90.0f;
 
