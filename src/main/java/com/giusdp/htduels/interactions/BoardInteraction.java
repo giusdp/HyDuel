@@ -1,8 +1,11 @@
 package com.giusdp.htduels.interactions;
 
+import com.giusdp.htduels.components.Duel;
 import com.giusdp.htduels.ui.BoadGameUI;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -61,6 +64,8 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
         assert player != null;
         activateBoardCamera(player, targetBlock);
+
+        spawnDuel(commandBuffer);
     }
 
     /**
@@ -84,6 +89,13 @@ public class BoardInteraction extends SimpleBlockInteraction {
             cameraPosition.y,
             cameraPosition.z
         );
+    }
+
+    private void spawnDuel(CommandBuffer<EntityStore> commandBuffer) {
+        Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
+        holder.addComponent(Duel.getComponentType(), new Duel());
+        commandBuffer.addEntity(holder, AddReason.SPAWN);
+        LOGGER.atInfo().log("Duel entity spawned");
     }
 
     private Position calculateCameraPosition(@NonNull Vector3i boardPosition) {

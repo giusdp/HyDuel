@@ -1,6 +1,6 @@
 package com.giusdp.htduels.commands;
 
-import com.giusdp.htduels.components.CardComponent;
+import com.giusdp.htduels.components.Card;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
@@ -91,8 +91,8 @@ public class SpawnCardCommand extends CommandBase {
             }
 
             // Card component (our custom component!)
-            CardComponent cardComponent = new CardComponent();
-            holder.addComponent(CardComponent.getComponentType(), cardComponent);
+            Card card = new Card();
+            holder.addComponent(Card.getComponentType(), card);
 
             // Make it interactable
             holder.ensureComponent(Interactable.getComponentType());
@@ -101,7 +101,7 @@ public class SpawnCardCommand extends CommandBase {
             Ref<EntityStore> entityRef = store.addEntity(holder, AddReason.SPAWN);
 
             LOGGER.atInfo().log("Card spawned at position (%f, %f, %f) with name: %s",
-                cardPos.x, cardPos.y, cardPos.z, cardComponent.name);
+                cardPos.x, cardPos.y, cardPos.z, card.name);
         });
 
         ctx.sendMessage(Message.raw("Card spawned!"));

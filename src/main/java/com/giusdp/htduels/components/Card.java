@@ -9,19 +9,20 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
  * Component that marks an entity as a card.
  * Stores card-specific data.
  */
-public class CardComponent implements Component<EntityStore> {
+public class Card implements Component<EntityStore> {
     public String name = "Im a proto card";
 
-    public CardComponent() {
+
+    public Card() {
     }
 
-    public static ComponentType<EntityStore, CardComponent> getComponentType() {
+    public static ComponentType<EntityStore, Card> getComponentType() {
         return DuelsPlugin.cardComponent;
     }
 
     @Override
     public Component<EntityStore> clone() {
-        CardComponent component = new CardComponent();
+        Card component = new Card();
         component.name = this.name;
         return component;
     }
