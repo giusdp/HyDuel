@@ -2,11 +2,18 @@ package com.giusdp.htduels.duel.phases;
 
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.Phase;
+import com.giusdp.htduels.effects.EffectRepo;
 
-public class StartupPhase implements Phase {
+import java.util.List;
+import java.util.function.Function;
 
+public class StartupPhase extends Phase {
+    public StartupPhase() {
+        registerEffect(EffectRepo.fillHands());
+    }
     @Override
     public void onEnter(Duel duel) {
+        applyEffects(duel);
     }
 
     @Override

@@ -11,11 +11,17 @@ class DuelTest {
     @Test
     void newDuelStartsInStartupAndTransitionsToTurnStart() {
         Duel duel = new Duel();
-
-        assertEquals(StartupPhase.class, duel.getCurrentPhase().getClass());
-
+        assertEquals(StartupPhase.class, duel.currentPhase.getClass());
         duel.tick();
+        assertEquals(TurnStartPhase.class, duel.currentPhase.getClass());
+    }
 
-        assertEquals(TurnStartPhase.class, duel.getCurrentPhase().getClass());
+    @Test
+    void handsGetFilledOnStartup() {
+        Duel duel = new Duel();
+        duel.tick();
+        assertNotEquals(0, duel.playerHands.length);
+        assertEquals(5, duel.playerHands[0].cards.size());
+        assertEquals(5, duel.playerHands[1].cards.size());
     }
 }

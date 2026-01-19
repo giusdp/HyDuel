@@ -2,9 +2,20 @@ package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.duel.phases.StartupPhase;
 
+import java.util.List;
+
 public class Duel {
 
-    private Phase currentPhase = new StartupPhase();
+    public Hand[] playerHands;
+    public Phase currentPhase;
+
+    public Duel() {
+        playerHands = new Hand[2];
+        playerHands[0] = new Hand();
+        playerHands[1] = new Hand();
+        currentPhase = new StartupPhase();
+        currentPhase.onEnter(this);
+    }
 
     public void tick() {
         currentPhase.tick(this);
@@ -14,9 +25,5 @@ public class Duel {
         currentPhase.onExit(this);
         currentPhase = newPhase;
         currentPhase.onEnter(this);
-    }
-
-    public Phase getCurrentPhase() {
-        return currentPhase;
     }
 }
