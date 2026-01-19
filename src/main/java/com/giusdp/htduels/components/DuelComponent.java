@@ -7,8 +7,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class DuelComponent implements Component<EntityStore> {
-
-    private Duel duel;
+    public Duel duel;
 
     public DuelComponent() {
         duel = new Duel();
@@ -22,9 +21,5 @@ public class DuelComponent implements Component<EntityStore> {
     public Component<EntityStore> clone() {
         DuelComponent component = new DuelComponent();
         return component;
-    }
-
-    public Duel getDuel() {
-        return duel;
     }
 }

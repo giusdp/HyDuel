@@ -19,7 +19,7 @@ public class DuelTicker extends EntityTickingSystem<EntityStore> {
                      @NonNull CommandBuffer<EntityStore> commandBuffer) {
         DuelComponent duelComponent = archetypeChunk.getComponent(index, DuelComponent.getComponentType());
         if (duelComponent == null) return;
-        duelComponent.getDuel().tick();
+        duelComponent.duel.tick();
     }
 
     @Override

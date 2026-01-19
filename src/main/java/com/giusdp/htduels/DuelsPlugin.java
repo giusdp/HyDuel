@@ -1,5 +1,6 @@
 package com.giusdp.htduels;
 
+import com.giusdp.htduels.commands.DuelCommand;
 import com.giusdp.htduels.commands.ResetCameraCommand;
 import com.giusdp.htduels.commands.SpawnCardCommand;
 import com.giusdp.htduels.components.CardComponent;
@@ -33,6 +34,7 @@ public class DuelsPlugin extends JavaPlugin {
         duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
 
         // Register commands
+        this.getCommandRegistry().registerCommand(new DuelCommand());
         this.getCommandRegistry().registerCommand(new ResetCameraCommand());
         this.getCommandRegistry().registerCommand(new SpawnCardCommand());
 
