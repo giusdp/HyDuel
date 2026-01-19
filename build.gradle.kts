@@ -17,6 +17,13 @@ repositories {
 dependencies {
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 hytale {

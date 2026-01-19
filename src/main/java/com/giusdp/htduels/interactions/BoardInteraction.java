@@ -1,6 +1,6 @@
 package com.giusdp.htduels.interactions;
 
-import com.giusdp.htduels.components.Duel;
+import com.giusdp.htduels.components.DuelComponent;
 import com.giusdp.htduels.ui.BoadGameUI;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;
@@ -93,7 +93,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
     private void spawnDuel(CommandBuffer<EntityStore> commandBuffer) {
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        holder.addComponent(Duel.getComponentType(), new Duel());
+        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent());
         commandBuffer.addEntity(holder, AddReason.SPAWN);
         LOGGER.atInfo().log("Duel entity spawned");
     }

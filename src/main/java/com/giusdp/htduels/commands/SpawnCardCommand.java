@@ -1,6 +1,6 @@
 package com.giusdp.htduels.commands;
 
-import com.giusdp.htduels.components.Card;
+import com.giusdp.htduels.components.CardComponent;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
@@ -91,8 +91,8 @@ public class SpawnCardCommand extends CommandBase {
             }
 
             // Card component (our custom component!)
-            Card card = new Card();
-            holder.addComponent(Card.getComponentType(), card);
+            CardComponent card = new CardComponent();
+            holder.addComponent(CardComponent.getComponentType(), card);
 
             // Make it interactable
             holder.ensureComponent(Interactable.getComponentType());

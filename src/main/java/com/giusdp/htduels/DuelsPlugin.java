@@ -2,8 +2,8 @@ package com.giusdp.htduels;
 
 import com.giusdp.htduels.commands.ResetCameraCommand;
 import com.giusdp.htduels.commands.SpawnCardCommand;
-import com.giusdp.htduels.components.Card;
-import com.giusdp.htduels.components.Duel;
+import com.giusdp.htduels.components.CardComponent;
+import com.giusdp.htduels.components.DuelComponent;
 import com.giusdp.htduels.events.BoardMouseHandler;
 import com.giusdp.htduels.interactions.BoardInteraction;
 import com.giusdp.htduels.systems.DuelTicker;
@@ -18,8 +18,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class DuelsPlugin extends JavaPlugin {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    public static ComponentType<EntityStore, Card> cardComponent;
-    public static ComponentType<EntityStore, Duel> duelComponent;
+    public static ComponentType<EntityStore, CardComponent> cardComponent;
+    public static ComponentType<EntityStore, DuelComponent> duelComponent;
 
     public DuelsPlugin(JavaPluginInit init) {
         super(init);
@@ -29,8 +29,8 @@ public class DuelsPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         // Register custom components
-        cardComponent = this.getEntityStoreRegistry().registerComponent(Card.class, Card::new);
-        duelComponent = this.getEntityStoreRegistry().registerComponent(Duel.class, Duel::new);
+        cardComponent = this.getEntityStoreRegistry().registerComponent(CardComponent.class, CardComponent::new);
+        duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
 
         // Register commands
         this.getCommandRegistry().registerCommand(new ResetCameraCommand());
