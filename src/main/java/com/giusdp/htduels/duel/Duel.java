@@ -21,7 +21,7 @@ public class Duel {
         playerHands[0] = new Hand();
         playerHands[1] = new Hand();
 
-        registerHandler(DrawCards.class, new DrawCardsHandler(cardRepo));
+        registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
         registerHandler(DrawCards.class, new DrawCardsLogHandler());
         registerHandler(DuelStarted.class, new DuelStartedLogHandler());
 
@@ -40,10 +40,11 @@ public class Duel {
         currentPhase.onEnter(this);
     }
 
-    public <T extends DuelEvent> void registerHandler(Class<T> eventType, MoveHandler handler) {
-        eventBus.register(eventType, (short) 0, event -> handler.handle(event, this));
+    public <T extends DuelEvent> void registerHandler(Class<T> eventType, DuelEventHandler handler) {
+        eventBus.register(eventType, (short) 0, handler);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends DuelEvent> void emit(T event) {
         eventBus.post((Class<T>) event.getClass(), null, event);
     }

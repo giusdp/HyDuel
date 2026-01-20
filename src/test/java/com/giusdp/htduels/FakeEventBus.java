@@ -1,5 +1,6 @@
 package com.giusdp.htduels;
 
+import com.giusdp.htduels.duel.DuelEventHandler;
 import com.giusdp.htduels.duel.event_bus.GameEventBus;
 import com.hypixel.hytale.event.IEvent;
 
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
 
 public class FakeEventBus implements GameEventBus {
     private final List<Object> posted = new ArrayList<>();
-    private final Map<Class<?>, List<Consumer<?>>> handlers = new HashMap<>();
+    private final Map<Class<?>, List<DuelEventHandler>> handlers = new HashMap<>();
 
     @Override
     public <K, E extends IEvent<K>> void post(Class<E> eventClass, K key, E event) {
@@ -26,7 +27,7 @@ public class FakeEventBus implements GameEventBus {
     }
 
     @Override
-    public <K, E extends IEvent<K>> void register(Class<E> eventClass, short priority, Consumer<E> handler
+    public <K, E extends IEvent<K>> void register(Class<E> eventClass, short priority, DuelEventHandler handler
     ) {
         handlers.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(handler);
     }
