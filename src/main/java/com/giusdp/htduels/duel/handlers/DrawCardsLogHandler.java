@@ -4,7 +4,6 @@ import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.MoveHandler;
 import com.giusdp.htduels.duel.moves.DrawCards;
 import com.giusdp.htduels.duel.moves.Move;
-import org.jetbrains.annotations.UnknownNullability;
 
 public class DrawCardsLogHandler implements MoveHandler {
     @Override

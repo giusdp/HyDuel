@@ -1,13 +1,18 @@
 package com.giusdp.htduels;
 
-import com.giusdp.htduels.commands.DuelCommand;
-import com.giusdp.htduels.commands.ResetCameraCommand;
-import com.giusdp.htduels.commands.SpawnCardCommand;
-import com.giusdp.htduels.components.CardComponent;
-import com.giusdp.htduels.components.DuelComponent;
-import com.giusdp.htduels.events.BoardMouseHandler;
-import com.giusdp.htduels.interactions.BoardInteraction;
-import com.giusdp.htduels.systems.DuelTicker;
+import com.giusdp.htduels.command.DuelCommand;
+import com.giusdp.htduels.command.ResetCameraCommand;
+import com.giusdp.htduels.command.SpawnCardCommand;
+import com.giusdp.htduels.component.CardComponent;
+import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.asset.CardAsset;
+import com.giusdp.htduels.asset.CardAssetCodec;
+import com.giusdp.htduels.asset.CardAssetStore;
+import com.giusdp.htduels.duel.handlers.DrawCardsHandler;
+import com.giusdp.htduels.event.BoardMouseHandler;
+import com.giusdp.htduels.interaction.BoardInteraction;
+import com.giusdp.htduels.interaction.InteractionNames;
+import com.giusdp.htduels.system.DuelTicker;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
@@ -16,8 +21,12 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+import java.util.ArrayList;
+
 public class DuelsPlugin extends JavaPlugin {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
+    public static CardAssetStore cardAssetStore;
 
     public static ComponentType<EntityStore, CardComponent> cardComponent;
     public static ComponentType<EntityStore, DuelComponent> duelComponent;
@@ -29,25 +38,55 @@ public class DuelsPlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
-        // Register custom components
+        setupComponents();
+        setupSystems();
+
+        setupCommands();
+
+        setupInteractions();
+        setupEventHandlers();
+
+        setupCardAssetStore();
+
+        LOGGER.atInfo().log("HyDuels plugin ready.");
+    }
+
+    private void setupComponents() {
         cardComponent = this.getEntityStoreRegistry().registerComponent(CardComponent.class, CardComponent::new);
         duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
+    }
 
-        // Register commands
+    private void setupCommands() {
         this.getCommandRegistry().registerCommand(new DuelCommand());
         this.getCommandRegistry().registerCommand(new ResetCameraCommand());
         this.getCommandRegistry().registerCommand(new SpawnCardCommand());
+    }
 
-        // Register custom interactions
-        this.getCodecRegistry(Interaction.CODEC).register("BoardActivation", BoardInteraction.class, BoardInteraction.CODEC);
+    private void setupInteractions() {
+        this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class, BoardInteraction.CODEC);
 
-        // Register Event handlers
+    }
+
+    private void setupEventHandlers() {
         this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
 
-        // Register Systems
+    }
+
+    private void setupSystems() {
         this.getEntityStoreRegistry().registerSystem(new DuelTicker());
+    }
 
-        LOGGER.atInfo().log("HyDuels plugin ready.");
+    private void setupCardAssetStore() {
+        cardAssetStore = CardAssetStore.builder()
+                .setPath("Cards")
+                .setCodec(CardAssetCodec.INSTANCE)
+                .setKeyFunction(CardAsset::id)
+                .build();
+        this.getAssetRegistry().register(cardAssetStore);
 
+        // Wire up card source for DrawCardsHandler
+        DrawCardsHandler.cardSource = () -> new ArrayList<>(cardAssetStore.getAssetMap().getAssetMap().values());
+
+        LOGGER.atInfo().log("Loaded %d cards", cardAssetStore.getAssetMap().getAssetCount());
     }
 }
