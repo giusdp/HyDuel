@@ -1,8 +1,8 @@
 package com.giusdp.htduels.duel;
 
-import com.giusdp.htduels.duel.moves.Move;
+import com.giusdp.htduels.duel.event.DuelEvent;
 
 @FunctionalInterface
 public interface MoveHandler {
-    void handle(Move move, Duel duel);
+    void handle(DuelEvent move, Duel duel);
 }

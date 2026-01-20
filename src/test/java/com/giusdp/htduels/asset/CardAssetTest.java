@@ -1,6 +1,5 @@
-package com.giusdp.htduels.duel.asset;
+package com.giusdp.htduels.asset;
 
-import com.giusdp.htduels.asset.CardAsset;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

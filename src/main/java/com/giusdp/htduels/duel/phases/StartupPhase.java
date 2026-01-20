@@ -2,7 +2,7 @@ package com.giusdp.htduels.duel.phases;
 
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.Phase;
-import com.giusdp.htduels.duel.moves.DrawCards;
+import com.giusdp.htduels.duel.event.DrawCards;
 
 public class StartupPhase extends Phase {
 

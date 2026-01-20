@@ -1,7 +1,5 @@
-package com.giusdp.htduels.duel.asset;
+package com.giusdp.htduels.asset;
 
-import com.giusdp.htduels.asset.CardAsset;
-import com.giusdp.htduels.asset.CardAssetCodec;
 import org.bson.BsonDocument;
 import org.bson.BsonInt32;
 import org.bson.BsonString;

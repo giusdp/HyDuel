@@ -2,6 +2,8 @@ package com.giusdp.htduels.component;
 
 import com.giusdp.htduels.DuelsPlugin;
 import com.giusdp.htduels.duel.Duel;
+import com.giusdp.htduels.CardAssetRepo;
+import com.giusdp.htduels.duel.event_bus.HytaleEventBus;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -10,7 +12,7 @@ public class DuelComponent implements Component<EntityStore> {
     public Duel duel;
 
     public DuelComponent() {
-        duel = new Duel();
+        duel = new Duel(new HytaleEventBus(), new CardAssetRepo());
     }
 
     public static ComponentType<EntityStore, DuelComponent> getComponentType() {

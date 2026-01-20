@@ -8,7 +8,6 @@ import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.asset.CardAssetCodec;
 import com.giusdp.htduels.asset.CardAssetStore;
-import com.giusdp.htduels.duel.handlers.DrawCardsHandler;
 import com.giusdp.htduels.event.BoardMouseHandler;
 import com.giusdp.htduels.interaction.BoardInteraction;
 import com.giusdp.htduels.interaction.InteractionNames;
@@ -20,8 +19,6 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-
-import java.util.ArrayList;
 
 public class DuelsPlugin extends JavaPlugin {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
