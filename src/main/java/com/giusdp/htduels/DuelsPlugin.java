@@ -69,7 +69,6 @@ public class DuelsPlugin extends JavaPlugin {
 
     private void setupEventHandlers() {
         this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
-
     }
 
     private void setupSystems() {
@@ -83,9 +82,6 @@ public class DuelsPlugin extends JavaPlugin {
                 .setKeyFunction(CardAsset::id)
                 .build();
         this.getAssetRegistry().register(cardAssetStore);
-
-        // Wire up card source for DrawCardsHandler
-        DrawCardsHandler.cardSource = () -> new ArrayList<>(cardAssetStore.getAssetMap().getAssetMap().values());
 
         LOGGER.atInfo().log("Loaded %d cards", cardAssetStore.getAssetMap().getAssetCount());
     }

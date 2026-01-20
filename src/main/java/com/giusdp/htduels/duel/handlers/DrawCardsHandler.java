@@ -1,5 +1,6 @@
 package com.giusdp.htduels.duel.handlers;
 
+import com.giusdp.htduels.DuelsPlugin;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.MoveHandler;
 import com.giusdp.htduels.asset.CardAsset;
@@ -13,13 +14,10 @@ public class DrawCardsHandler implements MoveHandler {
 
     private static final CardAsset PLACEHOLDER = new CardAsset("Placeholder", "Placeholder", 0, 1, 1, "Minion");
 
-    // Set by DuelsPlugin at startup
-    public static Supplier<List<CardAsset>> cardSource = List::of;
-
     @Override
     public void handle(Move move, Duel duel) {
         DrawCards drawCards = (DrawCards) move;
-        List<CardAsset> availableCards = cardSource.get();
+        List<CardAsset> availableCards = (List<CardAsset>) DuelsPlugin.cardAssetStore.getAssetMap().getAssetMap().values();
 
         for (int i = 0; i < drawCards.count(); i++) {
             CardAsset card = availableCards.isEmpty()
