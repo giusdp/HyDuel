@@ -1,4 +1,4 @@
-package com.giusdp.htduels.components;
+package com.giusdp.htduels.component;
 
 import com.giusdp.htduels.DuelsPlugin;
 import com.giusdp.htduels.duel.Duel;

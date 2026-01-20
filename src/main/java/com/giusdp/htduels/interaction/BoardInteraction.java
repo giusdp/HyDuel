@@ -1,6 +1,6 @@
-package com.giusdp.htduels.interactions;
+package com.giusdp.htduels.interaction;
 
-import com.giusdp.htduels.components.DuelComponent;
+import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.ui.BoadGameUI;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;

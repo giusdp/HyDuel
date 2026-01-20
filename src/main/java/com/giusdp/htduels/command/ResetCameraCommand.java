@@ -1,4 +1,4 @@
-package com.giusdp.htduels.commands;
+package com.giusdp.htduels.command;
 
 import com.hypixel.hytale.protocol.ClientCameraView;
 import com.hypixel.hytale.protocol.GameMode;

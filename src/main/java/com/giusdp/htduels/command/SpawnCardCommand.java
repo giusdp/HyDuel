@@ -1,6 +1,6 @@
-package com.giusdp.htduels.commands;
+package com.giusdp.htduels.command;
 
-import com.giusdp.htduels.components.CardComponent;
+import com.giusdp.htduels.component.CardComponent;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;

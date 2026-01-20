@@ -1,6 +1,6 @@
-package com.giusdp.htduels.systems;
+package com.giusdp.htduels.system;
 
-import com.giusdp.htduels.components.DuelComponent;
+import com.giusdp.htduels.component.DuelComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;

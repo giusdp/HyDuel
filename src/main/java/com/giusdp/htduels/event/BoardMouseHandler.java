@@ -1,4 +1,4 @@
-package com.giusdp.htduels.events;
+package com.giusdp.htduels.event;
 
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.MouseButtonState;

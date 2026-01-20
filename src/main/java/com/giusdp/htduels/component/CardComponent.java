@@ -1,4 +1,4 @@
-package com.giusdp.htduels.components;
+package com.giusdp.htduels.component;
 
 import com.giusdp.htduels.DuelsPlugin;
 import com.hypixel.hytale.component.Component;
