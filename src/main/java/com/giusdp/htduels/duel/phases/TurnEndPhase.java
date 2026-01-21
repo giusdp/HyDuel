@@ -5,16 +5,16 @@ import com.giusdp.htduels.duel.Phase;
 
 public class TurnEndPhase extends Phase {
 
-    @Override
-    public void onEnter(Duel duel) {
-    }
+  @Override
+  public void onEnter(Duel duel) {
+  }
 
-    @Override
-    public void tick(Duel duel) {
-        duel.transitionTo(new TurnStartPhase());
-    }
+  @Override
+  public void tick(Duel duel) {
+    duel.transitionTo(new TurnStartPhase());
+  }
 
-    @Override
-    public void onExit(Duel duel) {
-    }
+  @Override
+  public void onExit(Duel duel) {
+  }
 }

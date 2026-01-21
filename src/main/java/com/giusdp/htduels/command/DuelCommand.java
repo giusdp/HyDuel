@@ -14,45 +14,45 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-
 import javax.annotation.Nonnull;
 
 public class DuelCommand extends CommandBase {
-    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+  private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    public DuelCommand() {
-        super("duelstart", "Spawns a test card in front of you");
-        this.setPermissionGroup(GameMode.Adventure);
+  public DuelCommand() {
+    super("duelstart", "Spawns a test card in front of you");
+    this.setPermissionGroup(GameMode.Adventure);
+  }
+
+  @Override
+  protected void executeSync(@Nonnull CommandContext ctx) {
+    if (!ctx.isPlayer()) {
+      ctx.sendMessage(Message.raw("Only players can use this command!"));
+      return;
     }
 
-    @Override
-    protected void executeSync(@Nonnull CommandContext ctx) {
-        if (!ctx.isPlayer()) {
-            ctx.sendMessage(Message.raw("Only players can use this command!"));
-            return;
-        }
+    Player player = ctx.senderAs(Player.class);
+    World world = player.getWorld();
 
-        Player player = ctx.senderAs(Player.class);
-        World world = player.getWorld();
+    assert world != null;
 
-        assert world != null;
+    // Spawn card in front of player
+    world.execute(() -> {
+      EntityStore entityStore = world.getEntityStore();
+      Store<EntityStore> store = entityStore.getStore();
 
-        // Spawn card in front of player
-        world.execute(() -> {
-            EntityStore entityStore = world.getEntityStore();
-            Store<EntityStore> store = entityStore.getStore();
+      Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
+      holder.putComponent(NetworkId.getComponentType(),
+          new NetworkId(store.getExternalData().takeNextNetworkId()));
+      holder.addComponent(DuelComponent.getComponentType(), new DuelComponent());
 
-            Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-            holder.putComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
-            holder.addComponent(DuelComponent.getComponentType(), new DuelComponent());
+      holder.ensureComponent(UUIDComponent.getComponentType());
 
-            holder.ensureComponent(UUIDComponent.getComponentType());
+      store.addEntity(holder, AddReason.SPAWN);
 
-            store.addEntity(holder, AddReason.SPAWN);
+      LOGGER.atInfo().log("Duel entity spawned!");
+    });
 
-            LOGGER.atInfo().log("Duel entity spawned!");
-        });
-
-        ctx.sendMessage(Message.raw("Duel spawned!"));
-    }
+    ctx.sendMessage(Message.raw("Duel spawned!"));
+  }
 }

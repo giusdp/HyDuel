@@ -5,12 +5,12 @@ import com.giusdp.htduels.duel.event.DuelEvent;
 import org.jspecify.annotations.NonNull;
 
 public class DuelStartedLogHandler extends DuelEventHandler {
-    public DuelStartedLogHandler(@NonNull Duel duel) {
-        super(duel);
-    }
+  public DuelStartedLogHandler(@NonNull Duel duel) {
+    super(duel);
+  }
 
-    @Override
-    public void accept(DuelEvent event) {
-        System.out.println("[Duel] Duel started!");
-    }
+  @Override
+  public void accept(DuelEvent event) {
+    System.out.println("[Duel] Duel started!");
+  }
 }

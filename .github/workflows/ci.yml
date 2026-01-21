@@ -26,9 +26,6 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Download Hytale Server JAR
-        run: curl -L -o HytaleServer.jar https://cdn.hytale.com/HytaleServer.jar
-
       - name: Run tests
         run: ./gradlew test
 

@@ -1,9 +1,9 @@
 package com.giusdp.htduels.component;
 
+import com.giusdp.htduels.CardAssetRepo;
 import com.giusdp.htduels.DuelsPlugin;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.CardAssetRepo;
-import com.giusdp.htduels.duel.event_bus.HytaleEventBus;
+import com.giusdp.htduels.duel.eventbus.HytaleEventBus;
 import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import com.giusdp.htduels.duelist.Duelist;
@@ -12,29 +12,29 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class DuelComponent implements Component<EntityStore> {
-    public Duel duel;
+  public Duel duel;
 
-    // Static reference to the currently active duel for command access
-    private static DuelComponent activeDuel;
+  // Static reference to the currently active duel for command access
+  private static DuelComponent activeDuel;
 
-    public DuelComponent() {
-        Duelist player = new DuelPlayer();
-        Duelist bot = new Bot();
-        duel = new Duel(player, bot, new HytaleEventBus(), new CardAssetRepo());
-        activeDuel = this;
-    }
+  public DuelComponent() {
+    Duelist player = new DuelPlayer();
+    Duelist bot = new Bot();
+    duel = new Duel(player, bot, new HytaleEventBus(), new CardAssetRepo());
+    activeDuel = this;
+  }
 
-    public static DuelComponent getActiveDuel() {
-        return activeDuel;
-    }
+  public static DuelComponent getActiveDuel() {
+    return activeDuel;
+  }
 
-    public static ComponentType<EntityStore, DuelComponent> getComponentType() {
-        return DuelsPlugin.duelComponent;
-    }
+  public static ComponentType<EntityStore, DuelComponent> getComponentType() {
+    return DuelsPlugin.duelComponent;
+  }
 
-    @Override
-    public Component<EntityStore> clone() {
-        DuelComponent component = new DuelComponent();
-        return component;
-    }
+  @Override
+  public Component<EntityStore> clone() {
+    DuelComponent component = new DuelComponent();
+    return component;
+  }
 }

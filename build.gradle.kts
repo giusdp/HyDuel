@@ -1,6 +1,8 @@
 plugins {
     `maven-publish`
     id("hytale-mod") version "0.+"
+    id("checkstyle")
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.giusdp"
@@ -17,12 +19,6 @@ repositories {
 dependencies {
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
-
-    // Add Hytale Server JAR for CI builds (downloaded during CI workflow)
-    val serverJar = file("HytaleServer.jar")
-    if (serverJar.exists()) {
-        compileOnly(files(serverJar))
-    }
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -95,6 +91,22 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
         }
+    }
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
+}
+
+spotless {
+    java {
+        target("src/*/java/**/*.java")
+        importOrder()
+        removeUnusedImports()
+        eclipse()
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }
 
