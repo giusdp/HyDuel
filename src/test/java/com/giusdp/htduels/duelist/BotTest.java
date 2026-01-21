@@ -25,7 +25,7 @@ class BotTest {
     bot.playTurn(duel);
 
     List<DuelEvent> events = eventBus.postedEvents();
-    boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof PlayCard pc && pc.card().equals(card));
+    boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof PlayCard pc && pc.card.equals(card));
 
     assertTrue(hasPlayCard);
   }

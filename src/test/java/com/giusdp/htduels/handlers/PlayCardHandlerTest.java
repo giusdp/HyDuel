@@ -29,7 +29,7 @@ class PlayCardHandlerTest {
         assertTrue(duel.duelist1.getHand().contains(card));
         assertTrue(duel.battlefield.getSide(duel.duelist1).isEmpty());
 
-        duel.emit(new PlayCard(duel.duelist1, card));
+        duel.emit(new PlayCard(duel, duel.duelist1, card));
 
         assertFalse(duel.duelist1.getHand().contains(card));
         assertTrue(duel.battlefield.getSide(duel.duelist1).contains(card));
@@ -37,7 +37,7 @@ class PlayCardHandlerTest {
 
     @Test
     void playingCardDoesNotAffectOtherPlayerSide() {
-        duel.emit(new PlayCard(duel.duelist1, card));
+        duel.emit(new PlayCard(duel, duel.duelist1, card));
         assertTrue(duel.battlefield.getSide(duel.duelist2).isEmpty());
     }
 }

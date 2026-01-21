@@ -32,11 +32,11 @@ public class Duel {
 
     registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
 
-    registerHandler(DrawCards.class, new DrawCardsLogHandler(this));
+    registerHandler(DrawCards.class, new DrawCardsLogHandler());
 
-    registerHandler(PlayCard.class, new PlayCardHandler(this));
-    registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler(this));
-    registerHandler(EndMainPhase.class, new EndMainPhaseHandler(this));
+    registerHandler(PlayCard.class, new PlayCardHandler());
+    registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler());
+    registerHandler(EndMainPhase.class, new EndMainPhaseHandler());
 
     currentPhase.onEnter(this);
   }

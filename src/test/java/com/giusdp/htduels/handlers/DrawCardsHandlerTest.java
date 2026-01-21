@@ -19,10 +19,10 @@ class DrawCardsHandlerTest {
     duel.duelist1.getHand().clear();
     assertEquals(0, duel.duelist1.getHand().size());
 
-    duel.emit(new DrawCards(duel.duelist1, 5));
+    duel.emit(new DrawCards(duel, duel.duelist1, 5));
     assertEquals(5, duel.duelist1.getHand().size());
 
-    duel.emit(new DrawCards(duel.duelist1, 1));
+    duel.emit(new DrawCards(duel, duel.duelist1, 1));
     assertEquals(6, duel.duelist1.getHand().size());
   }
 }

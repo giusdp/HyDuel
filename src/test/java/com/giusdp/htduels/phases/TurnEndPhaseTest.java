@@ -22,7 +22,7 @@ public class TurnEndPhaseTest {
         var initialDuelist = duel.activeDuelist;
 
         duel.tick(); // Move to MainPhase
-        duel.emit(new EndMainPhase());
+        duel.emit(new EndMainPhase(duel));
         duel.tick(); // Move to TurnEndPhase
 
         var newDuelist = duel.activeDuelist;

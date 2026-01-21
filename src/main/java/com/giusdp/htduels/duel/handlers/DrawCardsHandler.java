@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DrawCardsHandler extends DuelEventHandler {
-
   private static final CardAsset PLACEHOLDER = new CardAsset("Placeholder", "Placeholder", 0, 1, 1, "Minion");
 
   private final CardRepo cardRepo;
 
   public DrawCardsHandler(Duel duel, CardRepo cardRepo) {
-    super(duel);
     this.cardRepo = cardRepo;
   }
 
@@ -24,9 +22,9 @@ public class DrawCardsHandler extends DuelEventHandler {
     DrawCards drawCards = (DrawCards) ev;
     List<CardAsset> availableCards = new ArrayList<>(cardRepo.getAvailableCards());
 
-    for (int i = 0; i < drawCards.count(); i++) {
+    for (int i = 0; i < drawCards.count; i++) {
       CardAsset card = availableCards.isEmpty() ? PLACEHOLDER : availableCards.get(i % availableCards.size());
-      drawCards.duelist().addToHand(card);
+      drawCards.duelist.addToHand(card);
     }
   }
 

@@ -11,10 +11,10 @@ public class StartupPhase extends Phase {
     @Override
     public void onEnter(Duel duel) {
         System.out.println("[Duel] Duel started!");
-        duel.emit(new DuelStarted());
-        duel.emit(new DrawCards(duel.duelist1, 5));
-        duel.emit(new DrawCards(duel.duelist2, 5));
-        duel.emit(new RandomDuelistSelect());
+        duel.emit(new DuelStarted(duel));
+        duel.emit(new DrawCards(duel, duel.duelist1, 5));
+        duel.emit(new DrawCards(duel, duel.duelist2, 5));
+        duel.emit(new RandomDuelistSelect(duel));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class EndTurnCommand extends AbstractAsyncCommand {
         }
 
         Duel duel = duelComponent.duel;
-        duel.emit(new EndMainPhase());
+        duel.emit(new EndMainPhase(duel));
         ctx.sendMessage(Message.raw("Turn done."));
         return CompletableFuture.completedFuture(null);
     }

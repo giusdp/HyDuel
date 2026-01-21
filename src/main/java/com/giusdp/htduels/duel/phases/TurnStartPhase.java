@@ -8,7 +8,7 @@ public class TurnStartPhase extends Phase {
 
   @Override
   public void onEnter(Duel duel) {
-    duel.emit(new DrawCards(duel.activeDuelist, 1));
+    duel.emit(new DrawCards(duel, duel.activeDuelist, 1));
 
     System.out.println("[Duel] Turn started for duelist: " + duel.activeDuelist);
   }

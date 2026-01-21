@@ -12,12 +12,12 @@ public class Bot extends Duelist {
 
     public void playTurn(Duel duel) {
         if (hand.isEmpty()) {
-            duel.emit(new EndMainPhase());
+            duel.emit(new EndMainPhase(duel));
             return;
         }
 
         CardAsset cardToPlay = hand.getFirst();
-        duel.emit(new PlayCard(this, cardToPlay));
-        duel.emit(new EndMainPhase());
+        duel.emit(new PlayCard(duel, this, cardToPlay));
+        duel.emit(new EndMainPhase(duel));
     }
 }

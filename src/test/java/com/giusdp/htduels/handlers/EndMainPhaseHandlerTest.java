@@ -23,7 +23,7 @@ class EndMainPhaseHandlerTest {
 
     assertInstanceOf(MainPhase.class, duel.currentPhase);
 
-    duel.emit(new EndMainPhase());
+    duel.emit(new EndMainPhase(duel));
     assertInstanceOf(TurnEndPhase.class, duel.currentPhase);
   }
 }

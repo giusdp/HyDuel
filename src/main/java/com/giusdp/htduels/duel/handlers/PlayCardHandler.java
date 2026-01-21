@@ -6,19 +6,15 @@ import com.giusdp.htduels.duel.event.PlayCard;
 import org.jspecify.annotations.NonNull;
 
 public class PlayCardHandler extends DuelEventHandler {
-  public PlayCardHandler(@NonNull Duel duel) {
-    super(duel);
-  }
-
   @Override
   public void accept(DuelEvent ev) {
     PlayCard playCard = (PlayCard) ev;
-    System.out.println("[Duel] Player " + playCard.duelist() + " plays card " + playCard.card().name());
+    System.out.println("[Duel] Player " + playCard.duelist + " plays card " + playCard.card.name());
 
-    System.out.println("[Duel] Removing card from hand: " + playCard.duelist().getHand().size());
-    playCard.duelist().removeFromHand(playCard.card());
-    System.out.println("[Duel] Hand size after removal: " + playCard.duelist().getHand().size());
+    System.out.println("[Duel] Removing card from hand: " + playCard.duelist.getHand().size());
+    playCard.duelist.removeFromHand(playCard.card);
+    System.out.println("[Duel] Hand size after removal: " + playCard.duelist.getHand().size());
 
-    duel.battlefield.placeCard(playCard.duelist(), playCard.card());
+    ev.duel.battlefield.placeCard(playCard.duelist, playCard.card);
   }
 }
