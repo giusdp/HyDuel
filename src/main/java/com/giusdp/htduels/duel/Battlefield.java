@@ -21,4 +21,8 @@ public class Battlefield {
     assert sides.containsKey(duelist);
     sides.get(duelist).add(card);
   }
+
+  public List<CardAsset> getSide(Duelist duelist) {
+    return sides.get(duelist);
+  }
 }

@@ -19,7 +19,7 @@ public abstract class Duelist {
     hand.add(card);
   }
 
-  public void removeFromHand(CardAsset card) {
-    hand.remove(card);
+  public boolean removeFromHand(CardAsset card) {
+    return hand.remove(card);
   }
 }
