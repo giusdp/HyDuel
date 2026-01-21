@@ -29,12 +29,16 @@ jobs:
       - name: Download Hytale Server JAR
         run: |
           mkdir -p run
-          mkdir -p ~/.hytale
-          curl -L -o run/HytaleServer.jar https://cdn.hytale.com/HytaleServer.jar
-          cp run/HytaleServer.jar ~/.hytale/HytaleServer.jar
+          mkdir -p ~/.hytale/server
+          mkdir -p ~/.local/share/hytale
+          curl -L -o HytaleServer.jar https://cdn.hytale.com/HytaleServer.jar
+          cp HytaleServer.jar run/HytaleServer.jar
+          cp HytaleServer.jar ~/.hytale/HytaleServer.jar
+          cp HytaleServer.jar ~/.hytale/server/HytaleServer.jar
+          cp HytaleServer.jar ~/.local/share/hytale/HytaleServer.jar
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test -Phytale.server_jar=${{ github.workspace }}/HytaleServer.jar
 
       - name: Build (compile)
-        run: ./gradlew build
+        run: ./gradlew build -Phytale.server_jar=${{ github.workspace }}/HytaleServer.jar
