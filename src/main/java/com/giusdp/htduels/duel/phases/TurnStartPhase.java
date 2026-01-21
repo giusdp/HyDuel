@@ -13,6 +13,7 @@ public class TurnStartPhase extends Phase {
 
   @Override
   public void tick(Duel duel) {
+
     duel.transitionTo(new MainPhase());
   }
 

@@ -62,4 +62,12 @@ public class Duel {
   public void setActiveDuelist(Duelist duelist) {
     this.activeDuelist = duelist;
   }
+
+  public void swapActiveDuelist() {
+    if (this.activeDuelist == duelist1) {
+      this.activeDuelist = duelist2;
+    } else {
+      this.activeDuelist = duelist1;
+    }
+  }
 }

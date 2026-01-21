@@ -10,18 +10,20 @@ import com.giusdp.htduels.duel.phases.TurnStartPhase;
 import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DuelTest {
-  Duel newDuel() {
-    var duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+  Duel duel;
+
+  @BeforeEach void setup() {
+    duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
     duel.setup();
-    return duel;
   }
 
   @Test
   void newDuelStartsInStartupAndTransitionsToTurnStart() {
-    Duel duel = newDuel();
     assertEquals(StartupPhase.class, duel.currentPhase.getClass());
     duel.tick();
     assertEquals(TurnStartPhase.class, duel.currentPhase.getClass());
@@ -29,7 +31,6 @@ class DuelTest {
 
   @Test
   void handsGetFilledOnStartup() {
-    Duel duel = newDuel();
     assertEquals(5, duel.duelist1.getHand().size());
     assertEquals(5, duel.duelist2.getHand().size());
   }

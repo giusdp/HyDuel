@@ -13,6 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TurnStartPhaseTest {
+
     @Test
     void emitsDrawCardsMoves() {
         FakeEventBus eventBus = new FakeEventBus();
@@ -23,4 +24,5 @@ public class TurnStartPhaseTest {
         long drawCardsCount = moves.stream().filter(m -> m instanceof DrawCards).count();
         assertEquals(3, drawCardsCount);
     }
+
 }
