@@ -18,6 +18,12 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
 
+    // Add Hytale Server JAR for CI builds (downloaded during CI workflow)
+    val serverJar = file("HytaleServer.jar")
+    if (serverJar.exists()) {
+        compileOnly(files(serverJar))
+    }
+
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
