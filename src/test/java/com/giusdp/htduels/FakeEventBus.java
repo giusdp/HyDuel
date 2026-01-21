@@ -1,6 +1,6 @@
 package com.giusdp.htduels;
 
-import com.giusdp.htduels.duel.DuelEventHandler;
+import com.giusdp.htduels.duel.handlers.DuelEventHandler;
 import com.giusdp.htduels.duel.event.DuelEvent;
 import com.giusdp.htduels.duel.event_bus.GameEventBus;
 import com.hypixel.hytale.event.IEvent;
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class FakeEventBus implements GameEventBus {
     private final List<DuelEvent> posted = new ArrayList<>();

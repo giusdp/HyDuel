@@ -1,6 +1,7 @@
 package com.giusdp.htduels;
 
 import com.giusdp.htduels.command.DuelCommand;
+import com.giusdp.htduels.command.DuelHandCommand;
 import com.giusdp.htduels.command.ResetCameraCommand;
 import com.giusdp.htduels.command.SpawnCardCommand;
 import com.giusdp.htduels.component.CardComponent;
@@ -55,6 +56,8 @@ public class DuelsPlugin extends JavaPlugin {
 
     private void setupCommands() {
         this.getCommandRegistry().registerCommand(new DuelCommand());
+        this.getCommandRegistry().registerCommand(new DuelHandCommand(0));
+        this.getCommandRegistry().registerCommand(new DuelHandCommand(1));
         this.getCommandRegistry().registerCommand(new ResetCameraCommand());
         this.getCommandRegistry().registerCommand(new SpawnCardCommand());
     }
@@ -78,6 +81,7 @@ public class DuelsPlugin extends JavaPlugin {
                 .setCodec(CardAssetCodec.INSTANCE)
                 .setKeyFunction(CardAsset::id)
                 .build();
+
         this.getAssetRegistry().register(cardAssetStore);
 
         LOGGER.atInfo().log("Loaded %d cards", cardAssetStore.getAssetMap().getAssetCount());

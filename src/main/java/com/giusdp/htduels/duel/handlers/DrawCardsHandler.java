@@ -2,7 +2,6 @@ package com.giusdp.htduels.duel.handlers;
 
 import com.giusdp.htduels.CardRepo;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.DuelEventHandler;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duel.event.DuelEvent;
@@ -30,7 +29,7 @@ public class DrawCardsHandler extends DuelEventHandler {
             CardAsset card = availableCards.isEmpty()
                 ? PLACEHOLDER
                 : availableCards.get(i % availableCards.size());
-            duel.playerHands[drawCards.playerIndex()].cards.add(card);
+           drawCards.duelist().addToHand(card);
         }
     }
 

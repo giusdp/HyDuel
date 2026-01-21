@@ -1,32 +1,44 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
-import com.giusdp.htduels.duel.handlers.DrawCardsHandler;
-import com.giusdp.htduels.duel.handlers.DrawCardsLogHandler;
-import com.giusdp.htduels.duel.handlers.DuelStartedLogHandler;
-import com.giusdp.htduels.duel.event.DrawCards;
-import com.giusdp.htduels.duel.event.DuelStarted;
-import com.giusdp.htduels.duel.event.DuelEvent;
+import com.giusdp.htduels.duel.event.*;
+import com.giusdp.htduels.duel.handlers.*;
 import com.giusdp.htduels.duel.event_bus.GameEventBus;
 import com.giusdp.htduels.duel.phases.StartupPhase;
+import com.giusdp.htduels.duelist.Duelist;
 
 public class Duel {
-    public Hand[] playerHands;
-    public Phase currentPhase;
-    private final GameEventBus eventBus;
+    public final Duelist duelist1;
+    public final Duelist duelist2;
 
-    public Duel(GameEventBus eventBus, CardRepo cardRepo) {
+    public final GameEventBus eventBus;
+    public final CardRepo cardRepo;
+
+    public Battlefield battlefield;
+
+    public Phase currentPhase;
+    public Duelist activeDuelist;
+
+    public Duel(Duelist duelist1,
+                Duelist duelist2,
+                GameEventBus eventBus,
+                CardRepo cardRepo) {
+        this.duelist1 = duelist1;
+        this.duelist2 = duelist2;
         this.eventBus = eventBus;
-        playerHands = new Hand[2];
-        playerHands[0] = new Hand();
-        playerHands[1] = new Hand();
+        this.cardRepo = cardRepo;
+    }
+
+    public void setup() {
+        this.battlefield = new Battlefield(new Duelist[]{duelist1, duelist2});
+        currentPhase = new StartupPhase();
 
         registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
-        registerHandler(DrawCards.class, new DrawCardsLogHandler());
-        registerHandler(DuelStarted.class, new DuelStartedLogHandler());
+        registerHandler(DrawCards.class, new DrawCardsLogHandler(this));
+        registerHandler(DuelStarted.class, new DuelStartedLogHandler(this));
+        registerHandler(PlayCard.class, new PlayCardHandler(this));
+        registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler(this));
 
-        emit(new DuelStarted());
-        currentPhase = new StartupPhase();
         currentPhase.onEnter(this);
     }
 
@@ -41,11 +53,15 @@ public class Duel {
     }
 
     public <T extends DuelEvent> void registerHandler(Class<T> eventType, DuelEventHandler handler) {
-        eventBus.register(eventType, (short) 0, handler);
+        this.eventBus.register(eventType, (short) 0, handler);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends DuelEvent> void emit(T event) {
-        eventBus.post((Class<T>) event.getClass(), null, event);
+        this.eventBus.post((Class<T>) event.getClass(), null, event);
+    }
+
+    public void setActiveDuelist(Duelist duelist) {
+        this.activeDuelist = duelist;
     }
 }

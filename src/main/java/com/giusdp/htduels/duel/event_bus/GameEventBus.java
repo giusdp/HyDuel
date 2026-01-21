@@ -1,6 +1,6 @@
 package com.giusdp.htduels.duel.event_bus;
 
-import com.giusdp.htduels.duel.DuelEventHandler;
+import com.giusdp.htduels.duel.handlers.DuelEventHandler;
 import com.hypixel.hytale.event.IEvent;
 
 

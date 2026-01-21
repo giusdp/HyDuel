@@ -1,3 +1,5 @@
 package com.giusdp.htduels.duel.event;
 
-public record DrawCards(int playerIndex, int count) implements DuelEvent {}
+import com.giusdp.htduels.duelist.Duelist;
+
+public record DrawCards(Duelist duelist, int count) implements DuelEvent {}
