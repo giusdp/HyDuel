@@ -11,7 +11,7 @@ import com.giusdp.htduels.duel.event.PlayCard;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class BotBrainTest {
+class BotTest {
 
   @Test
   void takeTurnEmitsPlayCardEventWhenBotHasCards() {
@@ -22,8 +22,7 @@ class BotBrainTest {
     CardAsset card = new CardAsset("test", "Test Card", 1, 2, 3, "Minion");
     bot.addToHand(card);
 
-    BotBrain brain = new BotBrain(bot);
-    brain.takeTurn(duel);
+    bot.playTurn(duel);
 
     List<DuelEvent> events = eventBus.postedEvents();
     boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof PlayCard pc && pc.card().equals(card));
@@ -39,8 +38,7 @@ class BotBrainTest {
 
     int eventCountBefore = eventBus.postedEvents().size();
 
-    BotBrain brain = new BotBrain(bot);
-    brain.takeTurn(duel);
+    bot.playTurn(duel);
 
     int eventCountAfter = eventBus.postedEvents().size();
 

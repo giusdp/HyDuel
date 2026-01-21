@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Duelist {
-  private final List<CardAsset> hand;
+  protected final List<CardAsset> hand;
 
   protected Duelist() {
     this.hand = new ArrayList<>();
