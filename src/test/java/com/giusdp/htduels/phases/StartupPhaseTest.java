@@ -9,28 +9,29 @@ import com.giusdp.htduels.duel.event.DuelStarted;
 import com.giusdp.htduels.duel.event.RandomDuelistSelect;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StartupPhaseTest {
-  public static FakeEventBus setup() {
-    FakeEventBus eventBus = new FakeEventBus();
+  FakeEventBus eventBus ;
+
+  @BeforeEach void setup() {
+    this.eventBus = new FakeEventBus();
     var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
     duel.setup();
-    return eventBus;
   }
 
   @Test
   void emitsDuelStarted() {
-    FakeEventBus eventBus = setup();
     List<DuelEvent> moves = eventBus.postedEvents();
     assertInstanceOf(DuelStarted.class, moves.getFirst());
   }
 
   @Test
   void emitsDrawCardsMoves() {
-    FakeEventBus eventBus = setup();
     List<DuelEvent> moves = eventBus.postedEvents();
     long drawCardsCount = moves.stream().filter(m -> m instanceof DrawCards).count();
     assertEquals(2, drawCardsCount);
@@ -38,7 +39,6 @@ class StartupPhaseTest {
 
   @Test
   void startupPhaseEmitsRandomDuelistSelect() {
-    FakeEventBus eventBus = setup();
     var moves = eventBus.postedEvents().stream().filter(e -> e instanceof RandomDuelistSelect).toList();
     assertFalse(moves.isEmpty());
   }
