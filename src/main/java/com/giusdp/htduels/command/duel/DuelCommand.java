@@ -12,7 +12,6 @@ public class DuelCommand extends AbstractCommandCollection {
         this.setPermissionGroup(GameMode.Adventure);
 
         this.addSubCommand(new StartCommand());
+        this.addSubCommand(new DisplayHandCommand());
     }
-
-
 }
