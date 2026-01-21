@@ -13,9 +13,8 @@ public class MainPhase extends Phase {
   @Override
   public void tick(Duel duel) {
     // Waiting for player input
-    if (duel.activeDuelist instanceof Bot) {
-      Bot bot = (Bot) duel.activeDuelist;
-      bot.playTurn(duel);
+    if (duel.activeDuelist instanceof Bot bot) {
+        bot.playTurn(duel);
     }
   }
 

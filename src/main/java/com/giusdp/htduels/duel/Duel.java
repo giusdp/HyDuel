@@ -31,8 +31,9 @@ public class Duel {
     currentPhase = new StartupPhase();
 
     registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
+
     registerHandler(DrawCards.class, new DrawCardsLogHandler(this));
-    registerHandler(DuelStarted.class, new DuelStartedLogHandler(this));
+
     registerHandler(PlayCard.class, new PlayCardHandler(this));
     registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler(this));
     registerHandler(EndMainPhase.class, new EndMainPhaseHandler(this));

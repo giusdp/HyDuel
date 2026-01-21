@@ -3,6 +3,7 @@ package com.giusdp.htduels.command.duel;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
+import com.giusdp.htduels.duel.event.PlayCard;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -14,13 +15,13 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class DisplayHandCommand extends AbstractAsyncCommand {
+public class PlayCardCommand extends AbstractAsyncCommand {
 
-    private final RequiredArg<Integer> duelistIndex;
+    private final RequiredArg<Integer> cardIndex;
 
-    public DisplayHandCommand() {
-        super("hand", "Shows player's hand");
-        duelistIndex = withRequiredArg("duelistIndex", "The index of the duelist (0 or 1)", ArgTypes.INTEGER);
+    public PlayCardCommand() {
+        super("play", "Shows player's hand");
+        cardIndex = withRequiredArg("cardIndex", "The index of the card to play from the hand", ArgTypes.INTEGER);
     }
 
     @Override
@@ -32,25 +33,12 @@ public class DisplayHandCommand extends AbstractAsyncCommand {
         }
 
         Duel duel = duelComponent.duel;
-        Duelist duelist = null;
-        if (duelistIndex.get(ctx) == 0) {
-            duelist = duel.duelist1;
-        } else {
-            duelist = duel.duelist2;
-        }
+        var card = duel.activeDuelist.getHand().get(cardIndex.get(ctx));
+        duel.emit(new PlayCard(duel.activeDuelist, card));
 
-        ctx.sendMessage(Message.raw(formatHand(duelistIndex.get(ctx), duelist)));
+        ctx.sendMessage(Message.raw("Played card: " + card.name()));
         return CompletableFuture.completedFuture(null);
     }
 
-    String formatHand(int index, Duelist duelist) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== PLAYER ").append(index).append(" HAND ===\n");
 
-        List<CardAsset> cards = duelist.getHand();
-        DisplayBoardCommand.formatCardList(cards, sb);
-
-        sb.append("=".repeat(22 + String.valueOf(index).length()));
-        return sb.toString();
-    }
 }
