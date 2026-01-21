@@ -1,18 +1,9 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
-import com.giusdp.htduels.duel.event.DrawCards;
-import com.giusdp.htduels.duel.event.DuelEvent;
-import com.giusdp.htduels.duel.event.DuelStarted;
-import com.giusdp.htduels.duel.event.PlayCard;
-import com.giusdp.htduels.duel.event.RandomDuelistSelect;
+import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
-import com.giusdp.htduels.duel.handlers.DrawCardsHandler;
-import com.giusdp.htduels.duel.handlers.DrawCardsLogHandler;
-import com.giusdp.htduels.duel.handlers.DuelEventHandler;
-import com.giusdp.htduels.duel.handlers.DuelStartedLogHandler;
-import com.giusdp.htduels.duel.handlers.PlayCardHandler;
-import com.giusdp.htduels.duel.handlers.RandomDuelistSelectHandler;
+import com.giusdp.htduels.duel.handlers.*;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
 
@@ -44,6 +35,7 @@ public class Duel {
     registerHandler(DuelStarted.class, new DuelStartedLogHandler(this));
     registerHandler(PlayCard.class, new PlayCardHandler(this));
     registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler(this));
+    registerHandler(EndMainPhase.class, new EndMainPhaseHandler(this));
 
     currentPhase.onEnter(this);
   }
