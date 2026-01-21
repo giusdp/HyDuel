@@ -30,18 +30,7 @@ class DuelTest {
   @Test
   void handsGetFilledOnStartup() {
     Duel duel = newDuel();
-    duel.tick();
     assertEquals(5, duel.duelist1.getHand().size());
     assertEquals(5, duel.duelist2.getHand().size());
-  }
-
-  @Test
-  void duelEmitsDuelStartedMove() {
-    FakeEventBus eventBus = new FakeEventBus();
-    var duel = new Duel(new DuelPlayer(), new Bot(), eventBus, new FakeCardRepo());
-    duel.setup();
-    List<DuelEvent> moves = eventBus.postedEvents();
-    assertFalse(moves.isEmpty());
-    assertInstanceOf(DuelStarted.class, moves.getFirst());
   }
 }

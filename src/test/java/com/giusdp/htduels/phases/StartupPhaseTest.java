@@ -1,24 +1,31 @@
 package com.giusdp.htduels.phases;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duel.event.DuelEvent;
+import com.giusdp.htduels.duel.event.DuelStarted;
 import com.giusdp.htduels.duel.event.RandomDuelistSelect;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class StartupPhaseTest {
-  FakeEventBus setup() {
+  public static FakeEventBus setup() {
     FakeEventBus eventBus = new FakeEventBus();
     var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
     duel.setup();
     return eventBus;
+  }
+
+  @Test
+  void emitsDuelStarted() {
+    FakeEventBus eventBus = setup();
+    List<DuelEvent> moves = eventBus.postedEvents();
+    assertInstanceOf(DuelStarted.class, moves.getFirst());
   }
 
   @Test
