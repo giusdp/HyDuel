@@ -26,8 +26,10 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Run tests
-        run: ./gradlew test
-
-      - name: Build (compile)
-        run: ./gradlew build
+      # TODO: Enable build and test once we have a way to get HytaleServer.jar in CI
+      # The hytale-mod plugin requires a local Hytale installation which isn't available on CI runners
+      # - name: Run tests
+      #   run: ./gradlew test
+      #
+      # - name: Build (compile)
+      #   run: ./gradlew build

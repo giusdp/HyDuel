@@ -23,15 +23,8 @@ jobs:
           java-version: '25'
           cache: 'gradle'
 
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
-
-      - name: Download Hytale Server JAR
-        run: |
-          curl -fL -o HytaleServer.jar https://cdn.hytale.com/HytaleServer.jar
-          # Verify the JAR is valid
-          file HytaleServer.jar
-          unzip -t HytaleServer.jar > /dev/null 2>&1 || { echo "Downloaded file is not a valid JAR"; exit 1; }
-
-      - name: Run checkstyle
-        run: ./gradlew checkstyleMain
+#      - name: Make Gradle wrapper executable
+#        run: chmod +x ./gradlew
+#
+#      - name: Run checkstyle
+#        run: ./gradlew checkstyleMain
