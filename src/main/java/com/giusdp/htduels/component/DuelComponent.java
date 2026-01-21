@@ -22,6 +22,8 @@ public class DuelComponent implements Component<EntityStore> {
     Duelist bot = new Bot();
     duel = new Duel(player, bot, new HytaleEventBus(), new CardAssetRepo());
     activeDuel = this;
+
+    duel.setup();
   }
 
   public static DuelComponent getActiveDuel() {

@@ -3,7 +3,7 @@ package com.giusdp.htduels;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.asset.CardAssetCodec;
 import com.giusdp.htduels.asset.CardAssetStore;
-import com.giusdp.htduels.command.DuelCommand;
+import com.giusdp.htduels.command.duel.DuelCommand;
 import com.giusdp.htduels.command.DuelHandCommand;
 import com.giusdp.htduels.command.ResetCameraCommand;
 import com.giusdp.htduels.command.SpawnCardCommand;
