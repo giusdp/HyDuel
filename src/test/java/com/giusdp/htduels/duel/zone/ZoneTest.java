@@ -45,7 +45,7 @@ class ZoneTest {
     void addCardAppearsInGetCards(Zone zone, ZoneType expectedType) {
         Card card = createCard("card1");
 
-        zone.add(card, 0);
+        zone.place(card, 0);
 
         assertEquals(1, zone.getCards().size());
         assertTrue(zone.getCards().contains(card));
@@ -58,8 +58,8 @@ class ZoneTest {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
 
-        zone.add(card1, 0);
-        zone.add(card2, 0);
+        zone.place(card1, 0);
+        zone.place(card2, 0);
 
         assertEquals(card2, zone.getCards().get(0));
         assertEquals(card1, zone.getCards().get(1));
@@ -72,8 +72,8 @@ class ZoneTest {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
 
-        zone.add(card1, 0);
-        zone.add(card2, zone.getCards().size());
+        zone.place(card1, 0);
+        zone.place(card2, zone.getCards().size());
 
         assertEquals(card1, zone.getCards().get(0));
         assertEquals(card2, zone.getCards().get(1));
@@ -84,7 +84,7 @@ class ZoneTest {
     @DisplayName("remove card removes it from list")
     void removeCardRemovesFromList(Zone zone, ZoneType expectedType) {
         Card card = createCard("card1");
-        zone.add(card, 0);
+        zone.place(card, 0);
 
         zone.remove(card);
 
@@ -99,9 +99,9 @@ class ZoneTest {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
         Card card3 = createCard("card3");
-        zone.add(card1, 0);
-        zone.add(card2, 1);
-        zone.add(card3, 2);
+        zone.place(card1, 0);
+        zone.place(card2, 1);
+        zone.place(card3, 2);
 
         zone.remove(card2);
 
@@ -116,7 +116,7 @@ class ZoneTest {
     void addSetsCardZoneReference(Zone zone, ZoneType expectedType) {
         Card card = createCard("card1");
 
-        zone.add(card, 0);
+        zone.place(card, 0);
 
         assertSame(zone, card.getZone());
     }
@@ -126,7 +126,7 @@ class ZoneTest {
     @DisplayName("remove clears card's zone reference")
     void removeClearsCardZoneReference(Zone zone, ZoneType expectedType) {
         Card card = createCard("card1");
-        zone.add(card, 0);
+        zone.place(card, 0);
 
         zone.remove(card);
 
@@ -141,9 +141,9 @@ class ZoneTest {
         Card card2 = createCard("card2");
         Card card3 = createCard("card3");
 
-        zone.add(card1, 0);
-        zone.add(card2, 1);
-        zone.add(card3, 2);
+        zone.place(card1, 0);
+        zone.place(card2, 1);
+        zone.place(card3, 2);
 
         assertEquals(0, card1.getZoneIndex());
         assertEquals(1, card2.getZoneIndex());
@@ -166,8 +166,8 @@ class ZoneTest {
         Battlefield battlefield = new Battlefield();
         Card card = createCard("card1");
 
-        hand.add(card, 0);
-        battlefield.add(card, 0);
+        hand.place(card, 0);
+        battlefield.place(card, 0);
 
         assertFalse(hand.getCards().contains(card));
         assertTrue(battlefield.getCards().contains(card));
@@ -182,11 +182,11 @@ class ZoneTest {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
 
-        hand.add(card1, 0);
-        hand.add(card2, 1);
+        hand.place(card1, 0);
+        hand.place(card2, 1);
         assertEquals(1, card2.getZoneIndex());
 
-        battlefield.add(card2, 0);
+        battlefield.place(card2, 0);
         assertEquals(0, card2.getZoneIndex());
         assertEquals(0, card1.getZoneIndex()); // card1 is now at index 0 in hand
     }

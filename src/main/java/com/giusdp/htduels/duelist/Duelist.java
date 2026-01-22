@@ -22,11 +22,10 @@ public abstract class Duelist {
     }
 
     public void addToHand(Card card) {
-        hand.add(card, 0);
+        hand.place(card, 0);
     }
 
     public void playCard(Card card) {
-        hand.remove(card);
-        battlefield.add(card, 0);
+        battlefield.place(card, 0);
     }
 }

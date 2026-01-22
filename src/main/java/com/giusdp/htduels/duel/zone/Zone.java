@@ -9,7 +9,7 @@ public interface Zone {
 
     List<Card> getCards();
 
-    void add(Card card, int index);
+    void place(Card card, int index);
 
     void remove(Card card);
 }
