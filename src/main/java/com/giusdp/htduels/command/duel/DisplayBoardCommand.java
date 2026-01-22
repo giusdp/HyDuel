@@ -3,8 +3,8 @@ package com.giusdp.htduels.command.duel;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Card;
-import com.giusdp.htduels.duel.zone.Battlefield;
 import com.giusdp.htduels.duel.Duel;
+import com.giusdp.htduels.duel.zone.Battlefield;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -18,6 +18,19 @@ public class DisplayBoardCommand extends AbstractAsyncCommand {
 
     public DisplayBoardCommand() {
         super("board", "Shows cards on the board");
+    }
+
+    public static void formatCardList(List<Card> cards, StringBuilder sb) {
+        for (int i = 0; i < cards.size(); i++) {
+            CardAsset card = cards.get(i).getAsset();
+            sb.append("[").append(i).append("] ")
+                    .append(card.name())
+                    .append(" (Cost: ").append(card.cost())
+                    .append(", ATK: ").append(card.attack())
+                    .append(", HP: ").append(card.health())
+                    .append(", ").append(card.type())
+                    .append(")\n");
+        }
     }
 
     @Override
@@ -51,19 +64,5 @@ public class DisplayBoardCommand extends AbstractAsyncCommand {
 
         sb.append("=".repeat(22));
         return sb.toString();
-    }
-
-
-    public static void formatCardList(List<Card> cards, StringBuilder sb) {
-        for (int i = 0; i < cards.size(); i++) {
-            CardAsset card = cards.get(i).getAsset();
-            sb.append("[").append(i).append("] ")
-                    .append(card.name())
-                    .append(" (Cost: ").append(card.cost())
-                    .append(", ATK: ").append(card.attack())
-                    .append(", HP: ").append(card.health())
-                    .append(", ").append(card.type())
-                    .append(")\n");
-        }
     }
 }

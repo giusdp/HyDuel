@@ -1,7 +1,5 @@
 package com.giusdp.htduels.handlers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
 import com.giusdp.htduels.asset.CardAsset;
@@ -12,6 +10,8 @@ import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayCardHandlerTest {
     Card card;

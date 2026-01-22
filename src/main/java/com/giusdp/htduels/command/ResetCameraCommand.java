@@ -7,7 +7,6 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
 
 import javax.annotation.Nonnull;
 
@@ -17,24 +16,24 @@ import javax.annotation.Nonnull;
  */
 public class ResetCameraCommand extends CommandBase {
 
-  public ResetCameraCommand() {
-    super("reset", "Resets your camera to normal first-person view");
-    this.setPermissionGroup(GameMode.Adventure);
-  }
-
-  @Override
-  protected void executeSync(@Nonnull CommandContext ctx) {
-    if (!ctx.isPlayer()) {
-      ctx.sendMessage(Message.raw("Only players can use this command!"));
-      return;
+    public ResetCameraCommand() {
+        super("reset", "Resets your camera to normal first-person view");
+        this.setPermissionGroup(GameMode.Adventure);
     }
 
-    Player player = ctx.senderAs(Player.class);
+    @Override
+    protected void executeSync(@Nonnull CommandContext ctx) {
+        if (!ctx.isPlayer()) {
+            ctx.sendMessage(Message.raw("Only players can use this command!"));
+            return;
+        }
+
+        Player player = ctx.senderAs(Player.class);
 
 
-    player.getPlayerRef().getPacketHandler()
-        .writeNoCache(new SetServerCamera(ClientCameraView.FirstPerson, false, null));
+        player.getPlayerRef().getPacketHandler()
+                .writeNoCache(new SetServerCamera(ClientCameraView.FirstPerson, false, null));
 
-    ctx.sendMessage(Message.raw("Camera reset to normal!"));
-  }
+        ctx.sendMessage(Message.raw("Camera reset to normal!"));
+    }
 }

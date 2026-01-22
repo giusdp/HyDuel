@@ -6,19 +6,19 @@ import com.giusdp.htduels.duelist.Bot;
 
 public class MainPhase extends Phase {
 
-  @Override
-  public void onEnter(Duel duel) {
-  }
-
-  @Override
-  public void tick(Duel duel) {
-    // Waiting for player input
-    if (duel.activeDuelist instanceof Bot bot) {
-        bot.playTurn(duel);
+    @Override
+    public void onEnter(Duel duel) {
     }
-  }
 
-  @Override
-  public void onExit(Duel duel) {
-  }
+    @Override
+    public void tick(Duel duel) {
+        // Waiting for player input
+        if (duel.activeDuelist instanceof Bot bot) {
+            bot.playTurn(duel);
+        }
+    }
+
+    @Override
+    public void onExit(Duel duel) {
+    }
 }

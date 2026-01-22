@@ -1,12 +1,8 @@
 package com.giusdp.htduels.duelist;
 
-import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.zone.Battlefield;
 import com.giusdp.htduels.duel.zone.Hand;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Duelist {
     protected final Hand hand;

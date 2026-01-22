@@ -3,9 +3,9 @@ package com.giusdp.htduels;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.asset.CardAssetCodec;
 import com.giusdp.htduels.asset.CardAssetStore;
-import com.giusdp.htduels.command.duel.DuelCommand;
 import com.giusdp.htduels.command.ResetCameraCommand;
 import com.giusdp.htduels.command.SpawnCardCommand;
+import com.giusdp.htduels.command.duel.DuelCommand;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.event.BoardMouseHandler;
@@ -21,65 +21,65 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class DuelsPlugin extends JavaPlugin {
-  private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-  public static CardAssetStore cardAssetStore;
+    public static CardAssetStore cardAssetStore;
 
-  public static ComponentType<EntityStore, CardComponent> cardComponent;
-  public static ComponentType<EntityStore, DuelComponent> duelComponent;
+    public static ComponentType<EntityStore, CardComponent> cardComponent;
+    public static ComponentType<EntityStore, DuelComponent> duelComponent;
 
-  public DuelsPlugin(JavaPluginInit init) {
-    super(init);
-    LOGGER.atInfo().log("Hello from %s version %s", this.getName(), this.getManifest().getVersion().toString());
-  }
+    public DuelsPlugin(JavaPluginInit init) {
+        super(init);
+        LOGGER.atInfo().log("Hello from %s version %s", this.getName(), this.getManifest().getVersion().toString());
+    }
 
-  @Override
-  protected void setup() {
-    setupComponents();
-    setupSystems();
+    @Override
+    protected void setup() {
+        setupComponents();
+        setupSystems();
 
-    setupCommands();
+        setupCommands();
 
-    setupInteractions();
-    setupEventHandlers();
+        setupInteractions();
+        setupEventHandlers();
 
-    setupCardAssetStore();
+        setupCardAssetStore();
 
-    LOGGER.atInfo().log("HyDuels plugin ready.");
-  }
+        LOGGER.atInfo().log("HyDuels plugin ready.");
+    }
 
-  private void setupComponents() {
-    cardComponent = this.getEntityStoreRegistry().registerComponent(CardComponent.class, CardComponent::new);
-    duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
-  }
+    private void setupComponents() {
+        cardComponent = this.getEntityStoreRegistry().registerComponent(CardComponent.class, CardComponent::new);
+        duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
+    }
 
-  private void setupCommands() {
-    this.getCommandRegistry().registerCommand(new DuelCommand());
+    private void setupCommands() {
+        this.getCommandRegistry().registerCommand(new DuelCommand());
 
-    this.getCommandRegistry().registerCommand(new ResetCameraCommand());
-    this.getCommandRegistry().registerCommand(new SpawnCardCommand());
-  }
+        this.getCommandRegistry().registerCommand(new ResetCameraCommand());
+        this.getCommandRegistry().registerCommand(new SpawnCardCommand());
+    }
 
-  private void setupInteractions() {
-    this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class,
-        BoardInteraction.CODEC);
+    private void setupInteractions() {
+        this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class,
+                BoardInteraction.CODEC);
 
-  }
+    }
 
-  private void setupEventHandlers() {
-    this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
-  }
+    private void setupEventHandlers() {
+        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
+    }
 
-  private void setupSystems() {
-    this.getEntityStoreRegistry().registerSystem(new DuelTicker());
-  }
+    private void setupSystems() {
+        this.getEntityStoreRegistry().registerSystem(new DuelTicker());
+    }
 
-  private void setupCardAssetStore() {
-    cardAssetStore = CardAssetStore.builder().setPath("Cards").setCodec(CardAssetCodec.INSTANCE)
-        .setKeyFunction(CardAsset::id).build();
+    private void setupCardAssetStore() {
+        cardAssetStore = CardAssetStore.builder().setPath("Cards").setCodec(CardAssetCodec.INSTANCE)
+                .setKeyFunction(CardAsset::id).build();
 
-    this.getAssetRegistry().register(cardAssetStore);
+        this.getAssetRegistry().register(cardAssetStore);
 
-    LOGGER.atInfo().log("Loaded %d cards", cardAssetStore.getAssetMap().getAssetCount());
-  }
+        LOGGER.atInfo().log("Loaded %d cards", cardAssetStore.getAssetMap().getAssetCount());
+    }
 }

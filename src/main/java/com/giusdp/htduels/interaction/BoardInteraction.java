@@ -20,27 +20,24 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.cli
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.jspecify.annotations.NonNull;
 
 import javax.annotation.Nullable;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Handles the interaction with the Board block. When a player presses F on the
  * board, it switches to a top-down tabletop camera view.
  */
 public class BoardInteraction extends SimpleBlockInteraction {
+    public static final BuilderCodec<BoardInteraction> CODEC = BuilderCodec
+            .builder(BoardInteraction.class, BoardInteraction::new, SimpleBlockInteraction.CODEC)
+            .documentation("Opens the game board interaction with a top-down camera view").build();
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-
     private static final double X_OFFSET = 0.0; // Center of 1-block width
     private static final double Y_OFFSET = 1.75;
     private static final double Z_OFFSET = 0.5; // Center of 2-block depth
     private static final float CAMERA_YAW = 0.0f; // Change this to 90, 180, or 270 to rotate the view
     private static final float CAMERA_PITCH = -90.0f;
-
-    public static final BuilderCodec<BoardInteraction> CODEC = BuilderCodec
-            .builder(BoardInteraction.class, BoardInteraction::new, SimpleBlockInteraction.CODEC)
-            .documentation("Opens the game board interaction with a top-down camera view").build();
 
     public BoardInteraction() {
         super("BoardActivation");

@@ -18,7 +18,14 @@
   },
   "IconProperties": {
     "Scale": 0.5,
-    "Rotation": [15.0, 25.0, 0.0],
-    "Translation": [0.0, -10.0]
+    "Rotation": [
+      15.0,
+      25.0,
+      0.0
+    ],
+    "Translation": [
+      0.0,
+      -10.0
+    ]
   }
 }

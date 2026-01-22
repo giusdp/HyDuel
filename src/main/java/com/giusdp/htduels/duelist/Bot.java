@@ -1,6 +1,5 @@
 package com.giusdp.htduels.duelist;
 
-import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.EndMainPhase;

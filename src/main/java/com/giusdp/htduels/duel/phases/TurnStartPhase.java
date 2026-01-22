@@ -6,20 +6,20 @@ import com.giusdp.htduels.duel.event.DrawCards;
 
 public class TurnStartPhase extends Phase {
 
-  @Override
-  public void onEnter(Duel duel) {
-    duel.emit(new DrawCards(duel, duel.activeDuelist, 1));
+    @Override
+    public void onEnter(Duel duel) {
+        duel.emit(new DrawCards(duel, duel.activeDuelist, 1));
 
-    System.out.println("[Duel] Turn started for duelist: " + duel.activeDuelist);
-  }
+        System.out.println("[Duel] Turn started for duelist: " + duel.activeDuelist);
+    }
 
-  @Override
-  public void tick(Duel duel) {
+    @Override
+    public void tick(Duel duel) {
 
-    duel.transitionTo(new MainPhase());
-  }
+        duel.transitionTo(new MainPhase());
+    }
 
-  @Override
-  public void onExit(Duel duel) {
-  }
+    @Override
+    public void onExit(Duel duel) {
+    }
 }
