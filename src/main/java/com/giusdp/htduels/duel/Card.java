@@ -1,21 +1,34 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.asset.CardAsset;
+import com.giusdp.htduels.duel.zone.Zone;
 import com.giusdp.htduels.duelist.Duelist;
-import com.hypixel.hytale.math.Vec2f;
 
 public class Card {
     private final CardAsset asset;
     private Duelist owner;
-
-    Vec2f position;
+    private Zone zone;
 
     public Card(CardAsset asset) {
         this.asset = asset;
-        position = new Vec2f(0, 0);
     }
 
     public CardAsset getAsset() {
         return asset;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
+
+    public int getZoneIndex() {
+        if (zone == null) {
+            return -1;
+        }
+        return zone.getCards().indexOf(this);
     }
 }

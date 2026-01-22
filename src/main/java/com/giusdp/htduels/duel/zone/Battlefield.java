@@ -24,12 +24,16 @@ public class Battlefield implements Zone {
 
     @Override
     public void add(Card card, int index) {
+        if (card.getZone() != null) {
+            card.getZone().remove(card);
+        }
         cards.add(index, card);
-
+        card.setZone(this);
     }
 
     @Override
     public void remove(Card card) {
         cards.remove(card);
+        card.setZone(null);
     }
 }

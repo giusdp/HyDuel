@@ -4,10 +4,12 @@ import com.giusdp.htduels.duel.Card;
 
 import java.util.List;
 
-interface Zone {
+public interface Zone {
     ZoneType getType();
+
     List<Card> getCards();
 
     void add(Card card, int index);
+
     void remove(Card card);
 }
