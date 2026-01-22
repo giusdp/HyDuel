@@ -25,6 +25,7 @@ import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
+import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
 /**
@@ -77,7 +78,7 @@ public class SpawnCardCommand extends CommandBase {
       // Load Card model
       ModelAsset modelAsset = ModelAsset.getAssetMap().getAsset("Card");
       if (modelAsset == null) {
-        LOGGER.at(java.util.logging.Level.SEVERE).log("Card model not found!");
+        LOGGER.at(Level.SEVERE).log("Card model not found!");
         return;
       }
 
@@ -87,6 +88,7 @@ public class SpawnCardCommand extends CommandBase {
 
       if (model.getBoundingBox() != null) {
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(model.getBoundingBox()));
+        LOGGER.at(Level.INFO).log("Bounding box details: %s", model.getBoundingBox().toString());
       }
 
       // Card component (our custom component!)
@@ -94,11 +96,11 @@ public class SpawnCardCommand extends CommandBase {
       holder.addComponent(CardComponent.getComponentType(), card);
 
       // Make it interactable
-      holder.ensureComponent(Interactable.getComponentType());
+      // holder.ensureComponent(Interactable.getComponentType());
 
       Store<EntityStore> store = entityStore.getStore();
       // Spawn the entity
-      Ref<EntityStore> entityRef = store.addEntity(holder, AddReason.SPAWN);
+      store.addEntity(holder, AddReason.SPAWN);
 
       LOGGER.atInfo().log("Card spawned at position (%f, %f, %f) with name: %s", cardPos.x, cardPos.y, cardPos.z,
           card.name);

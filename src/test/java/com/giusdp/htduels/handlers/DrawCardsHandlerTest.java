@@ -16,13 +16,13 @@ class DrawCardsHandlerTest {
     Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
     duel.setup();
 
-    duel.duelist1.getHand().clear();
-    assertEquals(0, duel.duelist1.getHand().size());
+    duel.duelist1.getHand().getCards().clear();
+    assertEquals(0, duel.duelist1.getHand().getCards().size());
 
     duel.emit(new DrawCards(duel, duel.duelist1, 5));
-    assertEquals(5, duel.duelist1.getHand().size());
+    assertEquals(5, duel.duelist1.getHand().getCards().size());
 
     duel.emit(new DrawCards(duel, duel.duelist1, 1));
-    assertEquals(6, duel.duelist1.getHand().size());
+    assertEquals(6, duel.duelist1.getHand().getCards().size());
   }
 }

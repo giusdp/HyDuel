@@ -2,13 +2,12 @@ package com.giusdp.htduels.command.duel;
 
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.duel.Battlefield;
+import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.zone.Battlefield;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
-import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractAsyncCommand;
 import org.jspecify.annotations.NonNull;
 
@@ -40,26 +39,24 @@ public class DisplayBoardCommand extends AbstractAsyncCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("=== BOARD ===\n");
 
-        Battlefield battlefield = duel.battlefield;
         Duelist duelist1 = duel.duelist1;
         Duelist duelist2 = duel.duelist2;
+        Battlefield side1 = duelist1.getBattlefield();
+        Battlefield side2 = duelist2.getBattlefield();
 
-        var side1 = battlefield.getSide(duelist1);
-        var side2 = battlefield.getSide(duelist2);
-
-        formatCardList(side1, sb);
+        formatCardList(side1.getCards(), sb);
         sb.append("-".repeat(22)).append("\n");
 
-        formatCardList(side2, sb);
+        formatCardList(side2.getCards(), sb);
 
         sb.append("=".repeat(22));
         return sb.toString();
     }
 
 
-    public static void formatCardList(List<CardAsset> cards, StringBuilder sb) {
+    public static void formatCardList(List<Card> cards, StringBuilder sb) {
         for (int i = 0; i < cards.size(); i++) {
-            CardAsset card = cards.get(i);
+            CardAsset card = cards.get(i).getAsset();
             sb.append("[").append(i).append("] ")
                     .append(card.name())
                     .append(" (Cost: ").append(card.cost())

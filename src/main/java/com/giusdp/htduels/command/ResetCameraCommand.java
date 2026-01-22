@@ -7,6 +7,8 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -28,6 +30,7 @@ public class ResetCameraCommand extends CommandBase {
     }
 
     Player player = ctx.senderAs(Player.class);
+
 
     player.getPlayerRef().getPacketHandler()
         .writeNoCache(new SetServerCamera(ClientCameraView.FirstPerson, false, null));

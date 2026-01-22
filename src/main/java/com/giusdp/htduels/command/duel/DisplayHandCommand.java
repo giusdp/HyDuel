@@ -2,7 +2,9 @@ package com.giusdp.htduels.command.duel;
 
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
+import com.giusdp.htduels.duel.zone.Hand;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -47,8 +49,8 @@ public class DisplayHandCommand extends AbstractAsyncCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("=== PLAYER ").append(index).append(" HAND ===\n");
 
-        List<CardAsset> cards = duelist.getHand();
-        DisplayBoardCommand.formatCardList(cards, sb);
+        Hand cards = duelist.getHand();
+        DisplayBoardCommand.formatCardList(cards.getCards(), sb);
 
         sb.append("=".repeat(22 + String.valueOf(index).length()));
         return sb.toString();

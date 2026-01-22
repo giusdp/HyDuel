@@ -31,7 +31,7 @@ class DuelTest {
 
   @Test
   void handsGetFilledOnStartup() {
-    assertEquals(5, duel.duelist1.getHand().size());
-    assertEquals(5, duel.duelist2.getHand().size());
+    assertEquals(5, duel.duelist1.getHand().getCards().size());
+    assertEquals(5, duel.duelist2.getHand().getCards().size());
   }
 }

@@ -14,7 +14,6 @@ public class Duel {
   public final GameEventBus eventBus;
   public final CardRepo cardRepo;
 
-  public Battlefield battlefield;
 
   public Phase currentPhase;
   public Duelist activeDuelist;
@@ -27,7 +26,6 @@ public class Duel {
   }
 
   public void setup() {
-    this.battlefield = new Battlefield(new Duelist[]{duelist1, duelist2});
     currentPhase = new StartupPhase();
 
     registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));

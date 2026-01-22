@@ -33,10 +33,10 @@ public class PlayCardCommand extends AbstractAsyncCommand {
         }
 
         Duel duel = duelComponent.duel;
-        var card = duel.activeDuelist.getHand().get(cardIndex.get(ctx));
+        var card = duel.activeDuelist.getHand().getCards().get(cardIndex.get(ctx));
         duel.emit(new PlayCard(duel, duel.activeDuelist, card));
 
-        ctx.sendMessage(Message.raw("Played card: " + card.name()));
+        ctx.sendMessage(Message.raw("Played card: " + card.getAsset().name()));
         return CompletableFuture.completedFuture(null);
     }
 
