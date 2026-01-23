@@ -9,12 +9,14 @@ import com.giusdp.htduels.command.duel.DuelCommand;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.event.BoardMouseHandler;
+import com.giusdp.htduels.event.CardMotionHandler;
 import com.giusdp.htduels.interaction.BoardInteraction;
 import com.giusdp.htduels.interaction.InteractionNames;
 import com.giusdp.htduels.system.DuelTicker;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerMouseMotionEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -68,6 +70,7 @@ public class DuelsPlugin extends JavaPlugin {
 
     private void setupEventHandlers() {
         this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
+        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, CardMotionHandler::handleMouseMotion);
     }
 
     private void setupSystems() {
