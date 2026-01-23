@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.protocol.GameMode;
@@ -33,6 +34,9 @@ import java.util.logging.Level;
 public class SpawnCardCommand extends CommandBase {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
+    public static Vector3d spawnPosition;
+    public static Box spawnBoundingBox;
+
     public SpawnCardCommand() {
         super("spawncard", "Spawns a test card in front of you");
         this.setPermissionGroup(GameMode.Adventure);
@@ -60,9 +64,10 @@ public class SpawnCardCommand extends CommandBase {
             // Get player position
             @SuppressWarnings("deprecation")
             Vector3d playerPos = player.getTransformComponent().getPosition();
-            Vector3d cardPos = playerPos.clone().add(0, 1, 1); // 1 block up, 1 block forward
+            Vector3d cardPos = playerPos.clone().add(0, 1, -1); // 1 block up, 1 block forward
+            spawnPosition = cardPos;
 
-            // Create entity holder
+        // Create entity holder
             Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
 
             // Transform component
@@ -81,7 +86,7 @@ public class SpawnCardCommand extends CommandBase {
                 return;
             }
 
-            Model model = Model.createRandomScaleModel(modelAsset);
+            Model model = Model.createScaledModel(modelAsset, 0.23f);
             holder.addComponent(PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
             holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
 
@@ -89,6 +94,7 @@ public class SpawnCardCommand extends CommandBase {
                 holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(model.getBoundingBox()));
                 LOGGER.at(Level.INFO).log("Bounding box details: %s", model.getBoundingBox().toString());
             }
+            spawnBoundingBox = model.getBoundingBox();
 
             // Card component (our custom component!)
             CardComponent card = new CardComponent();

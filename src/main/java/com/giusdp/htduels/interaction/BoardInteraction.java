@@ -43,6 +43,8 @@ public class BoardInteraction extends SimpleBlockInteraction {
         super("BoardActivation");
     }
 
+    public static Position cameraPos;
+
     @Override
     protected void interactWithBlock(@NonNull World world, @NonNull CommandBuffer<EntityStore> commandBuffer,
                                      @NonNull InteractionType type, @NonNull InteractionContext context, @Nullable ItemStack itemInHand,
@@ -65,6 +67,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
      */
     private void activateBoardCamera(@NonNull Player player, @NonNull PlayerRef playerRef, Vector3i boardPosition) {
         Position cameraPosition = calculateCameraPosition(boardPosition);
+        cameraPos = cameraPosition;
         ServerCameraSettings settings = createBoardCameraSettings(cameraPosition);
 
         playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, true, settings));
