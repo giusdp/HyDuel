@@ -58,7 +58,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
         player.getPageManager().openCustomPage(ref, ref.getStore(), new BoardGameUi(playerRef, CustomPageLifetime.CanDismiss));
 
         activateBoardCamera(player, playerRef, targetBlock);
-        spawnDuel(commandBuffer);
+        spawnDuel(commandBuffer, targetBlock);
     }
 
     /**
@@ -75,13 +75,14 @@ public class BoardInteraction extends SimpleBlockInteraction {
         assert settings.rotation != null;
         LOGGER.atInfo().log("Board camera activated for player %s at position (%f, %f, %f) with rotation (%f, %f, %f)", player.getDisplayName(),
                 cameraPosition.x, cameraPosition.y, cameraPosition.z, settings.rotation.yaw, settings.rotation.pitch, settings.rotation.roll);
-    }
+}
 
-    private void spawnDuel(CommandBuffer<EntityStore> commandBuffer) {
+    private void spawnDuel(CommandBuffer<EntityStore> commandBuffer, Vector3i boardPosition) {
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent());
+        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent(boardPosition));
         commandBuffer.addEntity(holder, AddReason.SPAWN);
-        LOGGER.atInfo().log("Duel entity spawned");
+        LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d)",
+                boardPosition.x, boardPosition.y, boardPosition.z);
     }
 
     private Position calculateCameraPosition(@NonNull Vector3i boardPosition) {

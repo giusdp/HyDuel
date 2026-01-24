@@ -101,10 +101,10 @@ public class SpawnCardCommand extends CommandBase {
             // Spawn the entity
             store.addEntity(holder, AddReason.SPAWN);
 
-            LOGGER.atInfo().log("Card spawned at position (%f, %f, %f) with name: %s", cardPos.x, cardPos.y, cardPos.z,
-                    card.name);
+            LOGGER.atInfo().log("Card spawned at position (%f, %f, %f)", cardPos.x, cardPos.y, cardPos.z);
         });
 
         ctx.sendMessage(Message.raw("Card spawned!"));
+
     }
 }
