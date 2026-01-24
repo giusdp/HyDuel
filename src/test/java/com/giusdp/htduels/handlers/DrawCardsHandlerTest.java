@@ -2,6 +2,7 @@ package com.giusdp.htduels.handlers;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
+import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duelist.Bot;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DrawCardsHandlerTest {
     @Test
     void addsCardsToHand() {
-        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
         duel.setup();
 
         duel.duelist1.getHand().getCards().clear();
