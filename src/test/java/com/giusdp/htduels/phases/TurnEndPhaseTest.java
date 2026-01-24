@@ -15,7 +15,7 @@ public class TurnEndPhaseTest {
 
     @Test
     void transitionsToTurnStartFromEndTurnSwappingDuelists() {
-        var duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
+        var duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
 
         duel.setup();
         duel.tick(); // Move to TurnStartPhase

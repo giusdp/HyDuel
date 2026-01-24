@@ -22,7 +22,7 @@ class StartupPhaseTest {
     @BeforeEach
     void setup() {
         this.eventBus = new FakeEventBus();
-        var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo(), TestBoardLayout.create());
+        var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
         duel.setup();
     }
 

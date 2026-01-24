@@ -15,7 +15,7 @@ public class RandomDuelistSelectHandlerTest {
     void picksADuelist() {
         var duelist1 = new DuelPlayer();
         var duelist2 = new DuelPlayer();
-        Duel duel = new Duel(duelist1, duelist2, new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
+        Duel duel = new Duel(duelist1, duelist2, new FakeEventBus(), new FakeCardRepo());
 
         assertNull(duel.activeDuelist);
         duel.setup();

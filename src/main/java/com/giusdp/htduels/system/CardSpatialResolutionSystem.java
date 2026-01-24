@@ -1,36 +1,59 @@
 package com.giusdp.htduels.system;
 
+import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
+import com.giusdp.htduels.component.CardSpatialComponent;
 import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.positioning.BoardLayout;
+import com.giusdp.htduels.duel.positioning.CardPositioningService;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore> {
+
     @Override
     public void tick(float deltaTime, int index, @NonNull ArchetypeChunk<EntityStore> archetypeChunk,
                      @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
         CardComponent cardComponent = archetypeChunk.getComponent(index, CardComponent.getComponentType());
-        if (cardComponent == null) {
+        CardSpatialComponent spatialComponent = archetypeChunk.getComponent(index, CardSpatialComponent.getComponentType());
+
+        if (cardComponent == null || spatialComponent == null) {
             return;
         }
 
-        Card card = cardComponent.getCard();
-
-        TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
-        if (transform != null) {
-            //transform.setPosition();
+        Ref<EntityStore> duelRef = cardComponent.getDuelEntity();
+        if (duelRef == null) {
+            return;
         }
+
+        BoardLayoutComponent layoutComponent = store.getComponent(duelRef, BoardLayoutComponent.getComponentType());
+        if (layoutComponent == null || layoutComponent.getBoardLayout() == null) {
+            return;
+        }
+
+        resolvePosition(cardComponent.getCard(), spatialComponent, layoutComponent.getBoardLayout());
+    }
+
+    public static void resolvePosition(Card card, CardSpatialComponent spatial, BoardLayout boardLayout) {
+        if (!spatial.isDirty()) {
+            return;
+        }
+
+        Vec2f pos = CardPositioningService.getWorldPosition(card, boardLayout);
+        spatial.setTargetPosition(pos);
+        spatial.clearDirty();
     }
 
     @Override
     public @Nullable Query<EntityStore> getQuery() {
-        return Query.and(CardComponent.getComponentType());
+        return Query.and(CardComponent.getComponentType(), CardSpatialComponent.getComponentType());
     }
 }

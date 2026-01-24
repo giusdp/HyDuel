@@ -21,7 +21,7 @@ class BotTest {
     void takeTurnEmitsPlayCardEventWhenBotHasCards() {
         FakeEventBus eventBus = new FakeEventBus();
         Bot bot = new Bot();
-        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo(), TestBoardLayout.create());
+        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo());
 
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         bot.addToHand(card);
@@ -38,7 +38,7 @@ class BotTest {
     void takeTurnDoesNothingWhenHandIsEmpty() {
         FakeEventBus eventBus = new FakeEventBus();
         Bot bot = new Bot();
-        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo(), TestBoardLayout.create());
+        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo());
 
         bot.playTurn(duel);
 

@@ -15,7 +15,7 @@ class DuelTest {
 
     @BeforeEach
     void setup() {
-        duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
+        duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
         duel.setup();
     }
 

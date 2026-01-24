@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class EndMainPhaseHandlerTest {
     @Test
     void addsCardsToHand() {
-        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
+        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
         duel.setup();
         duel.tick();
         duel.tick();

@@ -8,7 +8,6 @@ public class Card {
     private final CardAsset asset;
     private Duelist owner;
     private Zone zone;
-    private Duel duel;
 
     public Card(CardAsset asset) {
         this.asset = asset;
@@ -31,14 +30,6 @@ public class Card {
             return -1;
         }
         return zone.getCards().indexOf(this);
-    }
-
-    public Duel getDuel() {
-        return duel;
-    }
-
-    public void setDuel(Duel duel) {
-        this.duel = duel;
     }
 
     public Duelist getOwner() {

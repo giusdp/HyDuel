@@ -5,7 +5,6 @@ import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duel.handlers.*;
 import com.giusdp.htduels.duel.phases.StartupPhase;
-import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.duelist.Duelist;
 
 public class Duel {
@@ -14,17 +13,15 @@ public class Duel {
 
     public final GameEventBus eventBus;
     public final CardRepo cardRepo;
-    public final BoardLayout boardLayout;
 
     public Phase currentPhase;
     public Duelist activeDuelist;
 
-    public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo, BoardLayout boardLayout) {
+    public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
         this.duelist1 = duelist1;
         this.duelist2 = duelist2;
         this.eventBus = eventBus;
         this.cardRepo = cardRepo;
-        this.boardLayout = boardLayout;
     }
 
     public void setup() {
