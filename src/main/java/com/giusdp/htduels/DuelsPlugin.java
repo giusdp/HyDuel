@@ -12,6 +12,8 @@ import com.giusdp.htduels.event.BoardMouseHandler;
 import com.giusdp.htduels.event.CardMotionHandler;
 import com.giusdp.htduels.interaction.BoardInteraction;
 import com.giusdp.htduels.interaction.InteractionNames;
+import com.giusdp.htduels.system.CardMovementSystem;
+import com.giusdp.htduels.system.CardSpatialResolutionSystem;
 import com.giusdp.htduels.system.DuelTicker;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -75,6 +77,8 @@ public class DuelsPlugin extends JavaPlugin {
 
     private void setupSystems() {
         this.getEntityStoreRegistry().registerSystem(new DuelTicker());
+        this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
     }
 
     private void setupCardAssetStore() {
