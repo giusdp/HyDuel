@@ -2,6 +2,7 @@ package com.giusdp.htduels.handlers;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
+import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.EndMainPhase;
 import com.giusdp.htduels.duel.phases.MainPhase;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class EndMainPhaseHandlerTest {
     @Test
     void addsCardsToHand() {
-        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
         duel.setup();
         duel.tick();
         duel.tick();

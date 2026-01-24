@@ -2,6 +2,7 @@ package com.giusdp.htduels.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
+import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duel.event.DuelEvent;
@@ -21,7 +22,7 @@ class StartupPhaseTest {
     @BeforeEach
     void setup() {
         this.eventBus = new FakeEventBus();
-        var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
+        var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo(), TestBoardLayout.create());
         duel.setup();
     }
 

@@ -2,6 +2,7 @@ package com.giusdp.htduels.handlers;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
+import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ public class RandomDuelistSelectHandlerTest {
     void picksADuelist() {
         var duelist1 = new DuelPlayer();
         var duelist2 = new DuelPlayer();
-        Duel duel = new Duel(duelist1, duelist2, new FakeEventBus(), new FakeCardRepo());
+        Duel duel = new Duel(duelist1, duelist2, new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
 
         assertNull(duel.activeDuelist);
         duel.setup();

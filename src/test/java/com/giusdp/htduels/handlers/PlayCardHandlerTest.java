@@ -2,6 +2,7 @@ package com.giusdp.htduels.handlers;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
+import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
@@ -19,7 +20,7 @@ class PlayCardHandlerTest {
 
     @BeforeEach
     void setup() {
-        this.duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        this.duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo(), TestBoardLayout.create());
         this.duel.setup();
         this.card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         this.duel.duelist1.addToHand(card);

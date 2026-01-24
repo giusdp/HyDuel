@@ -2,6 +2,7 @@ package com.giusdp.htduels.duelist;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.FakeEventBus;
+import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
@@ -20,7 +21,7 @@ class BotTest {
     void takeTurnEmitsPlayCardEventWhenBotHasCards() {
         FakeEventBus eventBus = new FakeEventBus();
         Bot bot = new Bot();
-        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo());
+        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo(), TestBoardLayout.create());
 
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         bot.addToHand(card);
@@ -37,7 +38,7 @@ class BotTest {
     void takeTurnDoesNothingWhenHandIsEmpty() {
         FakeEventBus eventBus = new FakeEventBus();
         Bot bot = new Bot();
-        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo());
+        Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo(), TestBoardLayout.create());
 
         bot.playTurn(duel);
 
