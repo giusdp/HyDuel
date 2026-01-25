@@ -1,8 +1,6 @@
 plugins {
     `maven-publish`
     id("hytale-mod") version "0.+"
-    id("checkstyle")
-    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.giusdp"
@@ -94,21 +92,6 @@ publishing {
     }
 }
 
-checkstyle {
-    toolVersion = "10.12.5"
-}
-
-spotless {
-    java {
-        target("src/*/java/**/*.java")
-        importOrder()
-        removeUnusedImports()
-        eclipse()
-        indentWithSpaces(2)
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-}
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
