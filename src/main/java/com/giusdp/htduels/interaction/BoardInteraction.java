@@ -1,7 +1,10 @@
 package com.giusdp.htduels.interaction;
 
+import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.ui.BoardGameUi;
+import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -79,10 +82,29 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
     private void spawnDuel(CommandBuffer<EntityStore> commandBuffer, Vector3i boardPosition) {
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent(boardPosition));
+        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent());
+        holder.addComponent(BoardLayoutComponent.getComponentType(), new BoardLayoutComponent(createBoardLayout(boardPosition)));
         commandBuffer.addEntity(holder, AddReason.SPAWN);
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d)",
                 boardPosition.x, boardPosition.y, boardPosition.z);
+    }
+
+    private BoardLayout createBoardLayout(Vector3i boardPosition) {
+        float baseX = boardPosition.x;
+        float baseZ = boardPosition.z;
+
+        return new BoardLayout(
+                new Vec2f(baseX, baseZ - 0.5f),
+                new Vec2f(baseX, baseZ + 0.5f),
+                new Vec2f(baseX, baseZ - 1.0f),
+                new Vec2f(baseX, baseZ + 1.0f),
+                new Vec2f(baseX - 1.5f, baseZ - 1.0f),
+                new Vec2f(baseX - 1.5f, baseZ + 1.0f),
+                0.3f,
+                0.25f,
+                0.2f,
+                0.15f
+        );
     }
 
     private Position calculateCameraPosition(@NonNull Vector3i boardPosition) {

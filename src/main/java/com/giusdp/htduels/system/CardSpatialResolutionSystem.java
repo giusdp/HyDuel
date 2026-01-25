@@ -43,13 +43,13 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
     }
 
     public static void resolvePosition(Card card, CardSpatialComponent spatial, BoardLayout boardLayout) {
-        if (!spatial.isDirty()) {
+        if (!spatial.needsResolution(card)) {
             return;
         }
 
         Vec2f pos = CardPositioningService.getWorldPosition(card, boardLayout);
         spatial.setTargetPosition(pos);
-        spatial.clearDirty();
+        spatial.markResolved(card);
     }
 
     @Override

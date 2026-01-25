@@ -22,9 +22,7 @@ public class CardPositioningService {
         CardPositionFunction fn = FUNCTIONS.get(card.getZone().getType());
 
         if (fn == null) {
-            throw new IllegalStateException(
-                    "No layout function for zone " + card.getZone().getType()
-            );
+            throw new IllegalStateException("No layout function for zone " + card.getZone().getType());
         }
 
         return fn.compute(card, board);
