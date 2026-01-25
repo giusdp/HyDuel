@@ -36,15 +36,14 @@ public final class CardLayouts {
         int index = card.getZoneIndex();
         int count = hand.getCards().size();
 
-//        Vec2f center = owner.isBottomPlayer()
-//                ? board.playerBottomHandCenter
-//                : board.playerTopHandCenter;
-//
-//        float spacing = board.handSpacing;
-//        float offset = (index - (count - 1) / 2.0f) * spacing;
-//
-//        return center.add(new Vec2f(offset, 0));
-        return new Vec2f();
+        Vec2f center = owner.isBottomPlayer()
+                ? board.playerBottomHandCenter()
+                : board.playerTopHandCenter();
+
+        float spacing = board.handSpacing();
+        float offset = (index - (count - 1) / 2.0f) * spacing;
+
+        return new Vec2f(center.x + offset, center.y);
     }
 
     public static Vec2f deck(Card card, BoardLayout board) {

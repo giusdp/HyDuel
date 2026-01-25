@@ -2,9 +2,14 @@ package com.giusdp.htduels.interaction;
 
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
+import com.giusdp.htduels.duel.positioning.CardPositioningService;
+import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.spawn.CardSpawner;
 import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.math.Vec2f;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -82,11 +87,28 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
     private void spawnDuel(CommandBuffer<EntityStore> commandBuffer, Vector3i boardPosition) {
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent());
-        holder.addComponent(BoardLayoutComponent.getComponentType(), new BoardLayoutComponent(createBoardLayout(boardPosition)));
-        commandBuffer.addEntity(holder, AddReason.SPAWN);
+        DuelComponent duelComp = new DuelComponent();
+        BoardLayout layout = createBoardLayout(boardPosition);
+
+        holder.addComponent(DuelComponent.getComponentType(), duelComp);
+        holder.addComponent(BoardLayoutComponent.getComponentType(), new BoardLayoutComponent(layout));
+        Ref<EntityStore> duelRef = commandBuffer.addEntity(holder, AddReason.SPAWN);
+
+        float boardY = boardPosition.y + 1.0f;
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, boardY);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, boardY);
+
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d)",
                 boardPosition.x, boardPosition.y, boardPosition.z);
+    }
+
+    private void spawnHandCards(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> duelRef,
+                                Duelist duelist, BoardLayout layout, float boardY) {
+        for (Card card : duelist.getHand().getCards()) {
+            Vec2f pos2d = CardPositioningService.getWorldPosition(card, layout);
+            Vector3d pos = new Vector3d(pos2d.x, boardY, pos2d.y);
+            CardSpawner.spawn(commandBuffer, duelRef, card, pos);
+        }
     }
 
     private BoardLayout createBoardLayout(Vector3i boardPosition) {

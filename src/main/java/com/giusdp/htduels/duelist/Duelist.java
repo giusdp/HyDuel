@@ -7,10 +7,19 @@ import com.giusdp.htduels.duel.zone.Hand;
 public abstract class Duelist {
     protected final Hand hand;
     protected final Battlefield battlefield;
+    private boolean bottomPlayer;
 
     protected Duelist() {
         this.hand = new Hand();
         this.battlefield = new Battlefield();
+    }
+
+    public boolean isBottomPlayer() {
+        return bottomPlayer;
+    }
+
+    public void setBottomPlayer(boolean bottomPlayer) {
+        this.bottomPlayer = bottomPlayer;
     }
 
     public Hand getHand() {
