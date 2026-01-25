@@ -1,25 +1,33 @@
 package com.giusdp.htduels.duelist;
 
-import com.giusdp.htduels.asset.CardAsset;
-import java.util.ArrayList;
-import java.util.List;
+import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.zone.Battlefield;
+import com.giusdp.htduels.duel.zone.Hand;
 
 public abstract class Duelist {
-  private final List<CardAsset> hand;
+    protected final Hand hand;
+    protected final Battlefield battlefield;
 
-  protected Duelist() {
-    this.hand = new ArrayList<>();
-  }
+    protected Duelist() {
+        this.hand = new Hand();
+        this.battlefield = new Battlefield();
+    }
 
-  public List<CardAsset> getHand() {
-    return hand;
-  }
+    public Hand getHand() {
+        return hand;
+    }
 
-  public void addToHand(CardAsset card) {
-    hand.add(card);
-  }
+    public Battlefield getBattlefield() {
+        return battlefield;
+    }
 
-  public void removeFromHand(CardAsset card) {
-    hand.remove(card);
-  }
+    public void addToHand(Card card) {
+        card.setOwner(this);
+        hand.place(card, 0);
+    }
+
+    public void playCard(Card card) {
+        card.setOwner(this);
+        battlefield.place(card, 0);
+    }
 }

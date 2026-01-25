@@ -1,73 +1,71 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
-import com.giusdp.htduels.duel.event.DrawCards;
-import com.giusdp.htduels.duel.event.DuelEvent;
-import com.giusdp.htduels.duel.event.DuelStarted;
-import com.giusdp.htduels.duel.event.PlayCard;
-import com.giusdp.htduels.duel.event.RandomDuelistSelect;
+import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
-import com.giusdp.htduels.duel.handlers.DrawCardsHandler;
-import com.giusdp.htduels.duel.handlers.DrawCardsLogHandler;
-import com.giusdp.htduels.duel.handlers.DuelEventHandler;
-import com.giusdp.htduels.duel.handlers.DuelStartedLogHandler;
-import com.giusdp.htduels.duel.handlers.PlayCardHandler;
-import com.giusdp.htduels.duel.handlers.RandomDuelistSelectHandler;
+import com.giusdp.htduels.duel.handlers.*;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
 
 public class Duel {
-  public final Duelist duelist1;
-  public final Duelist duelist2;
+    public final Duelist duelist1;
+    public final Duelist duelist2;
 
-  public final GameEventBus eventBus;
-  public final CardRepo cardRepo;
+    public final GameEventBus eventBus;
+    public final CardRepo cardRepo;
 
-  public Battlefield battlefield;
+    public Phase currentPhase;
+    public Duelist activeDuelist;
 
-  public Phase currentPhase;
-  public Duelist activeDuelist;
+    public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
+        this.duelist1 = duelist1;
+        this.duelist2 = duelist2;
+        this.eventBus = eventBus;
+        this.cardRepo = cardRepo;
+    }
 
-  public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
-    this.duelist1 = duelist1;
-    this.duelist2 = duelist2;
-    this.eventBus = eventBus;
-    this.cardRepo = cardRepo;
-  }
+    public void setup() {
+        currentPhase = new StartupPhase();
 
-  public void setup() {
-    this.battlefield = new Battlefield(new Duelist[]{duelist1, duelist2});
-    currentPhase = new StartupPhase();
+        registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
 
-    registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
-    registerHandler(DrawCards.class, new DrawCardsLogHandler(this));
-    registerHandler(DuelStarted.class, new DuelStartedLogHandler(this));
-    registerHandler(PlayCard.class, new PlayCardHandler(this));
-    registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler(this));
+        registerHandler(DrawCards.class, new DrawCardsLogHandler());
 
-    currentPhase.onEnter(this);
-  }
+        registerHandler(PlayCard.class, new PlayCardHandler());
+        registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler());
+        registerHandler(EndMainPhase.class, new EndMainPhaseHandler());
 
-  public void tick() {
-    currentPhase.tick(this);
-  }
+        currentPhase.onEnter(this);
+    }
 
-  public void transitionTo(Phase newPhase) {
-    currentPhase.onExit(this);
-    currentPhase = newPhase;
-    currentPhase.onEnter(this);
-  }
+    public void tick() {
+        currentPhase.tick(this);
+    }
 
-  public <T extends DuelEvent> void registerHandler(Class<T> eventType, DuelEventHandler handler) {
-    this.eventBus.register(eventType, (short) 0, handler);
-  }
+    public void transitionTo(Phase newPhase) {
+        currentPhase.onExit(this);
+        currentPhase = newPhase;
+        currentPhase.onEnter(this);
+    }
 
-  @SuppressWarnings("unchecked")
-  public <T extends DuelEvent> void emit(T event) {
-    this.eventBus.post((Class<T>) event.getClass(), null, event);
-  }
+    public <T extends DuelEvent> void registerHandler(Class<T> eventType, DuelEventHandler handler) {
+        this.eventBus.register(eventType, (short) 0, handler);
+    }
 
-  public void setActiveDuelist(Duelist duelist) {
-    this.activeDuelist = duelist;
-  }
+    @SuppressWarnings("unchecked")
+    public <T extends DuelEvent> void emit(T event) {
+        this.eventBus.post((Class<T>) event.getClass(), null, event);
+    }
+
+    public void setActiveDuelist(Duelist duelist) {
+        this.activeDuelist = duelist;
+    }
+
+    public void swapActiveDuelist() {
+        if (this.activeDuelist == duelist1) {
+            this.activeDuelist = duelist2;
+        } else {
+            this.activeDuelist = duelist1;
+        }
+    }
 }
