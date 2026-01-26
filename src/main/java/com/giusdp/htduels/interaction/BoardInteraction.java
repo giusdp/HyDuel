@@ -166,9 +166,11 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = commandBuffer.addEntity(holder, AddReason.SPAWN);
 
         float boardY = boardPosition.y + 1.0f;
-        Vector3f cardRotation = new Vector3f(0, (float) rotation.getRadians(), 0);
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, boardY, cardRotation);
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, boardY, cardRotation);
+        float yawRadians = (float) rotation.getRadians();
+        Vector3f playerCardRotation = new Vector3f(0, yawRadians, 0);
+        Vector3f opponentCardRotation = new Vector3f((float) Math.PI, yawRadians, 0);  // Flipped face-down
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, boardY, opponentCardRotation);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, boardY, playerCardRotation);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 boardPosition.x, boardPosition.y, boardPosition.z, rotation.name());
