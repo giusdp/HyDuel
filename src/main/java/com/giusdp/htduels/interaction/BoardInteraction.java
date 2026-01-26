@@ -204,10 +204,10 @@ public class BoardInteraction extends SimpleBlockInteraction {
         return new BoardLayout(
                 origin,
                 rotation,
-                0.3f,   // playerBattlefieldDepth
-                0.3f,   // opponentBattlefieldDepth
-                0.6f,   // playerHandDepth
-                0.6f,   // opponentHandDepth
+                0.25f,  // playerBattlefieldDepth
+                0.25f,  // opponentBattlefieldDepth
+                0.5f,  // playerHandDepth
+                0.5f,  // opponentHandDepth
                 0.8f,   // deckOffsetX
                 0.3f,   // battlefieldSpacing
                 0.12f,  // handSpacing
