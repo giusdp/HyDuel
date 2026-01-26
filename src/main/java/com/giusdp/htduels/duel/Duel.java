@@ -49,12 +49,12 @@ public class Duel {
     }
 
     public <T extends DuelEvent> void registerHandler(Class<T> eventType, DuelEventHandler handler) {
-        this.eventBus.register(eventType, (short) 0, handler);
+        this.eventBus.register(eventType, this, (short) 0, handler);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends DuelEvent> void emit(T event) {
-        this.eventBus.post((Class<T>) event.getClass(), null, event);
+        this.eventBus.post((Class<T>) event.getClass(), this, event);
     }
 
     public void setActiveDuelist(Duelist duelist) {

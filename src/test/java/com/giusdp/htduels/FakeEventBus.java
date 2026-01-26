@@ -28,7 +28,7 @@ public class FakeEventBus implements GameEventBus {
     }
 
     @Override
-    public <K, E extends IEvent<K>> void register(Class<E> eventClass, short priority, DuelEventHandler handler) {
+    public <K, E extends IEvent<K>> void register(Class<E> eventClass, K key, short priority, DuelEventHandler handler) {
         handlers.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(handler);
     }
 

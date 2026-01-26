@@ -14,7 +14,7 @@ public final class HytaleEventBus implements GameEventBus {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <K, E extends IEvent<K>> void register(Class<E> eventClass, short priority, DuelEventHandler handler) {
-        HytaleServer.get().getEventBus().registerGlobal(priority, eventClass, (Consumer<E>) handler);
+    public <K, E extends IEvent<K>> void register(Class<E> eventClass, K key, short priority, DuelEventHandler handler) {
+        HytaleServer.get().getEventBus().register(priority, eventClass, key, (Consumer<E>) handler);
     }
 }
