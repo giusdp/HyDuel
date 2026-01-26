@@ -18,15 +18,12 @@ public final class CardLayouts {
         int index = card.getZoneIndex();
         int count = bf.getCards().size();
 
-//        Vec2f center = owner.isBottomPlayer()
-//                ? board.playerBottomBattlefieldCenter
-//                : board.playerTopBattlefieldCenter;
-//
-//        float spacing = board.battlefieldSpacing;
-//        float offset = (index - (count - 1) / 2.0f) * spacing;
-//
-//        return center.add(new Vec2f(offset, 0));
-        return new Vec2f();
+        float localX = (index - (count - 1) / 2.0f) * board.battlefieldSpacing();
+        float localZ = owner.isBottomPlayer()
+                ? -board.playerBattlefieldDepth()
+                : board.opponentBattlefieldDepth();
+
+        return board.toWorldPosition(localX, localZ);
     }
 
     public static Vec2f hand(Card card, BoardLayout board) {
@@ -36,24 +33,32 @@ public final class CardLayouts {
         int index = card.getZoneIndex();
         int count = hand.getCards().size();
 
-        Vec2f center = owner.isBottomPlayer()
-                ? board.playerBottomHandCenter()
-                : board.playerTopHandCenter();
+        float localX = (index - (count - 1) / 2.0f) * board.handSpacing();
+        float localZ = owner.isBottomPlayer()
+                ? -board.playerHandDepth()
+                : board.opponentHandDepth();
 
-        float spacing = board.handSpacing();
-        float offset = (index - (count - 1) / 2.0f) * spacing;
-
-        return new Vec2f(center.x + offset, center.y);
+        return board.toWorldPosition(localX, localZ);
     }
 
     public static Vec2f deck(Card card, BoardLayout board) {
+        Duelist owner = card.getOwner();
 
-        return new Vec2f();
+        float localZ = owner.isBottomPlayer()
+                ? -board.playerHandDepth()
+                : board.opponentHandDepth();
+
+        return board.toWorldPosition(-board.deckOffsetX(), localZ);
     }
 
     public static Vec2f graveyard(Card card, BoardLayout board) {
+        Duelist owner = card.getOwner();
 
-        return new Vec2f();
+        float localZ = owner.isBottomPlayer()
+                ? -board.playerHandDepth()
+                : board.opponentHandDepth();
+
+        // Graveyard on the opposite side of deck
+        return board.toWorldPosition(board.deckOffsetX(), localZ);
     }
 }
-

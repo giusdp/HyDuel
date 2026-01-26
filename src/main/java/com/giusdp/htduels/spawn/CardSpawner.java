@@ -35,7 +35,8 @@ public final class CardSpawner {
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull Ref<EntityStore> duelEntityRef,
             @Nonnull Card card,
-            @Nonnull Vector3d position
+            @Nonnull Vector3d position,
+            @Nonnull Vector3f rotation
     ) {
         ModelAsset modelAsset = ModelAsset.getAssetMap().getAsset(CARD_MODEL_NAME);
         if (modelAsset == null) {
@@ -44,10 +45,10 @@ public final class CardSpawner {
 
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
 
-        // Position
+        // Position and rotation
         holder.addComponent(
                 TransformComponent.getComponentType(),
-                new TransformComponent(position, new Vector3f())
+                new TransformComponent(position, rotation)
         );
 
         // Identity

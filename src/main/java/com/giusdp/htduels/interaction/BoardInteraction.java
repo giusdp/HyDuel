@@ -10,6 +10,7 @@ import com.giusdp.htduels.spawn.CardSpawner;
 import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -69,7 +70,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
         Rotation boardRotation = getBoardRotation(world, targetBlock);
         activateBoardCamera(player, playerRef, targetBlock, boardRotation);
-        //spawnDuel(commandBuffer, targetBlock, boardRotation);
+        spawnDuel(commandBuffer, targetBlock, boardRotation);
     }
 
 
@@ -165,19 +166,20 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = commandBuffer.addEntity(holder, AddReason.SPAWN);
 
         float boardY = boardPosition.y + 1.0f;
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, boardY);
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, boardY);
+        Vector3f cardRotation = new Vector3f(0, (float) rotation.getRadians(), 0);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, boardY, cardRotation);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, boardY, cardRotation);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 boardPosition.x, boardPosition.y, boardPosition.z, rotation.name());
     }
 
     private void spawnHandCards(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> duelRef,
-                                Duelist duelist, BoardLayout layout, float boardY) {
+                                Duelist duelist, BoardLayout layout, float boardY, Vector3f cardRotation) {
         for (Card card : duelist.getHand().getCards()) {
             Vec2f pos2d = CardPositioningService.getWorldPosition(card, layout);
             Vector3d pos = new Vector3d(pos2d.x, boardY, pos2d.y);
-            CardSpawner.spawn(commandBuffer, duelRef, card, pos);
+            CardSpawner.spawn(commandBuffer, duelRef, card, pos, cardRotation);
         }
     }
 
@@ -186,8 +188,16 @@ public class BoardInteraction extends SimpleBlockInteraction {
         float originX = boardPosition.x;
         float originZ = boardPosition.z;
         switch (rotation) {
-            case None, OneEighty -> originZ += 0.5f;
-            case Ninety, TwoSeventy -> originX += 0.5f;
+            case None -> originZ += 0.5f;
+            case Ninety -> {
+                originX += 0.5f;
+                originZ += 1f;
+            }
+            case OneEighty -> {
+                originX += 1f;
+                originZ += 0.5f;
+            }
+            case TwoSeventy -> originX += 0.5f;
         }
         Vec2f origin = new Vec2f(originX, originZ);
 
