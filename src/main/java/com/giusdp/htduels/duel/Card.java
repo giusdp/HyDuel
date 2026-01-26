@@ -2,6 +2,7 @@ package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.zone.Zone;
+import com.giusdp.htduels.duel.zone.ZoneType;
 import com.giusdp.htduels.duelist.Duelist;
 
 public class Card {
@@ -19,6 +20,10 @@ public class Card {
 
     public Zone getZone() {
         return zone;
+    }
+
+    public ZoneType getCurrentZoneType() {
+        return zone != null ? zone.getType() : null;
     }
 
     public void setZone(Zone zone) {

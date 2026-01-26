@@ -19,10 +19,10 @@ public class CardPositioningService {
     }
 
     public static Vec2f getWorldPosition(Card card, BoardLayout board) {
-        CardPositionFunction fn = FUNCTIONS.get(card.getZone().getType());
+        CardPositionFunction fn = FUNCTIONS.get(card.getCurrentZoneType());
 
         if (fn == null) {
-            throw new IllegalStateException("No layout function for zone " + card.getZone().getType());
+            throw new IllegalStateException("No layout function for zone " + card.getCurrentZoneType());
         }
 
         return fn.compute(card, board);
