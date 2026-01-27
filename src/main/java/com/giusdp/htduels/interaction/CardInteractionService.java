@@ -37,7 +37,7 @@ public class CardInteractionService {
         var spatialData = session.getSpatialData();
         Vec2f worldPos = screenToWorld(screenPoint, spatialData);
 
-        CardComponent cardUnderMouse = findCardAt(session, worldPos);
+        var cardUnderMouse = findCardAt(session, worldPos);
 
         if (cardUnderMouse == null) {
             return;
@@ -49,12 +49,9 @@ public class CardInteractionService {
             return;
         }
 
-        Card card = cardUnderMouse.getCard();
-
-
         Duelist clicker = duel.duelist1; // TODO: Determine which duelist clicked
 
-        duel.emit(new CardClicked(duel, card, clicker));
+        duel.emit(new CardClicked(duel, cardUnderMouse, clicker));
     }
 
 
@@ -82,7 +79,7 @@ public class CardInteractionService {
     }
 
     @Nullable
-    public static CardComponent findCardAt(DuelSession session, Vec2f worldPos) {
+    public static Ref<EntityStore>  findCardAt(DuelSession session, Vec2f worldPos) {
         Store<EntityStore> store = session.getDuelRef().getStore();
 
         for (Ref<EntityStore> cardRef : session.getCardEntities()) {
@@ -108,7 +105,7 @@ public class CardInteractionService {
 
             if (worldPos.x >= minX && worldPos.x <= maxX &&
                     worldPos.y >= minZ && worldPos.y <= maxZ) {
-                return card;
+                return cardRef;
             }
         }
         return null;
