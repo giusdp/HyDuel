@@ -12,8 +12,6 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class DuelComponent implements Component<EntityStore> {
-    // Static reference to the currently active duel for command access
-    private static DuelComponent activeDuel;
     public Duel duel;
 
     public DuelComponent() {
@@ -22,13 +20,8 @@ public class DuelComponent implements Component<EntityStore> {
         player.setBottomPlayer(true);
         bot.setBottomPlayer(false);
         duel = new Duel(player, bot, new HytaleEventBus(), new CardAssetRepo());
-        activeDuel = this;
 
         duel.setup();
-    }
-
-    public static DuelComponent getActiveDuel() {
-        return activeDuel;
     }
 
     public static ComponentType<EntityStore, DuelComponent> getComponentType() {
