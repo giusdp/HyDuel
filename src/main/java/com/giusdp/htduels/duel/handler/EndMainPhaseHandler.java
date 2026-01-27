@@ -1,4 +1,4 @@
-package com.giusdp.htduels.duel.handlers;
+package com.giusdp.htduels.duel.handler;
 
 import com.giusdp.htduels.duel.event.DuelEvent;
 import com.giusdp.htduels.duel.phases.TurnEndPhase;

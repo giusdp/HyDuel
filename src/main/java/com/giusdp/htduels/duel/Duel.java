@@ -3,7 +3,7 @@ package com.giusdp.htduels.duel;
 import com.giusdp.htduels.CardRepo;
 import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
-import com.giusdp.htduels.duel.handlers.*;
+import com.giusdp.htduels.duel.handler.*;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
 

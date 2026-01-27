@@ -2,7 +2,7 @@ package com.giusdp.htduels;
 
 import com.giusdp.htduels.duel.event.DuelEvent;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
-import com.giusdp.htduels.duel.handlers.DuelEventHandler;
+import com.giusdp.htduels.duel.handler.DuelEventHandler;
 import com.hypixel.hytale.event.IEvent;
 
 import java.util.ArrayList;

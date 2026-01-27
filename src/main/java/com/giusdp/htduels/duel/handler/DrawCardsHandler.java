@@ -1,4 +1,4 @@
-package com.giusdp.htduels.duel.handlers;
+package com.giusdp.htduels.duel.handler;
 
 import com.giusdp.htduels.CardRepo;
 import com.giusdp.htduels.asset.CardAsset;

@@ -181,7 +181,6 @@ public class BoardInteraction extends SimpleBlockInteraction {
         // Look straight down with rotation matching board orientation
         settings.rotationType = RotationType.Custom;
 
-        // I honestly don't know why we need to convert to radians here but not for the pitch
         settings.rotation = new Direction((float) rotation.getRadians(), CAMERA_PITCH, 0);
 
         // Freeze player movement
