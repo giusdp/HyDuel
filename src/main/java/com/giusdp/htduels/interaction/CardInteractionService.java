@@ -10,7 +10,6 @@ import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialData;
-import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Vector3d;
@@ -28,8 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CardInteractionService {
-    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-
     private static final float FOV_RADIANS = (float) Math.toRadians(80);
     private static final float ASPECT_RATIO = 16f / 9f;
 
@@ -58,8 +55,6 @@ public class CardInteractionService {
         Duelist clicker = duel.duelist1; // TODO: Determine which duelist clicked
 
         duel.emit(new CardClicked(duel, card, clicker));
-        LOGGER.atInfo().log("Card clicked: %s at world pos (%.2f, %.2f)",
-                card.getAsset().id(), worldPos.x, worldPos.y);
     }
 
 
