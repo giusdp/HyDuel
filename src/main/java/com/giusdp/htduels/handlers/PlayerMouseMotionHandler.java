@@ -1,8 +1,6 @@
-package com.giusdp.htduels.event;
+package com.giusdp.htduels.handlers;
 
-import com.giusdp.htduels.CardAssetRepo;
 import com.giusdp.htduels.DuelSession;
-import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -12,7 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 
-public class CardMotionHandler {
+public class PlayerMouseMotionHandler {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 

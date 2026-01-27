@@ -9,8 +9,8 @@ import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardSpatialComponent;
 import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.event.BoardMouseHandler;
-import com.giusdp.htduels.event.CardMotionHandler;
+import com.giusdp.htduels.handlers.PlayerMouseButtonHandler;
+import com.giusdp.htduels.handlers.PlayerMouseMotionHandler;
 import com.giusdp.htduels.interaction.BoardInteraction;
 import com.giusdp.htduels.interaction.InteractionNames;
 import com.giusdp.htduels.system.CardMovementSystem;
@@ -76,8 +76,10 @@ public class DuelsPlugin extends JavaPlugin {
     }
 
     private void setupEventHandlers() {
-        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, BoardMouseHandler::handleMouseClick);
-        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, CardMotionHandler::handleMouseMotion);
+        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, PlayerMouseButtonHandler::handleMouseClick);
+        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, PlayerMouseMotionHandler::handleMouseMotion);
+
+
     }
 
     private void setupSystems() {
