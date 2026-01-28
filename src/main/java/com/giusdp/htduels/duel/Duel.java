@@ -4,6 +4,7 @@ import com.giusdp.htduels.CardRepo;
 import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duel.handler.*;
+import com.giusdp.htduels.duel.handler.animation.CardClickedHandler;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
 
@@ -34,6 +35,9 @@ public class Duel {
         registerHandler(PlayCard.class, new PlayCardHandler());
         registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler());
         registerHandler(EndMainPhase.class, new EndMainPhaseHandler());
+
+        // animation handlers
+        registerHandler(CardClicked.class, new CardClickedHandler());
 
         currentPhase.onEnter(this);
     }

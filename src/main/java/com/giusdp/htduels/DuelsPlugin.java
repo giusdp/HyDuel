@@ -78,8 +78,6 @@ public class DuelsPlugin extends JavaPlugin {
     private void setupEventHandlers() {
         this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, PlayerMouseButtonHandler::handleMouseClick);
         this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, PlayerMouseMotionHandler::handleMouseMotion);
-
-
     }
 
     private void setupSystems() {

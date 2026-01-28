@@ -3,20 +3,19 @@ package com.giusdp.htduels.interaction;
 import com.giusdp.htduels.DuelSession;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.CardClicked;
+import com.giusdp.htduels.duel.event.CardReleased;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.component.spatial.SpatialData;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.protocol.MouseButtonState;
 import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.protocol.Vector2f;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
-import com.hypixel.hytale.server.core.modules.collision.CollisionMath;
 import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -51,7 +50,11 @@ public class CardInteractionService {
 
         Duelist clicker = duel.duelist1; // TODO: Determine which duelist clicked
 
-        duel.emit(new CardClicked(duel, cardUnderMouse, clicker));
+        if (event.getMouseButton().state == MouseButtonState.Pressed) {
+            duel.emit(new CardClicked(duel, cardUnderMouse, clicker));
+        } else {
+            duel.emit(new CardReleased(duel, cardUnderMouse, clicker));
+        }
     }
 
 
@@ -79,7 +82,7 @@ public class CardInteractionService {
     }
 
     @Nullable
-    public static Ref<EntityStore>  findCardAt(DuelSession session, Vec2f worldPos) {
+    public static Ref<EntityStore> findCardAt(DuelSession session, Vec2f worldPos) {
         Store<EntityStore> store = session.getDuelRef().getStore();
 
         for (Ref<EntityStore> cardRef : session.getCardEntities()) {
