@@ -46,6 +46,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final double Y_OFFSET = 1.75;
     private static final float CAMERA_PITCH = (float) Math.toRadians(-90.0f);
+    public static final float CARD_Y_OFFSET = 1.1f;
 
     public BoardInteraction() {
         super("BoardActivation");
@@ -66,7 +67,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Position cameraPosition = calculateCameraPosition(targetBlock, boardRotation);
 
         float cameraYaw = (float) boardRotation.getRadians();
-        float cardY = targetBlock.y + 1.0f;
+        float cardY = targetBlock.y + CARD_Y_OFFSET;
 
         assert playerRef != null;
         activateBoardCamera(playerRef, cameraPosition, boardRotation);
@@ -81,14 +82,13 @@ public class BoardInteraction extends SimpleBlockInteraction {
         DuelSession session = DuelSession.get(playerRef);
 
         // Spawn cards and register them with the session
-        float boardY = targetBlock.y + 1.0f;
         float yawRadians = (float) boardRotation.getRadians();
         Vector3f playerCardRotation = new Vector3f(0, yawRadians, 0);
         Vector3f opponentCardRotation = new Vector3f((float) Math.PI, yawRadians, 0);
 
         // TODO at some point we do a proper game init with draw events
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, boardY, opponentCardRotation, session);
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, boardY, playerCardRotation, session);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, cardY, opponentCardRotation, session);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, cardY, playerCardRotation, session);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());

@@ -1,6 +1,7 @@
 package com.giusdp.htduels.handlers;
 
 import com.giusdp.htduels.DuelSession;
+import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -29,6 +30,6 @@ public class PlayerMouseMotionHandler {
             return;
         }
 
-//        CardInteractionService.processMotion(event, session);
+        CardInteractionService.processMotion(event, session);
     }
 }

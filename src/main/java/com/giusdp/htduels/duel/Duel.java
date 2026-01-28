@@ -5,6 +5,9 @@ import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duel.handler.*;
 import com.giusdp.htduels.duel.handler.animation.CardClickedHandler;
+import com.giusdp.htduels.duel.handler.animation.CardHoveredHandler;
+import com.giusdp.htduels.duel.handler.animation.CardReleasedHandler;
+import com.giusdp.htduels.duel.handler.animation.CardUnhoveredHandler;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
 
@@ -38,6 +41,9 @@ public class Duel {
 
         // animation handlers
         registerHandler(CardClicked.class, new CardClickedHandler());
+        registerHandler(CardReleased.class, new CardReleasedHandler());
+        registerHandler(CardHovered.class, new CardHoveredHandler());
+        registerHandler(CardUnhovered.class, new CardUnhoveredHandler());
 
         currentPhase.onEnter(this);
     }

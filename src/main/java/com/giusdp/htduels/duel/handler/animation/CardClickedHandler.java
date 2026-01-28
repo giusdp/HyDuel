@@ -9,10 +9,7 @@ public class CardClickedHandler extends DuelEventHandler {
 
     @Override
     public void accept(DuelEvent ev) {
-        CardClicked hoveredEv = (CardClicked) ev;
-        var transform = hoveredEv.cardRef.getStore().getComponent(hoveredEv.cardRef, TransformComponent.getComponentType());
-        var pos = transform.getPosition();
-        pos.y += 0.05;
+        System.out.println("Card Clicked Handler triggered");
     }
 
 }
