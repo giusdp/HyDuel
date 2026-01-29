@@ -1,6 +1,6 @@
 package com.giusdp.htduels.interaction;
 
-import com.giusdp.htduels.DuelSession;
+import com.giusdp.htduels.PlayerDuelContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Card;
@@ -78,8 +78,8 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = spawnDuelEntity(commandBuffer, duelComp, layout);
 
         // Register the active duel session before spawning cards
-        DuelSession.register(playerRef, duelRef, duelComp.duel.duelist2, cameraPosition, cameraYaw, cardY);
-        DuelSession session = DuelSession.get(playerRef);
+        PlayerDuelContext.register(playerRef, duelRef, duelComp.duel.duelist2, cameraPosition, cameraYaw, cardY);
+        PlayerDuelContext session = PlayerDuelContext.get(playerRef);
 
         // Spawn cards and register them with the session
         float yawRadians = (float) boardRotation.getRadians();
@@ -130,7 +130,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
     private void spawnHandCards(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> duelRef,
                                 Duelist duelist, BoardLayout layout, float boardY, Vector3f cardRotation,
-                                DuelSession session) {
+                                PlayerDuelContext session) {
         for (Card card : duelist.getHand().getCards()) {
             spawnCard(commandBuffer, duelRef, card, layout, boardY, cardRotation, session);
         }
@@ -138,7 +138,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
     private void spawnCard(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> duelRef,
                            Card card, BoardLayout layout, float boardY, Vector3f cardRotation,
-                           DuelSession session) {
+                           PlayerDuelContext session) {
         Vec2f pos2d = CardPositioningService.getWorldPosition(card, layout);
         Vector3d pos = new Vector3d(pos2d.x, boardY, pos2d.y);
         Ref<EntityStore> cardRef = CardSpawner.spawn(commandBuffer, duelRef, card, pos, cardRotation);

@@ -1,6 +1,6 @@
 package com.giusdp.htduels.handlers;
 
-import com.giusdp.htduels.DuelSession;
+import com.giusdp.htduels.PlayerDuelContext;
 import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
@@ -14,7 +14,7 @@ public class PlayerMouseButtonHandler {
     public static void handleMouseClick(@Nonnull PlayerMouseButtonEvent event) {
         PlayerRef playerRef = event.getPlayerRefComponent();
 
-        DuelSession session = DuelSession.get(playerRef);
+        PlayerDuelContext session = PlayerDuelContext.get(playerRef);
 
         if (session == null) {
             return;

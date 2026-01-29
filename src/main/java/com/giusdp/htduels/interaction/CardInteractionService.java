@@ -1,9 +1,8 @@
 package com.giusdp.htduels.interaction;
 
-import com.giusdp.htduels.DuelSession;
+import com.giusdp.htduels.PlayerDuelContext;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardDragComponent;
-import com.giusdp.htduels.component.CardSpatialComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.CardClicked;
@@ -36,7 +35,7 @@ public class CardInteractionService {
 
     private static final Map<PlayerRef, Ref<EntityStore>> hoveredCards = new HashMap<>();
 
-    public static void processClick(PlayerMouseButtonEvent event, DuelSession session) {
+    public static void processClick(PlayerMouseButtonEvent event, PlayerDuelContext session) {
         Vector2f screenPoint = event.getScreenPoint();
         var spatialData = session.getSpatialData();
         Vec2f worldPos = screenToWorld(screenPoint, spatialData);
@@ -90,7 +89,7 @@ public class CardInteractionService {
         }
     }
 
-    public static void processMotion(PlayerMouseMotionEvent event, DuelSession session) {
+    public static void processMotion(PlayerMouseMotionEvent event, PlayerDuelContext session) {
         Vector2f screenPoint = event.getScreenPoint();
         Vec2f worldPos = screenToWorld(screenPoint, session.getSpatialData());
 
@@ -123,7 +122,7 @@ public class CardInteractionService {
         }
     }
 
-    public static Vec2f screenToWorld(Vector2f screenPoint, DuelSession.DuelSpatialData spatialData) {
+    public static Vec2f screenToWorld(Vector2f screenPoint, PlayerDuelContext.DuelSpatialData spatialData) {
         Position cameraPos = spatialData.cameraPos();
         float cameraYaw = spatialData.cameraYaw();
         float cardY = spatialData.cardY();
@@ -147,7 +146,7 @@ public class CardInteractionService {
     }
 
     @Nullable
-    public static Ref<EntityStore> findCardAt(DuelSession session, Vec2f worldPos) {
+    public static Ref<EntityStore> findCardAt(PlayerDuelContext session, Vec2f worldPos) {
         Store<EntityStore> store = session.getDuelRef().getStore();
 
         for (Ref<EntityStore> cardRef : session.getCardEntities()) {
@@ -191,7 +190,7 @@ public class CardInteractionService {
 //    }
 
     @Nullable
-    private static Duel getDuel(DuelSession session) {
+    private static Duel getDuel(PlayerDuelContext session) {
         Store<EntityStore> store = session.getDuelRef().getStore();
         DuelComponent duelComp = store.getComponent(session.getDuelRef(), DuelComponent.getComponentType());
         return duelComp != null ? duelComp.duel : null;

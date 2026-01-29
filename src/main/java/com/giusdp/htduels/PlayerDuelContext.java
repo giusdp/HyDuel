@@ -15,19 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DuelSession {
+public class PlayerDuelContext {
     public record DuelSpatialData(Position cameraPos, float cameraYaw, float cardY) {}
 
     final DuelSpatialData spatialData;
 
-    private static final Map<PlayerRef, DuelSession> sessions = new HashMap<>();
+    private static final Map<PlayerRef, PlayerDuelContext> sessions = new HashMap<>();
 
     public static void register(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
-        sessions.put(player, new DuelSession(player, duelRef, duelist, cameraPos, cameraYaw, cardY));
+        sessions.put(player, new PlayerDuelContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY));
     }
 
     @Nullable
-    public static DuelSession get(PlayerRef player) {
+    public static PlayerDuelContext get(PlayerRef player) {
         return sessions.get(player);
     }
 
@@ -38,7 +38,7 @@ public class DuelSession {
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
-    public DuelSession(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+    public PlayerDuelContext(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
         this.player = player;
         this.duelRef = duelRef;
         this.duelist = duelist;
