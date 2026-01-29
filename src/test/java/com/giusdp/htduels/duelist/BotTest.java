@@ -26,7 +26,7 @@ class BotTest {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         bot.addToHand(card);
 
-        bot.playTurn(duel);
+        bot.takeTurn(duel);
 
         List<DuelEvent> events = eventBus.postedEvents();
         boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof PlayCard pc && pc.card.equals(card));
@@ -40,7 +40,7 @@ class BotTest {
         Bot bot = new Bot();
         Duel duel = new Duel(new DuelPlayer(), bot, eventBus, new FakeCardRepo());
 
-        bot.playTurn(duel);
+        bot.takeTurn(duel);
 
         var evs = eventBus.postedEvents();
         assertEquals(1, evs.size());

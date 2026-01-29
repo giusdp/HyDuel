@@ -10,7 +10,8 @@ public class Bot extends Duelist {
         super();
     }
 
-    public void playTurn(Duel duel) {
+    @Override
+    public void takeTurn(Duel duel) {
         if (hand.getCards().isEmpty()) {
             duel.emit(new EndMainPhase(duel));
             return;

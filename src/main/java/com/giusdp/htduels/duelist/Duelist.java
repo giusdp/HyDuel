@@ -1,6 +1,7 @@
 package com.giusdp.htduels.duelist;
 
 import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.zone.Battlefield;
 import com.giusdp.htduels.duel.zone.Hand;
 
@@ -39,4 +40,6 @@ public abstract class Duelist {
         card.setOwner(this);
         battlefield.place(card, 0);
     }
+
+    public abstract void takeTurn(Duel duel);
 }
