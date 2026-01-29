@@ -31,22 +31,22 @@ public class PlayerDuelContext {
         return sessions.get(player);
     }
 
-    private final PlayerRef player;
+    private final PlayerRef playerRef;
     private final Ref<EntityStore> duelRef;
     private final Duelist duelist;
     private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
-    public PlayerDuelContext(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
-        this.player = player;
+    public PlayerDuelContext(PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+        this.playerRef = playerRef;
         this.duelRef = duelRef;
         this.duelist = duelist;
         this.spatialData = new DuelSpatialData(cameraPos, cameraYaw, cardY);
     }
 
-    public PlayerRef getPlayer() {
-        return player;
+    public PlayerRef getPlayerRef() {
+        return playerRef;
     }
 
     public Ref<EntityStore> getDuelRef() {

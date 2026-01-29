@@ -3,13 +3,7 @@ package com.giusdp.htduels.interaction;
 import com.giusdp.htduels.PlayerDuelContext;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardDragComponent;
-import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.event.CardClicked;
-import com.giusdp.htduels.duel.event.CardHovered;
-import com.giusdp.htduels.duel.event.CardReleased;
-import com.giusdp.htduels.duel.event.CardUnhovered;
-import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.component.CardHoverComponent;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Vec2f;
@@ -35,40 +29,32 @@ public class CardInteractionService {
 
     private static final Map<PlayerRef, Ref<EntityStore>> hoveredCards = new HashMap<>();
 
-    public static void processClick(PlayerMouseButtonEvent event, PlayerDuelContext session) {
+    public static void processClick(PlayerMouseButtonEvent event, PlayerDuelContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
-        var spatialData = session.getSpatialData();
+        var spatialData = ctx.getSpatialData();
         Vec2f worldPos = screenToWorld(screenPoint, spatialData);
 
-        Duel duel = getDuel(session);
-        if (duel == null) {
-            return;
-        }
-
-        Duelist clicker = session.getDuelist();
-        Store<EntityStore> store = session.getDuelRef().getStore();
+        Store<EntityStore> store = ctx.getDuelRef().getStore();
 
         if (event.getMouseButton().state == MouseButtonState.Pressed) {
-            var cardUnderMouse = findCardAt(session, worldPos);
+            var cardUnderMouse = findCardAt(ctx, worldPos);
             if (cardUnderMouse == null) {
                 return;
             }
 
             CardComponent cardComp = store.getComponent(cardUnderMouse, CardComponent.getComponentType());
-            if (cardComp == null || cardComp.getCard().getOwner() != clicker) {
+            if (cardComp == null || cardComp.getCard().getOwner() != ctx.getDuelist()) {
                 return;
             }
 
             CardDragComponent drag = store.getComponent(cardUnderMouse, CardDragComponent.getComponentType());
             if (drag != null) {
                 drag.setDragged(true);
-                drag.setDragger(session.getPlayer());
+                drag.setDragger(ctx.getPlayerRef());
             }
-            session.setDraggedCard(cardUnderMouse);
-
-            duel.emit(new CardClicked(duel, cardUnderMouse, clicker));
+            ctx.setDraggedCard(cardUnderMouse);
         } else {
-            Ref<EntityStore> draggedCard = session.getDraggedCard();
+            Ref<EntityStore> draggedCard = ctx.getDraggedCard();
             if (draggedCard == null) {
                 return;
             }
@@ -78,47 +64,40 @@ public class CardInteractionService {
                 drag.setDragged(false);
                 drag.setDragger(null);
             }
-            session.setDraggedCard(null);
+            ctx.setDraggedCard(null);
 
-            Ref<EntityStore> hoveredCard = hoveredCards.remove(session.getPlayer());
+            Ref<EntityStore> hoveredCard = hoveredCards.remove(ctx.getPlayerRef());
             if (hoveredCard != null) {
-                duel.emit(new CardUnhovered(duel, hoveredCard, clicker));
+                setHovered(store, hoveredCard, false);
             }
-
-            duel.emit(new CardReleased(duel, draggedCard, clicker));
         }
     }
 
-    public static void processMotion(PlayerMouseMotionEvent event, PlayerDuelContext session) {
+    public static void processMotion(PlayerMouseMotionEvent event, PlayerDuelContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
-        Vec2f worldPos = screenToWorld(screenPoint, session.getSpatialData());
+        Vec2f worldPos = screenToWorld(screenPoint, ctx.getSpatialData());
 
-        session.setMouseWorldPosition(worldPos);
+        ctx.setMouseWorldPosition(worldPos);
 
-        if (session.getDraggedCard() != null) {
+        if (ctx.getDraggedCard() != null) {
             return;
         }
 
-        Ref<EntityStore> cardUnderMouse = findCardAt(session, worldPos);
-        Ref<EntityStore> previouslyHovered = hoveredCards.get(session.getPlayer());
+        Ref<EntityStore> cardUnderMouse = findCardAt(ctx, worldPos);
+        Ref<EntityStore> previouslyHovered = hoveredCards.get(ctx.getPlayerRef());
 
         if (previouslyHovered == null && cardUnderMouse == null) {
             return;
         }
 
-        Duel duel = getDuel(session);
-        if (duel == null) {
-            return;
-        }
-
-        Duelist viewer = session.getDuelist();
+        Store<EntityStore> store = ctx.getDuelRef().getStore();
 
         if (cardUnderMouse == null) {
-            duel.emit(new CardUnhovered(duel, previouslyHovered, viewer));
-            hoveredCards.remove(session.getPlayer());
+            setHovered(store, previouslyHovered, false);
+            hoveredCards.remove(ctx.getPlayerRef());
         } else if (previouslyHovered == null) {
-            duel.emit(new CardHovered(duel, cardUnderMouse, viewer));
-            hoveredCards.put(session.getPlayer(), cardUnderMouse);
+            setHovered(store, cardUnderMouse, true);
+            hoveredCards.put(ctx.getPlayerRef(), cardUnderMouse);
         }
     }
 
@@ -146,10 +125,10 @@ public class CardInteractionService {
     }
 
     @Nullable
-    public static Ref<EntityStore> findCardAt(PlayerDuelContext session, Vec2f worldPos) {
-        Store<EntityStore> store = session.getDuelRef().getStore();
+    public static Ref<EntityStore> findCardAt(PlayerDuelContext ctx, Vec2f worldPos) {
+        Store<EntityStore> store = ctx.getDuelRef().getStore();
 
-        for (Ref<EntityStore> cardRef : session.getCardEntities()) {
+        for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {
             CardComponent card = store.getComponent(cardRef, CardComponent.getComponentType());
             if (card == null) {
                 continue;
@@ -179,20 +158,10 @@ public class CardInteractionService {
     }
 
 
-//    @Nullable
-//    public CardComponent getHoveredCard(PlayerRef player) {
-//        return hoveredCards.get(player);
-//    }
-//
-//
-//    public void clearHoverState(PlayerRef player) {
-//        hoveredCards.remove(player);
-//    }
-
-    @Nullable
-    private static Duel getDuel(PlayerDuelContext session) {
-        Store<EntityStore> store = session.getDuelRef().getStore();
-        DuelComponent duelComp = store.getComponent(session.getDuelRef(), DuelComponent.getComponentType());
-        return duelComp != null ? duelComp.duel : null;
+    private static void setHovered(Store<EntityStore> store, Ref<EntityStore> cardRef, boolean hovered) {
+        CardHoverComponent hover = store.getComponent(cardRef, CardHoverComponent.getComponentType());
+        if (hover != null) {
+            hover.setHovered(hovered);
+        }
     }
 }
