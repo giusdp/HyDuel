@@ -119,7 +119,7 @@ public class CardInteractionService {
         if (cardUnderMouse == null) {
             setHovered(store, previouslyHovered, false);
             hoveredCards.remove(ctx.getPlayerRef());
-        } else if (previouslyHovered == null) {
+        } else if (previouslyHovered == null && isInHand(store, cardUnderMouse)) {
             setHovered(store, cardUnderMouse, true);
             hoveredCards.put(ctx.getPlayerRef(), cardUnderMouse);
         }
@@ -199,5 +199,10 @@ public class CardInteractionService {
     private static BoardLayout getBoardLayout(Store<EntityStore> store, Ref<EntityStore> duelRef) {
         BoardLayoutComponent layoutComp = store.getComponent(duelRef, BoardLayoutComponent.getComponentType());
         return layoutComp != null ? layoutComp.getBoardLayout() : null;
+    }
+
+    private static boolean isInHand(Store<EntityStore> store, Ref<EntityStore> cardRef) {
+        CardComponent comp = store.getComponent(cardRef, CardComponent.getComponentType());
+        return comp != null && comp.getCard().getCurrentZoneType() == ZoneType.HAND;
     }
 }
