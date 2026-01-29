@@ -1,7 +1,7 @@
 package com.giusdp.htduels.system;
 
+import com.giusdp.htduels.DuelSession;
 import com.giusdp.htduels.component.CardDragComponent;
-import com.giusdp.htduels.component.CardSpatialComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
@@ -14,17 +14,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public class CardMovementSystem extends EntityTickingSystem<EntityStore> {
+public class CardDragSystem extends EntityTickingSystem<EntityStore> {
+
     @Override
     public void tick(float deltaTime, int index, @NonNull ArchetypeChunk<EntityStore> archetypeChunk,
                      @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
-        CardSpatialComponent spatial = archetypeChunk.getComponent(index, CardSpatialComponent.getComponentType());
-        if (spatial == null || spatial.getTargetPosition() == null) {
-            return;
-        }
-
-        CardDragComponent drag = archetypeChunk.getComponent(index, CardDragComponent.getComponentType());
-        if (drag != null && drag.isDragged()) {
+        CardDragComponent dragComponent = archetypeChunk.getComponent(index, CardDragComponent.getComponentType());
+        if (dragComponent == null || !dragComponent.isDragged()) {
             return;
         }
 
@@ -33,16 +29,31 @@ public class CardMovementSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        applyMovement(transform.getPosition(), spatial.getTargetPosition());
+        var dragger = dragComponent.getDragger();
+        if (dragger == null) {
+            return;
+        }
+
+        DuelSession session = DuelSession.get(dragger);
+        if (session == null) {
+            return;
+        }
+
+        Vec2f mousePos = session.getMouseWorldPosition();
+        if (mousePos == null) {
+            return;
+        }
+
+        applyDrag(transform.getPosition(), mousePos);
     }
 
-    public static void applyMovement(Vector3d position, Vec2f targetPosition) {
-        position.x = targetPosition.x;
-        position.z = targetPosition.y;
+    public static void applyDrag(Vector3d position, Vec2f mouseWorldPosition) {
+        position.x = mouseWorldPosition.x;
+        position.z = mouseWorldPosition.y;
     }
 
     @Override
     public @Nullable Query<EntityStore> getQuery() {
-        return Query.and(CardSpatialComponent.getComponentType());
+        return Query.and(CardDragComponent.getComponentType());
     }
 }

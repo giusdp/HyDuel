@@ -6,6 +6,8 @@ import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+import com.hypixel.hytale.math.Vec2f;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +33,8 @@ public class DuelSession {
     private final PlayerRef player;
     private final Ref<EntityStore> duelRef;
     private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
+    private @Nullable Vec2f mouseWorldPosition;
+    private @Nullable Ref<EntityStore> draggedCard;
 
     public DuelSession(PlayerRef player, Ref<EntityStore> duelRef, Position cameraPos, float cameraYaw, float cardY) {
         this.player = player;
@@ -56,5 +60,21 @@ public class DuelSession {
         cardRefs.add(cardRef);
     }
 
+    @Nullable
+    public Vec2f getMouseWorldPosition() {
+        return mouseWorldPosition;
+    }
 
+    public void setMouseWorldPosition(Vec2f mouseWorldPosition) {
+        this.mouseWorldPosition = mouseWorldPosition;
+    }
+
+    @Nullable
+    public Ref<EntityStore> getDraggedCard() {
+        return draggedCard;
+    }
+
+    public void setDraggedCard(@Nullable Ref<EntityStore> draggedCard) {
+        this.draggedCard = draggedCard;
+    }
 }

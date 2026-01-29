@@ -2,6 +2,8 @@ package com.giusdp.htduels.interaction;
 
 import com.giusdp.htduels.DuelSession;
 import com.giusdp.htduels.component.CardComponent;
+import com.giusdp.htduels.component.CardDragComponent;
+import com.giusdp.htduels.component.CardSpatialComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.CardClicked;
@@ -39,29 +41,50 @@ public class CardInteractionService {
         var spatialData = session.getSpatialData();
         Vec2f worldPos = screenToWorld(screenPoint, spatialData);
 
-        var cardUnderMouse = findCardAt(session, worldPos);
-
-        if (cardUnderMouse == null) {
-            return;
-        }
-
         Duel duel = getDuel(session);
         if (duel == null) {
             return;
         }
 
         Duelist clicker = duel.duelist1; // TODO: Determine which duelist clicked
+        Store<EntityStore> store = session.getDuelRef().getStore();
 
         if (event.getMouseButton().state == MouseButtonState.Pressed) {
+            var cardUnderMouse = findCardAt(session, worldPos);
+            if (cardUnderMouse == null) {
+                return;
+            }
+
+            CardDragComponent drag = store.getComponent(cardUnderMouse, CardDragComponent.getComponentType());
+            if (drag != null) {
+                drag.setDragged(true);
+                drag.setDragger(session.getPlayer());
+            }
+            session.setDraggedCard(cardUnderMouse);
+
             duel.emit(new CardClicked(duel, cardUnderMouse, clicker));
         } else {
-            duel.emit(new CardReleased(duel, cardUnderMouse, clicker));
+            Ref<EntityStore> draggedCard = session.getDraggedCard();
+            if (draggedCard == null) {
+                return;
+            }
+
+            CardDragComponent drag = store.getComponent(draggedCard, CardDragComponent.getComponentType());
+            if (drag != null) {
+                drag.setDragged(false);
+                drag.setDragger(null);
+            }
+            session.setDraggedCard(null);
+
+            duel.emit(new CardReleased(duel, draggedCard, clicker));
         }
     }
 
     public static void processMotion(PlayerMouseMotionEvent event, DuelSession session) {
         Vector2f screenPoint = event.getScreenPoint();
         Vec2f worldPos = screenToWorld(screenPoint, session.getSpatialData());
+
+        session.setMouseWorldPosition(worldPos);
 
         Ref<EntityStore> cardUnderMouse = findCardAt(session, worldPos);
         Ref<EntityStore> previouslyHovered = hoveredCards.get(session.getPlayer());

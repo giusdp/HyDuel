@@ -7,6 +7,7 @@ import com.giusdp.htduels.command.ResetCameraCommand;
 import com.giusdp.htduels.command.duel.DuelCommand;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
+import com.giusdp.htduels.component.CardDragComponent;
 import com.giusdp.htduels.component.CardHoverComponent;
 import com.giusdp.htduels.component.CardSpatialComponent;
 import com.giusdp.htduels.component.DuelComponent;
@@ -14,6 +15,7 @@ import com.giusdp.htduels.handlers.PlayerMouseButtonHandler;
 import com.giusdp.htduels.handlers.PlayerMouseMotionHandler;
 import com.giusdp.htduels.interaction.BoardInteraction;
 import com.giusdp.htduels.interaction.InteractionNames;
+import com.giusdp.htduels.system.CardDragSystem;
 import com.giusdp.htduels.system.CardHoverSystem;
 import com.giusdp.htduels.system.CardMovementSystem;
 import com.giusdp.htduels.system.CardSpatialResolutionSystem;
@@ -33,6 +35,7 @@ public class DuelsPlugin extends JavaPlugin {
     public static CardAssetStore cardAssetStore;
 
     public static ComponentType<EntityStore, CardComponent> cardComponent;
+    public static ComponentType<EntityStore, CardDragComponent> cardDragComponent;
     public static ComponentType<EntityStore, CardHoverComponent> cardHoverComponent;
     public static ComponentType<EntityStore, DuelComponent> duelComponent;
     public static ComponentType<EntityStore, CardSpatialComponent> cardSpatialComponent;
@@ -60,6 +63,7 @@ public class DuelsPlugin extends JavaPlugin {
 
     private void setupComponents() {
         cardComponent = this.getEntityStoreRegistry().registerComponent(CardComponent.class, CardComponent::new);
+        cardDragComponent = this.getEntityStoreRegistry().registerComponent(CardDragComponent.class, CardDragComponent::new);
         cardHoverComponent = this.getEntityStoreRegistry().registerComponent(CardHoverComponent.class, CardHoverComponent::new);
         cardSpatialComponent = this.getEntityStoreRegistry().registerComponent(CardSpatialComponent.class, CardSpatialComponent::new);
         boardLayoutComponent = this.getEntityStoreRegistry().registerComponent(BoardLayoutComponent.class, BoardLayoutComponent::new);
@@ -88,6 +92,7 @@ public class DuelsPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new DuelTicker());
         this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
         this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardDragSystem());
         this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
     }
 
