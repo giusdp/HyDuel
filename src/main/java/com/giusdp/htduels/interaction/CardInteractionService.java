@@ -76,6 +76,11 @@ public class CardInteractionService {
             }
             session.setDraggedCard(null);
 
+            Ref<EntityStore> hoveredCard = hoveredCards.remove(session.getPlayer());
+            if (hoveredCard != null) {
+                duel.emit(new CardUnhovered(duel, hoveredCard, clicker));
+            }
+
             duel.emit(new CardReleased(duel, draggedCard, clicker));
         }
     }
@@ -86,14 +91,17 @@ public class CardInteractionService {
 
         session.setMouseWorldPosition(worldPos);
 
+        if (session.getDraggedCard() != null) {
+            return;
+        }
+
         Ref<EntityStore> cardUnderMouse = findCardAt(session, worldPos);
         Ref<EntityStore> previouslyHovered = hoveredCards.get(session.getPlayer());
 
         if (previouslyHovered == null && cardUnderMouse == null) {
-            return; // No change in hover state
+            return;
         }
 
-        // Check if hover state changed
         Duel duel = getDuel(session);
         if (duel == null) {
             return;
@@ -101,17 +109,13 @@ public class CardInteractionService {
 
         Duelist viewer = duel.duelist2; // TODO: Determine which duelist is viewing
 
-        // Emit unhover event for previous card
         if (cardUnderMouse == null) {
             duel.emit(new CardUnhovered(duel, previouslyHovered, viewer));
             hoveredCards.remove(session.getPlayer());
         } else if (previouslyHovered == null) {
-            // Emit hover event for new card
             duel.emit(new CardHovered(duel, cardUnderMouse, viewer));
             hoveredCards.put(session.getPlayer(), cardUnderMouse);
         }
-
-        // else if the card is clicked on we have to update the position so the card follows the mouse
     }
 
     public static Vec2f screenToWorld(Vector2f screenPoint, DuelSession.DuelSpatialData spatialData) {
