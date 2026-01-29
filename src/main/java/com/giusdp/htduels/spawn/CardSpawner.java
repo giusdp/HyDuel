@@ -1,6 +1,7 @@
 package com.giusdp.htduels.spawn;
 
 import com.giusdp.htduels.component.CardComponent;
+import com.giusdp.htduels.component.CardHoverComponent;
 import com.giusdp.htduels.component.CardSpatialComponent;
 import com.giusdp.htduels.duel.Card;
 import com.hypixel.hytale.component.AddReason;
@@ -66,6 +67,7 @@ public final class CardSpawner {
 
         // Game data
         holder.addComponent(CardComponent.getComponentType(), new CardComponent(card, duelEntityRef));
+        holder.addComponent(CardHoverComponent.getComponentType(), new CardHoverComponent((float) position.y));
         holder.addComponent(CardSpatialComponent.getComponentType(), new CardSpatialComponent());
 
         return commandBuffer.addEntity(holder, AddReason.SPAWN);

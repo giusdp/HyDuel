@@ -223,8 +223,8 @@ public class BoardInteraction extends SimpleBlockInteraction {
                 rotation,
                 0.25f,  // playerBattlefieldDepth
                 0.25f,  // opponentBattlefieldDepth
-                0.5f,  // playerHandDepth
-                0.5f,  // opponentHandDepth
+                0.4f,  // playerHandDepth
+                0.4f,  // opponentHandDepth
                 0.8f,   // deckOffsetX
                 0.3f,   // battlefieldSpacing
                 0.12f,  // handSpacing
