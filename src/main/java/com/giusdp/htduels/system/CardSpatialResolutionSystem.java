@@ -12,6 +12,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.giusdp.htduels.duel.zone.ZoneType;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.jspecify.annotations.NonNull;
@@ -49,7 +50,16 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
 
         Vec2f pos = CardPositioningService.getWorldPosition(card, boardLayout);
         spatial.setTargetPosition(pos);
+        spatial.setTargetY(resolveY(card, boardLayout));
         spatial.markResolved(card);
+    }
+
+    private static float resolveY(Card card, BoardLayout boardLayout) {
+        ZoneType zone = card.getCurrentZoneType();
+        if (zone == ZoneType.BATTLEFIELD) {
+            return boardLayout.battlefieldYOffset();
+        }
+        return boardLayout.handYOffset();
     }
 
     @Override

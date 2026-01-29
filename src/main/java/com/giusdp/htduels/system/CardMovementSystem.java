@@ -33,11 +33,13 @@ public class CardMovementSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        applyMovement(transform.getPosition(), spatial.getTargetPosition());
+        applyMovement(transform.getPosition(), spatial);
     }
 
-    public static void applyMovement(Vector3d position, Vec2f targetPosition) {
+    public static void applyMovement(Vector3d position, CardSpatialComponent spatial) {
+        Vec2f targetPosition = spatial.getTargetPosition();
         position.x = targetPosition.x;
+        position.y = spatial.getTargetY();
         position.z = targetPosition.y;
     }
 

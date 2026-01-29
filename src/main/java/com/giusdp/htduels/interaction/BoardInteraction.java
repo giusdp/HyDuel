@@ -87,8 +87,8 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Vector3f opponentCardRotation = new Vector3f((float) Math.PI, yawRadians, 0);
 
         // TODO at some point we do a proper game init with draw events
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, cardY, opponentCardRotation, session);
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, cardY, playerCardRotation, session);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, layout.handYOffset(), opponentCardRotation, session);
+        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, layout.handYOffset(), playerCardRotation, session);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());
@@ -226,10 +226,12 @@ public class BoardInteraction extends SimpleBlockInteraction {
                 0.4f,  // playerHandDepth
                 0.4f,  // opponentHandDepth
                 0.8f,   // deckOffsetX
-                0.3f,   // battlefieldSpacing
+                0.15f,  // battlefieldSpacing
                 0.12f,  // handSpacing
                 0.2f,   // battlefieldCardWidth
-                0.15f   // handCardWidth
+                0.15f,  // handCardWidth
+                boardPosition.y + 1.2f,   // handYOffset
+                boardPosition.y + 1.05f   // battlefieldYOffset
         );
     }
 

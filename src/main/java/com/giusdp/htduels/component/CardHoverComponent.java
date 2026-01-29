@@ -7,20 +7,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.jspecify.annotations.Nullable;
 
 public class CardHoverComponent implements Component<EntityStore> {
-    private float originalY;
     private boolean hovered;
-
-    public CardHoverComponent() {
-    }
-
-    public CardHoverComponent(float originalY) {
-        this.originalY = originalY;
-        this.hovered = false;
-    }
-
-    public float getOriginalY() {
-        return originalY;
-    }
 
     public boolean isHovered() {
         return hovered;

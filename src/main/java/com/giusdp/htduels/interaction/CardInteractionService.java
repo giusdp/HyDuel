@@ -1,9 +1,16 @@
 package com.giusdp.htduels.interaction;
 
 import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardDragComponent;
 import com.giusdp.htduels.component.CardHoverComponent;
+import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.Duel;
+import com.giusdp.htduels.duel.event.PlayCard;
+import com.giusdp.htduels.duel.positioning.BoardLayout;
+import com.giusdp.htduels.duel.zone.ZoneType;
+import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Vec2f;
@@ -47,6 +54,10 @@ public class CardInteractionService {
                 return;
             }
 
+            if (cardComp.getCard().getCurrentZoneType() != ZoneType.HAND) {
+                return;
+            }
+
             CardDragComponent drag = store.getComponent(cardUnderMouse, CardDragComponent.getComponentType());
             if (drag != null) {
                 drag.setDragged(true);
@@ -69,6 +80,19 @@ public class CardInteractionService {
             Ref<EntityStore> hoveredCard = hoveredCards.remove(ctx.getPlayerRef());
             if (hoveredCard != null) {
                 setHovered(store, hoveredCard, false);
+            }
+
+            BoardLayout boardLayout = getBoardLayout(store, ctx.getDuelRef());
+            Duel duel = getDuel(store, ctx.getDuelRef());
+            if (boardLayout == null || duel == null) {
+                return;
+            }
+            Duelist duelist = ctx.getDuelist();
+            if (boardLayout.isInBattlefieldZone(worldPos, duelist.isBottomPlayer())) {
+                CardComponent cardComp = store.getComponent(draggedCard, CardComponent.getComponentType());
+                if (cardComp != null) {
+                    duel.emit(new PlayCard(duel, duelist, cardComp.getCard()));
+                }
             }
         }
     }
@@ -163,5 +187,17 @@ public class CardInteractionService {
         if (hover != null) {
             hover.setHovered(hovered);
         }
+    }
+
+    @Nullable
+    private static Duel getDuel(Store<EntityStore> store, Ref<EntityStore> duelRef) {
+        DuelComponent duelComp = store.getComponent(duelRef, DuelComponent.getComponentType());
+        return duelComp != null ? duelComp.duel : null;
+    }
+
+    @Nullable
+    private static BoardLayout getBoardLayout(Store<EntityStore> store, Ref<EntityStore> duelRef) {
+        BoardLayoutComponent layoutComp = store.getComponent(duelRef, BoardLayoutComponent.getComponentType());
+        return layoutComp != null ? layoutComp.getBoardLayout() : null;
     }
 }

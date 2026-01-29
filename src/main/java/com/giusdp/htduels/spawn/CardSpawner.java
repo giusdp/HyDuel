@@ -69,7 +69,7 @@ public final class CardSpawner {
         // Game data
         holder.addComponent(CardComponent.getComponentType(), new CardComponent(card, duelEntityRef));
         holder.addComponent(CardDragComponent.getComponentType(), new CardDragComponent());
-        holder.addComponent(CardHoverComponent.getComponentType(), new CardHoverComponent((float) position.y));
+        holder.addComponent(CardHoverComponent.getComponentType(), new CardHoverComponent());
         holder.addComponent(CardSpatialComponent.getComponentType(), new CardSpatialComponent());
 
         return commandBuffer.addEntity(holder, AddReason.SPAWN);

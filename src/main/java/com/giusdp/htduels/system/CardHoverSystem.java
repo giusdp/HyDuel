@@ -1,6 +1,7 @@
 package com.giusdp.htduels.system;
 
 import com.giusdp.htduels.component.CardHoverComponent;
+import com.giusdp.htduels.component.CardSpatialComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
@@ -19,7 +20,8 @@ public class CardHoverSystem extends EntityTickingSystem<EntityStore> {
     public void tick(float deltaTime, int index, @NonNull ArchetypeChunk<EntityStore> archetypeChunk,
                      @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
         CardHoverComponent hoverComponent = archetypeChunk.getComponent(index, CardHoverComponent.getComponentType());
-        if (hoverComponent == null) {
+        CardSpatialComponent spatialComponent = archetypeChunk.getComponent(index, CardSpatialComponent.getComponentType());
+        if (hoverComponent == null || spatialComponent == null) {
             return;
         }
 
@@ -28,11 +30,11 @@ public class CardHoverSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        applyHover(hoverComponent, transform.getPosition());
+        applyHover(hoverComponent, spatialComponent, transform.getPosition());
     }
 
-    public static void applyHover(CardHoverComponent hoverComponent, Vector3d position) {
-        float targetY = hoverComponent.getOriginalY();
+    public static void applyHover(CardHoverComponent hoverComponent, CardSpatialComponent spatial, Vector3d position) {
+        float targetY = spatial.getTargetY();
 
         if (hoverComponent.isHovered()) {
             targetY += HOVER_OFFSET;
@@ -45,6 +47,6 @@ public class CardHoverSystem extends EntityTickingSystem<EntityStore> {
 
     @Override
     public @Nullable Query<EntityStore> getQuery() {
-        return Query.and(CardHoverComponent.getComponentType());
+        return Query.and(CardHoverComponent.getComponentType(), CardSpatialComponent.getComponentType());
     }
 }

@@ -30,7 +30,9 @@ public final class TestBoardLayout {
                 1.5f,   // battlefieldSpacing
                 1.2f,   // handSpacing
                 1.0f,   // battlefieldCardWidth
-                0.8f    // handCardWidth
+                0.8f,   // handCardWidth
+                1.2f,   // handYOffset
+                0.8f    // battlefieldYOffset
         );
     }
 }

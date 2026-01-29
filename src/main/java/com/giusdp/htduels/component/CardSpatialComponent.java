@@ -12,6 +12,7 @@ import org.jspecify.annotations.Nullable;
 
 public class CardSpatialComponent implements Component<EntityStore> {
     private Vec2f targetPosition;
+    private float targetY;
     private @Nullable ZoneType lastResolvedZoneType;
     private int lastResolvedIndex = -1;
 
@@ -41,6 +42,14 @@ public class CardSpatialComponent implements Component<EntityStore> {
 
     public void setTargetPosition(Vec2f pos) {
         this.targetPosition = pos;
+    }
+
+    public float getTargetY() {
+        return targetY;
+    }
+
+    public void setTargetY(float targetY) {
+        this.targetY = targetY;
     }
 
     @Override
