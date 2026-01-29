@@ -1,6 +1,7 @@
 package com.giusdp.htduels;
 
 
+import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -21,8 +22,8 @@ public class DuelSession {
 
     private static final Map<PlayerRef, DuelSession> sessions = new HashMap<>();
 
-    public static void register(PlayerRef player, Ref<EntityStore> duelRef, Position cameraPos, float cameraYaw, float cardY) {
-        sessions.put(player, new DuelSession(player, duelRef, cameraPos, cameraYaw, cardY));
+    public static void register(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+        sessions.put(player, new DuelSession(player, duelRef, duelist, cameraPos, cameraYaw, cardY));
     }
 
     @Nullable
@@ -32,13 +33,15 @@ public class DuelSession {
 
     private final PlayerRef player;
     private final Ref<EntityStore> duelRef;
+    private final Duelist duelist;
     private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
-    public DuelSession(PlayerRef player, Ref<EntityStore> duelRef, Position cameraPos, float cameraYaw, float cardY) {
+    public DuelSession(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
         this.player = player;
         this.duelRef = duelRef;
+        this.duelist = duelist;
         this.spatialData = new DuelSpatialData(cameraPos, cameraYaw, cardY);
     }
 
@@ -48,6 +51,10 @@ public class DuelSession {
 
     public Ref<EntityStore> getDuelRef() {
         return duelRef;
+    }
+
+    public Duelist getDuelist() {
+        return duelist;
     }
 
     public DuelSpatialData getSpatialData() {return spatialData;}

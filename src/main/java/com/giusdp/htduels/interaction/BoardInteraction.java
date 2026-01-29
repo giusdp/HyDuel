@@ -78,7 +78,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = spawnDuelEntity(commandBuffer, duelComp, layout);
 
         // Register the active duel session before spawning cards
-        DuelSession.register(playerRef, duelRef, cameraPosition, cameraYaw, cardY);
+        DuelSession.register(playerRef, duelRef, duelComp.duel.duelist2, cameraPosition, cameraYaw, cardY);
         DuelSession session = DuelSession.get(playerRef);
 
         // Spawn cards and register them with the session

@@ -46,12 +46,17 @@ public class CardInteractionService {
             return;
         }
 
-        Duelist clicker = duel.duelist1; // TODO: Determine which duelist clicked
+        Duelist clicker = session.getDuelist();
         Store<EntityStore> store = session.getDuelRef().getStore();
 
         if (event.getMouseButton().state == MouseButtonState.Pressed) {
             var cardUnderMouse = findCardAt(session, worldPos);
             if (cardUnderMouse == null) {
+                return;
+            }
+
+            CardComponent cardComp = store.getComponent(cardUnderMouse, CardComponent.getComponentType());
+            if (cardComp == null || cardComp.getCard().getOwner() != clicker) {
                 return;
             }
 
@@ -107,7 +112,7 @@ public class CardInteractionService {
             return;
         }
 
-        Duelist viewer = duel.duelist2; // TODO: Determine which duelist is viewing
+        Duelist viewer = session.getDuelist();
 
         if (cardUnderMouse == null) {
             duel.emit(new CardUnhovered(duel, previouslyHovered, viewer));
