@@ -6,7 +6,6 @@ import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.math.Vec2f;
-import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -56,7 +55,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
         PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
 
         assert player != null;
-        activateBoardUI(player, playerRef, ref);
+        BoardGameUi boardGameUi = activateBoardUI(player, playerRef, ref);
 
         Rotation boardRotation = getBoardRotation(world, targetBlock);
         Position cameraPosition = calculateCameraPosition(targetBlock, boardRotation);
@@ -73,14 +72,18 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = spawnDuelEntity(commandBuffer, duelComp, layout);
 
         // Register the active duel session
-        PlayerDuelContext.register(playerRef, duelRef, duelComp.duel.duelist1, cameraPosition, cameraYaw, cardY);
+        PlayerDuelContext ctx = PlayerDuelContext.registerGlobal(playerRef, duelRef, duelComp.duel.duelist1, cameraPosition, cameraYaw, cardY);
+        ctx.setBoardGameUi(boardGameUi);
+        duelComp.duel.addPlayerContext(ctx);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());
     }
 
-    private void activateBoardUI(Player player, PlayerRef playerRef, Ref<EntityStore> ref) {
-        player.getPageManager().openCustomPage(ref, ref.getStore(), new BoardGameUi(playerRef, CustomPageLifetime.CanDismiss));
+    private BoardGameUi activateBoardUI(Player player, PlayerRef playerRef, Ref<EntityStore> ref) {
+        BoardGameUi boardGameUi = new BoardGameUi(playerRef, CustomPageLifetime.CanDismiss);
+        player.getPageManager().openCustomPage(ref, ref.getStore(), boardGameUi);
+        return boardGameUi;
     }
 
     private Rotation getBoardRotation(@NonNull World world, @NonNull Vector3i blockPos) {

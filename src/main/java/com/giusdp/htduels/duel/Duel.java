@@ -1,11 +1,16 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
+import com.giusdp.htduels.PlayerDuelContext;
 import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duel.handler.*;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Duel {
     public final Duelist duelist1;
@@ -16,6 +21,7 @@ public class Duel {
 
     public Phase currentPhase;
     public Duelist activeDuelist;
+    private final List<PlayerDuelContext> playerContexts = new ArrayList<>();
 
     public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
         this.duelist1 = duelist1;
@@ -59,6 +65,14 @@ public class Duel {
 
     public void setActiveDuelist(Duelist duelist) {
         this.activeDuelist = duelist;
+    }
+
+    public void addPlayerContext(PlayerDuelContext ctx) {
+        playerContexts.add(ctx);
+    }
+
+    public List<PlayerDuelContext> getPlayerContexts() {
+        return Collections.unmodifiableList(playerContexts);
     }
 
     public void swapActiveDuelist() {

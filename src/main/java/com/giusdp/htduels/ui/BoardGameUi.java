@@ -30,6 +30,12 @@ public class BoardGameUi extends InteractiveCustomUIPage<BoardGameUi.BindingData
 
     }
 
+    public void updateTurnIndicator(String text) {
+        UICommandBuilder commandBuilder = new UICommandBuilder();
+        commandBuilder.set("#turnIndicator.Text", text);
+        sendUpdate(commandBuilder, null, false);
+    }
+
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store,
                                 @Nonnull BindingData data) {

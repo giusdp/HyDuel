@@ -2,3 +2,9 @@
 $C = "../Common.ui";
 
 $C.@BackButton #BackButton3822b14c {}
+
+Label #turnIndicator {
+    Style: (FontSize: 24, Alignment: Center);
+    Anchor: (Top: 10, Width: 300, Height: 40);
+    Text: "";
+}

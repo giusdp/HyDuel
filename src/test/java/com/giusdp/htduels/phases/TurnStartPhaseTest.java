@@ -6,7 +6,9 @@ import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duel.event.DuelEvent;
+import com.giusdp.htduels.duel.phases.TurnStartPhase;
 import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +16,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TurnStartPhaseTest {
+
+    @Test
+    void turnIndicatorTextReturnsYourTurnForActiveDuelist() {
+        Duelist active = new DuelPlayer();
+        assertEquals("Your Turn", TurnStartPhase.turnIndicatorText(active, active));
+    }
+
+    @Test
+    void turnIndicatorTextReturnsOpponentsTurnForInactiveDuelist() {
+        Duelist player = new DuelPlayer();
+        Duelist opponent = new DuelPlayer();
+        assertEquals("Opponent's Turn", TurnStartPhase.turnIndicatorText(player, opponent));
+    }
 
     @Test
     void emitsDrawCardsMoves() {

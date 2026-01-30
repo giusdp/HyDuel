@@ -2,12 +2,14 @@ package com.giusdp.htduels;
 
 
 import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import com.hypixel.hytale.math.Vec2f;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -20,20 +22,22 @@ public class PlayerDuelContext {
 
     final DuelSpatialData spatialData;
 
-    private static final Map<PlayerRef, PlayerDuelContext> sessions = new HashMap<>();
+    private static final Map<PlayerRef, PlayerDuelContext> playerContexts = new HashMap<>();
 
-    public static void register(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
-        sessions.put(player, new PlayerDuelContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY));
+    public static PlayerDuelContext registerGlobal(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+        PlayerDuelContext ctx = new PlayerDuelContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY);
+        playerContexts.put(player, ctx);
+        return ctx;
     }
 
     @Nullable
     public static PlayerDuelContext get(PlayerRef player) {
-        return sessions.get(player);
+        return playerContexts.get(player);
     }
 
     public static List<PlayerDuelContext> getByDuelRef(Ref<EntityStore> duelRef) {
         List<PlayerDuelContext> result = new ArrayList<>();
-        for (PlayerDuelContext ctx : sessions.values()) {
+        for (PlayerDuelContext ctx : playerContexts.values()) {
             if (ctx.duelRef.equals(duelRef)) {
                 result.add(ctx);
             }
@@ -42,13 +46,14 @@ public class PlayerDuelContext {
     }
 
     public static void unregisterByDuelRef(Ref<EntityStore> duelRef) {
-        sessions.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
+        playerContexts.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
     }
 
     private final PlayerRef playerRef;
     private final Ref<EntityStore> duelRef;
     private final Duelist duelist;
     private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
+    private @Nullable BoardGameUi boardGameUi;
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
@@ -73,6 +78,15 @@ public class PlayerDuelContext {
 
     public DuelSpatialData getSpatialData() {return spatialData;}
 
+    @Nullable
+    public BoardGameUi getBoardGameUi() {
+        return boardGameUi;
+    }
+
+    public void setBoardGameUi(@NotNull BoardGameUi boardGameUi) {
+        this.boardGameUi = boardGameUi;
+    }
+
     public List<Ref<EntityStore>> getCardEntities() {
         return cardRefs;
     }
@@ -86,7 +100,7 @@ public class PlayerDuelContext {
         return mouseWorldPosition;
     }
 
-    public void setMouseWorldPosition(Vec2f mouseWorldPosition) {
+    public void setMouseWorldPosition(@NotNull Vec2f mouseWorldPosition) {
         this.mouseWorldPosition = mouseWorldPosition;
     }
 
