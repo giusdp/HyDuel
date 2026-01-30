@@ -17,6 +17,7 @@ import com.giusdp.htduels.interaction.InteractionNames;
 import com.giusdp.htduels.system.CardDragSystem;
 import com.giusdp.htduels.system.CardHoverSystem;
 import com.giusdp.htduels.system.CardMovementSystem;
+import com.giusdp.htduels.system.CardRotationSystem;
 import com.giusdp.htduels.system.CardSpawnSystem;
 import com.giusdp.htduels.system.CardSpatialResolutionSystem;
 import com.giusdp.htduels.system.DuelTicker;
@@ -91,6 +92,7 @@ public class DuelsPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new CardSpawnSystem());
         this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
         this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardRotationSystem());
         this.getEntityStoreRegistry().registerSystem(new CardDragSystem());
         this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
     }

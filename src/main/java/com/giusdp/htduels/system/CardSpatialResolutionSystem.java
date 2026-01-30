@@ -51,7 +51,15 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
         Vec2f pos = CardPositioningService.getWorldPosition(card, boardLayout);
         spatial.setTargetPosition(pos);
         spatial.setTargetY(resolveY(card, boardLayout));
+        spatial.setTargetPitchX(resolveFacing(card));
         spatial.markResolved(card);
+    }
+
+    public static float resolveFacing(Card card) {
+        if (card.getCurrentZoneType() == ZoneType.HAND && card.getOwner() != null && card.getOwner().isBottomPlayer()) {
+            return (float) Math.PI;
+        }
+        return 0f;
     }
 
     private static float resolveY(Card card, BoardLayout boardLayout) {
