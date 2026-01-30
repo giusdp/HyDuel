@@ -116,10 +116,19 @@ public class CardInteractionService {
 
         Store<EntityStore> store = ctx.getDuelRef().getStore();
 
-        if (cardUnderMouse == null) {
+        // Same card — nothing to do
+        if (cardUnderMouse != null && cardUnderMouse.equals(previouslyHovered)) {
+            return;
+        }
+
+        // Unhover the previous card if there was one
+        if (previouslyHovered != null) {
             setHovered(store, previouslyHovered, false);
             hoveredCards.remove(ctx.getPlayerRef());
-        } else if (previouslyHovered == null && isInHand(store, cardUnderMouse)) {
+        }
+
+        // Hover the new card if it's in hand
+        if (cardUnderMouse != null && isInHand(store, cardUnderMouse)) {
             setHovered(store, cardUnderMouse, true);
             hoveredCards.put(ctx.getPlayerRef(), cardUnderMouse);
         }
@@ -139,11 +148,11 @@ public class CardInteractionService {
         float localX = screenPoint.x * halfWidth;
         float localZ = screenPoint.y * halfHeight;
 
-        // Rotate by camera yaw to get world offset
+        // Rotate by camera yaw to get world offset (negate yaw to match Rotation.rotateY convention)
         float cos = (float) Math.cos(cameraYaw);
         float sin = (float) Math.sin(cameraYaw);
-        float worldX = (float) cameraPos.x + (localX * cos - localZ * sin);
-        float worldZ = (float) cameraPos.z + (localX * sin + localZ * cos);
+        float worldX = (float) cameraPos.x + (localX * cos + localZ * sin);
+        float worldZ = (float) cameraPos.z + (-localX * sin + localZ * cos);
 
         return new Vec2f(worldX, worldZ);
     }
@@ -164,17 +173,20 @@ public class CardInteractionService {
                 continue;
             }
 
-            // Check if worldPos is inside card's XZ bounds
+            // Transform world position into card-local space to handle rotated bounding boxes
             Vector3d pos = transform.getPosition();
+            float dx = worldPos.x - (float) pos.x;
+            float dz = worldPos.y - (float) pos.z;
+
+            float yaw = transform.getRotation().getYaw();
+            float cos = (float) Math.cos(-yaw);
+            float sin = (float) Math.sin(-yaw);
+            float localX = dx * cos - dz * sin;
+            float localZ = dx * sin + dz * cos;
+
             Box box = bbox.getBoundingBox();
-
-            float minX = (float) (pos.x + box.min.x);
-            float maxX = (float) (pos.x + box.max.x);
-            float minZ = (float) (pos.z + box.min.z);
-            float maxZ = (float) (pos.z + box.max.z);
-
-            if (worldPos.x >= minX && worldPos.x <= maxX &&
-                    worldPos.y >= minZ && worldPos.y <= maxZ) {
+            if (localX >= box.min.x && localX <= box.max.x &&
+                    localZ >= box.min.z && localZ <= box.max.z) {
                 return cardRef;
             }
         }

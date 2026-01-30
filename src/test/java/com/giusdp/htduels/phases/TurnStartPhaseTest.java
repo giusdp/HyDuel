@@ -20,10 +20,15 @@ public class TurnStartPhaseTest {
         FakeEventBus eventBus = new FakeEventBus();
         var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
         duel.setup();
-        List<DuelEvent> moves = eventBus.postedEvents();
+        // Tick through 10 draws in StartupPhase
+        for (int i = 0; i < 10; i++) {
+            duel.tick();
+        }
+        // Tick 11 transitions to TurnStartPhase, which draws 1 more
         duel.tick();
+        List<DuelEvent> moves = eventBus.postedEvents();
         long drawCardsCount = moves.stream().filter(m -> m instanceof DrawCards).count();
-        assertEquals(3, drawCardsCount);
+        assertEquals(11, drawCardsCount);
     }
 
 }

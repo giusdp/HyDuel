@@ -31,6 +31,16 @@ public class PlayerDuelContext {
         return sessions.get(player);
     }
 
+    public static List<PlayerDuelContext> getByDuelRef(Ref<EntityStore> duelRef) {
+        List<PlayerDuelContext> result = new ArrayList<>();
+        for (PlayerDuelContext ctx : sessions.values()) {
+            if (ctx.duelRef.equals(duelRef)) {
+                result.add(ctx);
+            }
+        }
+        return result;
+    }
+
     private final PlayerRef playerRef;
     private final Ref<EntityStore> duelRef;
     private final Duelist duelist;

@@ -3,14 +3,9 @@ package com.giusdp.htduels.interaction;
 import com.giusdp.htduels.PlayerDuelContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
-import com.giusdp.htduels.duel.positioning.CardPositioningService;
-import com.giusdp.htduels.duelist.Duelist;
-import com.giusdp.htduels.spawn.CardSpawner;
 import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.math.Vec2f;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.AddReason;
@@ -77,18 +72,8 @@ public class BoardInteraction extends SimpleBlockInteraction {
         BoardLayout layout = createBoardLayout(targetBlock, boardRotation);
         Ref<EntityStore> duelRef = spawnDuelEntity(commandBuffer, duelComp, layout);
 
-        // Register the active duel session before spawning cards
+        // Register the active duel session
         PlayerDuelContext.register(playerRef, duelRef, duelComp.duel.duelist2, cameraPosition, cameraYaw, cardY);
-        PlayerDuelContext session = PlayerDuelContext.get(playerRef);
-
-        // Spawn cards and register them with the session
-        float yawRadians = (float) boardRotation.getRadians();
-        Vector3f playerCardRotation = new Vector3f(0, yawRadians, 0);
-        Vector3f opponentCardRotation = new Vector3f((float) Math.PI, yawRadians, 0);
-
-        // TODO at some point we do a proper game init with draw events
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist1, layout, layout.handYOffset(), opponentCardRotation, session);
-        spawnHandCards(commandBuffer, duelRef, duelComp.duel.duelist2, layout, layout.handYOffset(), playerCardRotation, session);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());
@@ -126,23 +111,6 @@ public class BoardInteraction extends SimpleBlockInteraction {
         holder.addComponent(DuelComponent.getComponentType(), duelComp);
         holder.addComponent(BoardLayoutComponent.getComponentType(), new BoardLayoutComponent(layout));
         return commandBuffer.addEntity(holder, AddReason.SPAWN);
-    }
-
-    private void spawnHandCards(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> duelRef,
-                                Duelist duelist, BoardLayout layout, float boardY, Vector3f cardRotation,
-                                PlayerDuelContext session) {
-        for (Card card : duelist.getHand().getCards()) {
-            spawnCard(commandBuffer, duelRef, card, layout, boardY, cardRotation, session);
-        }
-    }
-
-    private void spawnCard(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> duelRef,
-                           Card card, BoardLayout layout, float boardY, Vector3f cardRotation,
-                           PlayerDuelContext session) {
-        Vec2f pos2d = CardPositioningService.getWorldPosition(card, layout);
-        Vector3d pos = new Vector3d(pos2d.x, boardY, pos2d.y);
-        Ref<EntityStore> cardRef = CardSpawner.spawn(commandBuffer, duelRef, card, pos, cardRotation);
-        session.addCardEntity(cardRef);
     }
 
     private Position calculateCameraPosition(@NonNull Vector3i boardPosition, Rotation rotation) {

@@ -7,19 +7,26 @@ import com.giusdp.htduels.duel.event.DuelStarted;
 import com.giusdp.htduels.duel.event.RandomDuelistSelect;
 
 public class StartupPhase extends Phase {
+    private int drawCount = 0;
 
     @Override
     public void onEnter(Duel duel) {
         System.out.println("[Duel] Duel started!");
         duel.emit(new DuelStarted(duel));
-        duel.emit(new DrawCards(duel, duel.duelist1, 5));
-        duel.emit(new DrawCards(duel, duel.duelist2, 5));
         duel.emit(new RandomDuelistSelect(duel));
     }
 
     @Override
     public void tick(Duel duel) {
-        duel.transitionTo(new TurnStartPhase());
+        if (drawCount < 5) {
+            duel.emit(new DrawCards(duel, duel.duelist1, 1));
+        } else if (drawCount < 10) {
+            duel.emit(new DrawCards(duel, duel.duelist2, 1));
+        } else {
+            duel.transitionTo(new TurnStartPhase());
+            return;
+        }
+        drawCount++;
     }
 
     @Override

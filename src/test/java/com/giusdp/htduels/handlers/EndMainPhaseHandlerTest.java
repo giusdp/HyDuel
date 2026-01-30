@@ -18,8 +18,10 @@ class EndMainPhaseHandlerTest {
     void addsCardsToHand() {
         Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
         duel.setup();
-        duel.tick();
-        duel.tick();
+        // 10 ticks for startup draws, 1 to transition to TurnStart, 1 to transition to MainPhase
+        for (int i = 0; i < 12; i++) {
+            duel.tick();
+        }
 
         assertInstanceOf(MainPhase.class, duel.currentPhase);
 

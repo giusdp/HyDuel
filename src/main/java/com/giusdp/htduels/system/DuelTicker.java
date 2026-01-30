@@ -19,7 +19,11 @@ public class DuelTicker extends EntityTickingSystem<EntityStore> {
         if (duelComponent == null) {
             return;
         }
-        duelComponent.duel.tick();
+        if (duelComponent.duel.currentPhase == null) {
+            duelComponent.duel.setup();
+        } else {
+            duelComponent.duel.tick();
+        }
     }
 
     @Override

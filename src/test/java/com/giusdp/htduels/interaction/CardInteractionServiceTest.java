@@ -107,9 +107,9 @@ class CardInteractionServiceTest {
 
             Vec2f result = CardInteractionService.screenToWorld(new Vector2f(1, 0), spatial);
 
-            // Right edge should now be +Z instead of +X
+            // Right edge should now be -Z instead of +X (matches Rotation.rotateY convention)
             assertEquals(0f, result.x, 0.1f);
-            assertEquals(halfWidth, result.y, 0.1f);
+            assertEquals(-halfWidth, result.y, 0.1f);
         }
 
         @Test

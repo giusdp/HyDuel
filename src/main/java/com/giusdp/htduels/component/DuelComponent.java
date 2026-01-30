@@ -20,8 +20,6 @@ public class DuelComponent implements Component<EntityStore> {
         player.setBottomPlayer(true);
         bot.setBottomPlayer(false);
         duel = new Duel(player, bot, new HytaleEventBus(), new CardAssetRepo());
-
-        duel.setup();
     }
 
     public static ComponentType<EntityStore, DuelComponent> getComponentType() {
