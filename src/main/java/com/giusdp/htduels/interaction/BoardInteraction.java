@@ -73,7 +73,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = spawnDuelEntity(commandBuffer, duelComp, layout);
 
         // Register the active duel session
-        PlayerDuelContext.register(playerRef, duelRef, duelComp.duel.duelist2, cameraPosition, cameraYaw, cardY);
+        PlayerDuelContext.register(playerRef, duelRef, duelComp.duel.duelist1, cameraPosition, cameraYaw, cardY);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());

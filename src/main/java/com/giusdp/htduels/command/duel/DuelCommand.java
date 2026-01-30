@@ -11,6 +11,6 @@ public class DuelCommand extends AbstractCommandCollection {
         super("duel", "Commands to interact with duels");
         this.setPermissionGroup(GameMode.Adventure);
 
-        this.addSubCommand(new StartCommand());
+        this.addSubCommand(new EndTurnCommand());
     }
 }

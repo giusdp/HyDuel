@@ -17,8 +17,8 @@ public class DuelComponent implements Component<EntityStore> {
     public DuelComponent() {
         Duelist player = new DuelPlayer();
         Duelist bot = new Bot();
-        player.setBottomPlayer(true);
-        bot.setBottomPlayer(false);
+        player.setBottomPlayer(false);
+        bot.setBottomPlayer(true);
         duel = new Duel(player, bot, new HytaleEventBus(), new CardAssetRepo());
     }
 
