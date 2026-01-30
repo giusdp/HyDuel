@@ -51,7 +51,6 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
         Vec2f pos = CardPositioningService.getWorldPosition(card, boardLayout);
         spatial.setTargetPosition(pos);
         spatial.setTargetY(resolveY(card, boardLayout));
-        spatial.setTargetPitchX(resolveFacing(card));
         spatial.markResolved(card);
     }
 

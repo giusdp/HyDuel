@@ -1,6 +1,6 @@
 package com.giusdp.htduels.system;
 
-import com.giusdp.htduels.component.CardSpatialComponent;
+import com.giusdp.htduels.component.CardComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
@@ -16,13 +16,8 @@ public class CardRotationSystem extends EntityTickingSystem<EntityStore> {
     @Override
     public void tick(float deltaTime, int index, @NonNull ArchetypeChunk<EntityStore> archetypeChunk,
                      @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
-        CardSpatialComponent spatial = archetypeChunk.getComponent(index, CardSpatialComponent.getComponentType());
-        if (spatial == null) {
-            return;
-        }
-
-        float targetPitch = spatial.getTargetPitchX();
-        if (Float.isNaN(targetPitch)) {
+        CardComponent cardComponent = archetypeChunk.getComponent(index, CardComponent.getComponentType());
+        if (cardComponent == null) {
             return;
         }
 
@@ -31,6 +26,7 @@ public class CardRotationSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
+        float targetPitch = CardSpatialResolutionSystem.resolveFacing(cardComponent.getCard());
         Vector3f rotation = transform.getRotation();
         if (rotation.getPitch() != targetPitch) {
             transform.setRotation(new Vector3f(targetPitch, rotation.getYaw(), rotation.getRoll()));
@@ -39,6 +35,6 @@ public class CardRotationSystem extends EntityTickingSystem<EntityStore> {
 
     @Override
     public @Nullable Query<EntityStore> getQuery() {
-        return Query.and(CardSpatialComponent.getComponentType());
+        return Query.and(CardComponent.getComponentType());
     }
 }
