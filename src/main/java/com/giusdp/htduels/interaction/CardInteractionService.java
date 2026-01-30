@@ -36,6 +36,10 @@ public class CardInteractionService {
 
     private static final Map<PlayerRef, Ref<EntityStore>> hoveredCards = new HashMap<>();
 
+    public static void clearHoveredCard(PlayerRef playerRef) {
+        hoveredCards.remove(playerRef);
+    }
+
     public static void processClick(PlayerMouseButtonEvent event, PlayerDuelContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
         var spatialData = ctx.getSpatialData();

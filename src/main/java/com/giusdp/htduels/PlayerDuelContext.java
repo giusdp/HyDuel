@@ -41,6 +41,10 @@ public class PlayerDuelContext {
         return result;
     }
 
+    public static void unregisterByDuelRef(Ref<EntityStore> duelRef) {
+        sessions.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
+    }
+
     private final PlayerRef playerRef;
     private final Ref<EntityStore> duelRef;
     private final Duelist duelist;
