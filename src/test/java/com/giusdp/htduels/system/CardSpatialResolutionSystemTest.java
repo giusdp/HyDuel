@@ -28,7 +28,7 @@ class CardSpatialResolutionSystemTest {
     @Test
     void resolvesPositionWhenDirty() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         CardSpatialComponent spatial = new CardSpatialComponent();
         assertTrue(spatial.needsResolution(card));
@@ -42,7 +42,7 @@ class CardSpatialResolutionSystemTest {
     @Test
     void doesNotResolveWhenAlreadyResolved() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         CardSpatialComponent spatial = new CardSpatialComponent();
         spatial.markResolved(card);
@@ -55,7 +55,7 @@ class CardSpatialResolutionSystemTest {
     @Test
     void resolvesPositionForCardOnBattlefield() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.playCard(card);
+        duel.getDuelist(0).playCard(card);
 
         CardSpatialComponent spatial = new CardSpatialComponent();
 
@@ -68,7 +68,7 @@ class CardSpatialResolutionSystemTest {
     @Test
     void resolvesWhenZoneChanges() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         CardSpatialComponent spatial = new CardSpatialComponent();
         CardSpatialResolutionSystem.resolvePosition(card, spatial, boardLayout);
@@ -76,7 +76,7 @@ class CardSpatialResolutionSystemTest {
         assertFalse(spatial.needsResolution(card));
 
         // Move card to battlefield
-        duel.duelist1.playCard(card);
+        duel.getDuelist(0).playCard(card);
 
         assertTrue(spatial.needsResolution(card));
 
@@ -89,8 +89,8 @@ class CardSpatialResolutionSystemTest {
     void resolvesWhenIndexChanges() {
         Card card1 = new Card(new CardAsset("test1", "Test Card 1", 1, 2, 3, "Minion"));
         Card card2 = new Card(new CardAsset("test2", "Test Card 2", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card1);
-        duel.duelist1.addToHand(card2);
+        duel.getDuelist(0).addToHand(card1);
+        duel.getDuelist(0).addToHand(card2);
         // addToHand places at index 0, so cards = [card2, card1]
         // card2 is at index 0, card1 is at index 1
 
@@ -104,7 +104,7 @@ class CardSpatialResolutionSystemTest {
         assertFalse(spatial2.needsResolution(card2));
 
         // Remove card2 (at index 0), shifting card1's index from 1 to 0
-        duel.duelist1.getHand().remove(card2);
+        duel.getDuelist(0).getHand().remove(card2);
 
         assertTrue(spatial1.needsResolution(card1));
     }

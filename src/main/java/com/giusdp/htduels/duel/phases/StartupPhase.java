@@ -19,9 +19,9 @@ public class StartupPhase extends Phase {
     @Override
     public void tick(Duel duel) {
         if (drawCount < 5) {
-            duel.emit(new DrawCards(duel, duel.duelist1, 1));
+            duel.emit(new DrawCards(duel, duel.getDuelist(0), 1));
         } else if (drawCount < 10) {
-            duel.emit(new DrawCards(duel, duel.duelist2, 1));
+            duel.emit(new DrawCards(duel, duel.getDuelist(1), 1));
         } else {
             duel.transitionTo(new TurnStartPhase());
             return;

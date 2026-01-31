@@ -1,6 +1,6 @@
 package com.giusdp.htduels.interaction;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardDragComponent;
@@ -40,7 +40,7 @@ public class CardInteractionService {
         hoveredCards.remove(playerRef);
     }
 
-    public static void processClick(PlayerMouseButtonEvent event, PlayerDuelContext ctx) {
+    public static void processClick(PlayerMouseButtonEvent event, DuelistContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
         var spatialData = ctx.getSpatialData();
         Vec2f worldPos = screenToWorld(screenPoint, spatialData);
@@ -101,7 +101,7 @@ public class CardInteractionService {
         }
     }
 
-    public static void processMotion(PlayerMouseMotionEvent event, PlayerDuelContext ctx) {
+    public static void processMotion(PlayerMouseMotionEvent event, DuelistContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
         Vec2f worldPos = screenToWorld(screenPoint, ctx.getSpatialData());
 
@@ -138,7 +138,7 @@ public class CardInteractionService {
         }
     }
 
-    public static Vec2f screenToWorld(Vector2f screenPoint, PlayerDuelContext.DuelSpatialData spatialData) {
+    public static Vec2f screenToWorld(Vector2f screenPoint, DuelistContext.DuelSpatialData spatialData) {
         Position cameraPos = spatialData.cameraPos();
         float cameraYaw = spatialData.cameraYaw();
         float cardY = spatialData.cardY();
@@ -162,7 +162,7 @@ public class CardInteractionService {
     }
 
     @Nullable
-    public static Ref<EntityStore> findCardAt(PlayerDuelContext ctx, Vec2f worldPos) {
+    public static Ref<EntityStore> findCardAt(DuelistContext ctx, Vec2f worldPos) {
         Store<EntityStore> store = ctx.getDuelRef().getStore();
 
         for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {

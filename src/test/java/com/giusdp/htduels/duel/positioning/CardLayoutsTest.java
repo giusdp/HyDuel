@@ -24,14 +24,14 @@ class CardLayoutsTest {
     void setup() {
         boardLayout = TestBoardLayout.create();
         duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
-        duel.duelist1.setBottomPlayer(true);
-        duel.duelist2.setBottomPlayer(false);
+        duel.getDuelist(0).setBottomPlayer(true);
+        duel.getDuelist(1).setBottomPlayer(false);
     }
 
     @Test
     void singleCardInHandIsCenteredAtOrigin() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         Vec2f position = CardLayouts.hand(card, boardLayout);
 
@@ -45,9 +45,9 @@ class CardLayoutsTest {
         Card card1 = new Card(new CardAsset("test1", "Test Card 1", 1, 2, 3, "Minion"));
         Card card2 = new Card(new CardAsset("test2", "Test Card 2", 1, 2, 3, "Minion"));
         Card card3 = new Card(new CardAsset("test3", "Test Card 3", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card1);
-        duel.duelist1.addToHand(card2);
-        duel.duelist1.addToHand(card3);
+        duel.getDuelist(0).addToHand(card1);
+        duel.getDuelist(0).addToHand(card2);
+        duel.getDuelist(0).addToHand(card3);
 
         Vec2f pos1 = CardLayouts.hand(card1, boardLayout);
         Vec2f pos2 = CardLayouts.hand(card2, boardLayout);
@@ -71,7 +71,7 @@ class CardLayoutsTest {
     @Test
     void bottomPlayerUsesNegativeDepth() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         Vec2f position = CardLayouts.hand(card, boardLayout);
 
@@ -81,7 +81,7 @@ class CardLayoutsTest {
     @Test
     void topPlayerUsesPositiveDepth() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist2.addToHand(card);
+        duel.getDuelist(1).addToHand(card);
 
         Vec2f position = CardLayouts.hand(card, boardLayout);
 
@@ -92,8 +92,8 @@ class CardLayoutsTest {
     void twoCardsInHandAreSymmetricallySpacedAroundCenter() {
         Card card1 = new Card(new CardAsset("test1", "Test Card 1", 1, 2, 3, "Minion"));
         Card card2 = new Card(new CardAsset("test2", "Test Card 2", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card1);
-        duel.duelist1.addToHand(card2);
+        duel.getDuelist(0).addToHand(card1);
+        duel.getDuelist(0).addToHand(card2);
 
         Vec2f pos1 = CardLayouts.hand(card1, boardLayout);
         Vec2f pos2 = CardLayouts.hand(card2, boardLayout);
@@ -114,7 +114,7 @@ class CardLayoutsTest {
         void rotationNonePlacesPlayerHandAtNegativeZ() {
             boardLayout = TestBoardLayout.create(Rotation.None);
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-            duel.duelist1.addToHand(card);
+            duel.getDuelist(0).addToHand(card);
 
             Vec2f pos = CardLayouts.hand(card, boardLayout);
 
@@ -127,7 +127,7 @@ class CardLayoutsTest {
         void rotationNinetyRotatesPositions90DegreesClockwise() {
             boardLayout = TestBoardLayout.create(Rotation.Ninety);
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-            duel.duelist1.addToHand(card);
+            duel.getDuelist(0).addToHand(card);
 
             Vec2f pos = CardLayouts.hand(card, boardLayout);
 
@@ -140,7 +140,7 @@ class CardLayoutsTest {
         void rotationOneEightyRotatesPositions180Degrees() {
             boardLayout = TestBoardLayout.create(Rotation.OneEighty);
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-            duel.duelist1.addToHand(card);
+            duel.getDuelist(0).addToHand(card);
 
             Vec2f pos = CardLayouts.hand(card, boardLayout);
 
@@ -155,7 +155,7 @@ class CardLayoutsTest {
         void rotationTwoSeventyRotatesPositions270Degrees() {
             boardLayout = TestBoardLayout.create(Rotation.TwoSeventy);
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-            duel.duelist1.addToHand(card);
+            duel.getDuelist(0).addToHand(card);
 
             Vec2f pos = CardLayouts.hand(card, boardLayout);
 
@@ -170,9 +170,9 @@ class CardLayoutsTest {
             Card card1 = new Card(new CardAsset("test1", "Test Card 1", 1, 2, 3, "Minion"));
             Card card2 = new Card(new CardAsset("test2", "Test Card 2", 1, 2, 3, "Minion"));
             Card card3 = new Card(new CardAsset("test3", "Test Card 3", 1, 2, 3, "Minion"));
-            duel.duelist1.addToHand(card1);
-            duel.duelist1.addToHand(card2);
-            duel.duelist1.addToHand(card3);
+            duel.getDuelist(0).addToHand(card1);
+            duel.getDuelist(0).addToHand(card2);
+            duel.getDuelist(0).addToHand(card3);
 
             Vec2f pos1 = CardLayouts.hand(card1, boardLayout);
             Vec2f pos2 = CardLayouts.hand(card2, boardLayout);

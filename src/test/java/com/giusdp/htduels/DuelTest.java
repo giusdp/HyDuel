@@ -35,7 +35,7 @@ class DuelTest {
         for (int i = 0; i < 10; i++) {
             duel.tick();
         }
-        assertEquals(5, duel.duelist1.getHand().getCards().size());
-        assertEquals(5, duel.duelist2.getHand().getCards().size());
+        assertEquals(5, duel.getDuelist(0).getHand().getCards().size());
+        assertEquals(5, duel.getDuelist(1).getHand().getCards().size());
     }
 }

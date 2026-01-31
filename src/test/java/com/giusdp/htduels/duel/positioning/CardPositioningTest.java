@@ -26,16 +26,16 @@ class CardPositioningTest {
     @Test
     void duelistSetsOwnerOnCard() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         assertNotNull(card.getOwner());
-        assertSame(duel.duelist1, card.getOwner());
+        assertSame(duel.getDuelist(0), card.getOwner());
     }
 
     @Test
     void cardPositioningServiceReturnsPositionForCardInHand() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.addToHand(card);
+        duel.getDuelist(0).addToHand(card);
 
         var position = CardPositioningService.getWorldPosition(card, boardLayout);
 
@@ -45,7 +45,7 @@ class CardPositioningTest {
     @Test
     void cardPositioningServiceReturnsPositionForCardOnBattlefield() {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        duel.duelist1.playCard(card);
+        duel.getDuelist(0).playCard(card);
 
         var position = CardPositioningService.getWorldPosition(card, boardLayout);
 

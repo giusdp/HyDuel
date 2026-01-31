@@ -20,9 +20,9 @@ public final class DuelCleanupService {
     }
 
     public static void cleanup(Ref<EntityStore> duelRef, CommandBuffer<EntityStore> commandBuffer) {
-        List<PlayerDuelContext> contexts = PlayerDuelContext.getByDuelRef(duelRef);
+        List<DuelistContext> contexts = DuelistContext.getByDuelRef(duelRef);
 
-        for (PlayerDuelContext ctx : contexts) {
+        for (DuelistContext ctx : contexts) {
             // Remove all card entities
             for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {
                 commandBuffer.removeEntity(cardRef, RemoveReason.REMOVE);
@@ -51,6 +51,6 @@ public final class DuelCleanupService {
         commandBuffer.removeEntity(duelRef, RemoveReason.REMOVE);
 
         // Unregister all player contexts for this duel
-        PlayerDuelContext.unregisterByDuelRef(duelRef);
+        DuelistContext.unregisterByDuelRef(duelRef);
     }
 }

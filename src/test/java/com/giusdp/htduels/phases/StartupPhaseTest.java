@@ -41,7 +41,7 @@ class StartupPhaseTest {
         duel.tick();
         long drawCount = eventBus.postedEvents().stream().filter(e -> e instanceof DrawCards).count();
         assertEquals(1, drawCount);
-        assertEquals(1, duel.duelist1.getHand().getCards().size());
+        assertEquals(1, duel.getDuelist(0).getHand().getCards().size());
     }
 
     @Test
@@ -51,8 +51,8 @@ class StartupPhaseTest {
         }
         long drawCount = eventBus.postedEvents().stream().filter(e -> e instanceof DrawCards).count();
         assertEquals(5, drawCount);
-        assertEquals(5, duel.duelist1.getHand().getCards().size());
-        assertEquals(0, duel.duelist2.getHand().getCards().size());
+        assertEquals(5, duel.getDuelist(0).getHand().getCards().size());
+        assertEquals(0, duel.getDuelist(1).getHand().getCards().size());
     }
 
     @Test
@@ -62,8 +62,8 @@ class StartupPhaseTest {
         }
         long drawCount = eventBus.postedEvents().stream().filter(e -> e instanceof DrawCards).count();
         assertEquals(10, drawCount);
-        assertEquals(5, duel.duelist1.getHand().getCards().size());
-        assertEquals(5, duel.duelist2.getHand().getCards().size());
+        assertEquals(5, duel.getDuelist(0).getHand().getCards().size());
+        assertEquals(5, duel.getDuelist(1).getHand().getCards().size());
     }
 
     @Test

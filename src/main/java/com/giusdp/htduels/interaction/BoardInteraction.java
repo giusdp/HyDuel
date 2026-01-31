@@ -1,6 +1,6 @@
 package com.giusdp.htduels.interaction;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
@@ -72,9 +72,9 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Ref<EntityStore> duelRef = spawnDuelEntity(commandBuffer, duelComp, layout);
 
         // Register the active duel session
-        PlayerDuelContext ctx = PlayerDuelContext.registerGlobal(playerRef, duelRef, duelComp.duel.duelist1, cameraPosition, cameraYaw, cardY);
+        DuelistContext ctx = DuelistContext.registerGlobal(playerRef, duelRef, duelComp.duel.getDuelist(0), cameraPosition, cameraYaw, cardY);
         ctx.setBoardGameUi(boardGameUi);
-        duelComp.duel.addPlayerContext(ctx);
+        duelComp.duel.addContext(ctx);
 
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());

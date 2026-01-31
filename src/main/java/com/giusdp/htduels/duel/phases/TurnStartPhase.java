@@ -1,6 +1,6 @@
 package com.giusdp.htduels.duel.phases;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.Phase;
 import com.giusdp.htduels.duel.event.DrawCards;
@@ -19,7 +19,7 @@ public class TurnStartPhase extends Phase {
     }
 
     private void updateTurnIndicators(Duel duel) {
-        for (PlayerDuelContext ctx : duel.getPlayerContexts()) {
+        for (DuelistContext ctx : duel.getContexts()) {
             BoardGameUi ui = ctx.getBoardGameUi();
             if (ui == null) continue;
 

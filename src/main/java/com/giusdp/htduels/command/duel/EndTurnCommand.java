@@ -1,6 +1,6 @@
 package com.giusdp.htduels.command.duel;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.EndMainPhase;
@@ -29,7 +29,7 @@ public class EndTurnCommand extends AbstractAsyncCommand {
         }
 
         Player player = ctx.senderAs(Player.class);
-        PlayerDuelContext duelCtx = PlayerDuelContext.get(player.getPlayerRef());
+        DuelistContext duelCtx = DuelistContext.get(player.getPlayerRef());
 
         if (duelCtx == null) {
             ctx.sendMessage(Message.raw("You are not in a duel!"));

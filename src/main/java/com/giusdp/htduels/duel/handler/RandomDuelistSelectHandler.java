@@ -9,9 +9,9 @@ public class RandomDuelistSelectHandler extends DuelEventHandler {
     @Override
     public void accept(DuelEvent ev) {
         if (new Random().nextBoolean()) {
-            ev.duel.setActiveDuelist(ev.duel.duelist1);
+            ev.duel.setActiveDuelist(ev.duel.getDuelist(0));
         } else {
-            ev.duel.setActiveDuelist(ev.duel.duelist2);
+            ev.duel.setActiveDuelist(ev.duel.getDuelist(1));
         }
     }
 }

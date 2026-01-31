@@ -17,27 +17,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerDuelContext {
+public class DuelistContext {
     public record DuelSpatialData(Position cameraPos, float cameraYaw, float cardY) {}
 
     final DuelSpatialData spatialData;
 
-    private static final Map<PlayerRef, PlayerDuelContext> playerContexts = new HashMap<>();
+    private static final Map<PlayerRef, DuelistContext> playerRegistry = new HashMap<>();
 
-    public static PlayerDuelContext registerGlobal(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
-        PlayerDuelContext ctx = new PlayerDuelContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY);
-        playerContexts.put(player, ctx);
+    public static DuelistContext registerGlobal(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+        DuelistContext ctx = new DuelistContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY);
+        playerRegistry.put(player, ctx);
         return ctx;
     }
 
     @Nullable
-    public static PlayerDuelContext get(PlayerRef player) {
-        return playerContexts.get(player);
+    public static DuelistContext get(PlayerRef player) {
+        return playerRegistry.get(player);
     }
 
-    public static List<PlayerDuelContext> getByDuelRef(Ref<EntityStore> duelRef) {
-        List<PlayerDuelContext> result = new ArrayList<>();
-        for (PlayerDuelContext ctx : playerContexts.values()) {
+    public static List<DuelistContext> getByDuelRef(Ref<EntityStore> duelRef) {
+        List<DuelistContext> result = new ArrayList<>();
+        for (DuelistContext ctx : playerRegistry.values()) {
             if (ctx.duelRef.equals(duelRef)) {
                 result.add(ctx);
             }
@@ -46,7 +46,7 @@ public class PlayerDuelContext {
     }
 
     public static void unregisterByDuelRef(Ref<EntityStore> duelRef) {
-        playerContexts.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
+        playerRegistry.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
     }
 
     private final PlayerRef playerRef;
@@ -57,7 +57,7 @@ public class PlayerDuelContext {
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
-    public PlayerDuelContext(PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+    public DuelistContext(PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
         this.playerRef = playerRef;
         this.duelRef = duelRef;
         this.duelist = duelist;

@@ -1,6 +1,6 @@
 package com.giusdp.htduels.interaction;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.protocol.Vector2f;
@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CardInteractionServiceTest {
 
-    private PlayerDuelContext.DuelSpatialData spatialData(Position cameraPos, float cameraYaw, float cardY) {
-        return new PlayerDuelContext.DuelSpatialData(cameraPos, cameraYaw, cardY);
+    private DuelistContext.DuelSpatialData spatialData(Position cameraPos, float cameraYaw, float cardY) {
+        return new DuelistContext.DuelSpatialData(cameraPos, cameraYaw, cardY);
     }
 
     @Nested

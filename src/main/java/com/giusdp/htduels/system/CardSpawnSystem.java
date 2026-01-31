@@ -1,6 +1,6 @@
 package com.giusdp.htduels.system;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.DuelComponent;
@@ -44,14 +44,14 @@ public class CardSpawnSystem extends EntityTickingSystem<EntityStore> {
         }
 
         Ref<EntityStore> duelRef = archetypeChunk.getReferenceTo(index);
-        List<PlayerDuelContext> contexts = PlayerDuelContext.getByDuelRef(duelRef);
+        List<DuelistContext> contexts = DuelistContext.getByDuelRef(duelRef);
         if (contexts.isEmpty()) {
             return;
         }
 
         // Collect all cards that already have entities
         Set<Card> spawnedCards = new HashSet<>();
-        for (PlayerDuelContext ctx : contexts) {
+        for (DuelistContext ctx : contexts) {
             for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {
                 CardComponent cardComp = store.getComponent(cardRef, CardComponent.getComponentType());
                 if (cardComp != null) {
@@ -62,14 +62,15 @@ public class CardSpawnSystem extends EntityTickingSystem<EntityStore> {
 
         float yawRadians = (float) layout.rotation().getRadians();
 
-        // Check both duelists' hand and battlefield for unspawned cards
-        spawnMissingCards(duelComponent.duel.duelist1, layout, yawRadians, duelRef, commandBuffer, spawnedCards, contexts);
-        spawnMissingCards(duelComponent.duel.duelist2, layout, yawRadians, duelRef, commandBuffer, spawnedCards, contexts);
+        // Check all duelists' hand and battlefield for unspawned cards
+        for (Duelist duelist : duelComponent.duel.getDuelists()) {
+            spawnMissingCards(duelist, layout, yawRadians, duelRef, commandBuffer, spawnedCards, contexts);
+        }
     }
 
     private void spawnMissingCards(Duelist duelist, BoardLayout layout, float yawRadians,
                                    Ref<EntityStore> duelRef, CommandBuffer<EntityStore> commandBuffer,
-                                   Set<Card> spawnedCards, List<PlayerDuelContext> contexts) {
+                                   Set<Card> spawnedCards, List<DuelistContext> contexts) {
         Vector3f rotation = duelist.isBottomPlayer()
                 ? new Vector3f((float) Math.PI, yawRadians, 0)
                 : new Vector3f(0, yawRadians, 0);
@@ -89,12 +90,12 @@ public class CardSpawnSystem extends EntityTickingSystem<EntityStore> {
 
     private void spawnAndRegister(Card card, BoardLayout layout, float y, Vector3f rotation,
                                   Ref<EntityStore> duelRef, CommandBuffer<EntityStore> commandBuffer,
-                                  List<PlayerDuelContext> contexts) {
+                                  List<DuelistContext> contexts) {
         Vec2f pos2d = CardPositioningService.getWorldPosition(card, layout);
         Vector3d pos = new Vector3d(pos2d.x, y, pos2d.y);
         Ref<EntityStore> cardRef = CardSpawner.spawn(commandBuffer, duelRef, card, pos, rotation);
         if (cardRef != null) {
-            for (PlayerDuelContext ctx : contexts) {
+            for (DuelistContext ctx : contexts) {
                 ctx.addCardEntity(cardRef);
             }
         }

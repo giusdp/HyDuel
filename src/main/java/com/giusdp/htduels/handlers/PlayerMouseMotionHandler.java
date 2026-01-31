@@ -1,6 +1,6 @@
 package com.giusdp.htduels.handlers;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -25,7 +25,7 @@ public class PlayerMouseMotionHandler {
             return;
         }
 
-        PlayerDuelContext session = PlayerDuelContext.get(playerRef);
+        DuelistContext session = DuelistContext.get(playerRef);
         if (session == null) {
             return;
         }

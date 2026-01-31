@@ -27,24 +27,24 @@ class PlayCardHandlerTest {
             this.duel.tick();
         }
         this.card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
-        this.duel.duelist1.addToHand(card);
+        this.duel.getDuelist(0).addToHand(card);
     }
 
     @Test
     void playingCardMovesItFromHandToBattlefield() {
-        assertTrue(duel.duelist1.getHand().getCards().contains(card));
-        assertTrue(duel.duelist1.getBattlefield().getCards().isEmpty());
+        assertTrue(duel.getDuelist(0).getHand().getCards().contains(card));
+        assertTrue(duel.getDuelist(0).getBattlefield().getCards().isEmpty());
 
-        duel.emit(new PlayCard(duel, duel.duelist1, card));
+        duel.emit(new PlayCard(duel, duel.getDuelist(0), card));
 
-        assertFalse(duel.duelist1.getHand().getCards().contains(card));
-        assertTrue(duel.duelist1.getBattlefield().getCards().contains(card));
+        assertFalse(duel.getDuelist(0).getHand().getCards().contains(card));
+        assertTrue(duel.getDuelist(0).getBattlefield().getCards().contains(card));
     }
 
     @Test
     void playingCardDoesNotAffectOtherPlayerSide() {
-        duel.emit(new PlayCard(duel, duel.duelist1, card));
-        assertTrue(duel.duelist2.getBattlefield().getCards().isEmpty());
-        assertEquals(5, duel.duelist2.getHand().getCards().size());
+        duel.emit(new PlayCard(duel, duel.getDuelist(0), card));
+        assertTrue(duel.getDuelist(1).getBattlefield().getCards().isEmpty());
+        assertEquals(5, duel.getDuelist(1).getHand().getCards().size());
     }
 }

@@ -1,6 +1,6 @@
 package com.giusdp.htduels.system;
 
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.CardDragComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -34,7 +34,7 @@ public class CardDragSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        PlayerDuelContext session = PlayerDuelContext.get(dragger);
+        DuelistContext session = DuelistContext.get(dragger);
         if (session == null) {
             return;
         }

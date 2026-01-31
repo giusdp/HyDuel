@@ -1,7 +1,7 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
-import com.giusdp.htduels.PlayerDuelContext;
+import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duel.handler.*;
@@ -13,19 +13,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class Duel {
-    public final Duelist duelist1;
-    public final Duelist duelist2;
+    private final List<Duelist> duelists;
 
     public final GameEventBus eventBus;
     public final CardRepo cardRepo;
 
     public Phase currentPhase;
     public Duelist activeDuelist;
-    private final List<PlayerDuelContext> playerContexts = new ArrayList<>();
+    private final List<DuelistContext> contexts = new ArrayList<>();
 
     public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
-        this.duelist1 = duelist1;
-        this.duelist2 = duelist2;
+        this.duelists = List.of(duelist1, duelist2);
         this.eventBus = eventBus;
         this.cardRepo = cardRepo;
     }
@@ -67,19 +65,28 @@ public class Duel {
         this.activeDuelist = duelist;
     }
 
-    public void addPlayerContext(PlayerDuelContext ctx) {
-        playerContexts.add(ctx);
+    public Duelist getDuelist(int index) {
+        return duelists.get(index);
     }
 
-    public List<PlayerDuelContext> getPlayerContexts() {
-        return Collections.unmodifiableList(playerContexts);
+    public List<Duelist> getDuelists() {
+        return duelists;
+    }
+
+    public void addContext(DuelistContext ctx) {
+        contexts.add(ctx);
+    }
+
+    public List<DuelistContext> getContexts() {
+        return Collections.unmodifiableList(contexts);
     }
 
     public void swapActiveDuelist() {
-        if (this.activeDuelist == duelist1) {
-            this.activeDuelist = duelist2;
-        } else {
-            this.activeDuelist = duelist1;
+        for (Duelist d : duelists) {
+            if (d != activeDuelist) {
+                this.activeDuelist = d;
+                return;
+            }
         }
     }
 }
