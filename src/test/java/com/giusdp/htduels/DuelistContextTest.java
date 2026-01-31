@@ -80,12 +80,11 @@ class DuelistContextTest {
         @Test
         void botContextNotInPlayerRegistry() {
             Duelist bot = new Bot();
-            new DuelistContext(null, bot);
+            DuelistContext ctx = new DuelistContext(null, bot);
 
             // Bot context uses the bot constructor, which does not register in playerRegistry
-            // Any PlayerRef lookup should not find the bot context
-            assertTrue(DuelistContext.getByDuelRef(null).isEmpty()
-                    || DuelistContext.getByDuelRef(null).stream().noneMatch(c -> c.getDuelist() == bot));
+            // A direct lookup by PlayerRef should not find the bot context
+            assertNull(DuelistContext.get(null));
         }
     }
 }

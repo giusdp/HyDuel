@@ -30,7 +30,7 @@ public class DuelTicker extends EntityTickingSystem<EntityStore> {
 
         if (duelComponent.duel.currentPhase instanceof DuelEndPhase) {
             Ref<EntityStore> duelRef = archetypeChunk.getReferenceTo(index);
-            DuelCleanupService.cleanup(duelRef, commandBuffer);
+            DuelCleanupService.cleanup(duelRef, duelComponent, commandBuffer);
         }
     }
 

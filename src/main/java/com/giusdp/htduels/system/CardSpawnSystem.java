@@ -44,7 +44,7 @@ public class CardSpawnSystem extends EntityTickingSystem<EntityStore> {
         }
 
         Ref<EntityStore> duelRef = archetypeChunk.getReferenceTo(index);
-        List<DuelistContext> contexts = DuelistContext.getByDuelRef(duelRef);
+        List<DuelistContext> contexts = duelComponent.duel.getContexts();
         if (contexts.isEmpty()) {
             return;
         }

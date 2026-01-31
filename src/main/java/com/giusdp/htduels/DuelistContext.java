@@ -42,16 +42,6 @@ public class DuelistContext {
         return playerRegistry.get(player);
     }
 
-    public static List<DuelistContext> getByDuelRef(Ref<EntityStore> duelRef) {
-        List<DuelistContext> result = new ArrayList<>();
-        for (DuelistContext ctx : playerRegistry.values()) {
-            if (ctx.duelRef.equals(duelRef)) {
-                result.add(ctx);
-            }
-        }
-        return result;
-    }
-
     public static void unregisterByDuelRef(Ref<EntityStore> duelRef) {
         playerRegistry.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
     }

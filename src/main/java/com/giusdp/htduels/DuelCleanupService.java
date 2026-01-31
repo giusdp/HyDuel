@@ -1,5 +1,6 @@
 package com.giusdp.htduels;
 
+import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -19,8 +20,8 @@ public final class DuelCleanupService {
     private DuelCleanupService() {
     }
 
-    public static void cleanup(Ref<EntityStore> duelRef, CommandBuffer<EntityStore> commandBuffer) {
-        List<DuelistContext> contexts = DuelistContext.getByDuelRef(duelRef);
+    public static void cleanup(Ref<EntityStore> duelRef, DuelComponent duelComp, CommandBuffer<EntityStore> commandBuffer) {
+        List<DuelistContext> contexts = duelComp.duel.getContexts();
 
         for (DuelistContext ctx : contexts) {
             // Remove all card entities
@@ -28,23 +29,26 @@ public final class DuelCleanupService {
                 commandBuffer.removeEntity(cardRef, RemoveReason.REMOVE);
             }
 
-            // Dismiss the board game UI
+            // Player-specific cleanup (skip for bot contexts)
             PlayerRef playerRef = ctx.getPlayerRef();
-            Ref<EntityStore> playerEntityRef = playerRef.getReference();
-            if (playerEntityRef != null) {
-                Store<EntityStore> store = playerEntityRef.getStore();
-                Player player = store.getComponent(playerEntityRef, Player.getComponentType());
-                if (player != null) {
-                    player.getPageManager().setPage(playerEntityRef, store, Page.None);
+            if (playerRef != null) {
+                // Dismiss the board game UI
+                Ref<EntityStore> playerEntityRef = playerRef.getReference();
+                if (playerEntityRef != null) {
+                    Store<EntityStore> store = playerEntityRef.getStore();
+                    Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+                    if (player != null) {
+                        player.getPageManager().setPage(playerEntityRef, store, Page.None);
+                    }
                 }
+
+                // Reset camera to first person
+                playerRef.getPacketHandler()
+                        .writeNoCache(new SetServerCamera(ClientCameraView.FirstPerson, false, null));
+
+                // Clear hover state
+                CardInteractionService.clearHoveredCard(playerRef);
             }
-
-            // Reset camera to first person
-            playerRef.getPacketHandler()
-                    .writeNoCache(new SetServerCamera(ClientCameraView.FirstPerson, false, null));
-
-            // Clear hover state
-            CardInteractionService.clearHoveredCard(playerRef);
         }
 
         // Remove the duel entity itself
