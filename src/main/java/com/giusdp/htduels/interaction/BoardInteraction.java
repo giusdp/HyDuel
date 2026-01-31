@@ -76,6 +76,9 @@ public class BoardInteraction extends SimpleBlockInteraction {
         ctx.setBoardGameUi(boardGameUi);
         duelComp.duel.addContext(ctx);
 
+        DuelistContext botCtx = new DuelistContext(duelRef, duelComp.duel.getDuelist(1));
+        duelComp.duel.addContext(botCtx);
+
         LOGGER.atInfo().log("Duel entity spawned at board position (%d, %d, %d) with rotation %s",
                 targetBlock.x, targetBlock.y, targetBlock.z, boardRotation.name());
     }

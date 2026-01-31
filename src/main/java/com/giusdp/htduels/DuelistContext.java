@@ -20,9 +20,16 @@ import java.util.Map;
 public class DuelistContext {
     public record DuelSpatialData(Position cameraPos, float cameraYaw, float cardY) {}
 
-    final DuelSpatialData spatialData;
-
     private static final Map<PlayerRef, DuelistContext> playerRegistry = new HashMap<>();
+    final @Nullable DuelSpatialData spatialData;
+
+    private final @Nullable PlayerRef playerRef;
+    private final Ref<EntityStore> duelRef;
+    private final Duelist duelist;
+    private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
+    private @Nullable BoardGameUi boardGameUi;
+    private @Nullable Vec2f mouseWorldPosition;
+    private @Nullable Ref<EntityStore> draggedCard;
 
     public static DuelistContext registerGlobal(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
         DuelistContext ctx = new DuelistContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY);
@@ -49,13 +56,6 @@ public class DuelistContext {
         playerRegistry.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
     }
 
-    private final PlayerRef playerRef;
-    private final Ref<EntityStore> duelRef;
-    private final Duelist duelist;
-    private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
-    private @Nullable BoardGameUi boardGameUi;
-    private @Nullable Vec2f mouseWorldPosition;
-    private @Nullable Ref<EntityStore> draggedCard;
 
     public DuelistContext(PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
         this.playerRef = playerRef;
@@ -64,6 +64,14 @@ public class DuelistContext {
         this.spatialData = new DuelSpatialData(cameraPos, cameraYaw, cardY);
     }
 
+    public DuelistContext(Ref<EntityStore> duelRef, Duelist duelist) {
+        this.playerRef = null;
+        this.duelRef = duelRef;
+        this.duelist = duelist;
+        this.spatialData = null;
+    }
+
+    @Nullable
     public PlayerRef getPlayerRef() {
         return playerRef;
     }
@@ -76,6 +84,7 @@ public class DuelistContext {
         return duelist;
     }
 
+    @Nullable
     public DuelSpatialData getSpatialData() {return spatialData;}
 
     @Nullable

@@ -20,7 +20,12 @@ class PlayCardHandlerTest {
 
     @BeforeEach
     void setup() {
-        this.duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        this.duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new Bot(), false)
+                .build();
         this.duel.setup();
         // Tick through all 10 startup draws
         for (int i = 0; i < 10; i++) {

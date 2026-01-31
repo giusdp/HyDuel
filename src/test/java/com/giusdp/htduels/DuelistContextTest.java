@@ -1,5 +1,7 @@
 package com.giusdp.htduels;
 
+import com.giusdp.htduels.duelist.Bot;
+import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.protocol.Position;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,6 +47,45 @@ class DuelistContextTest {
 
             float cameraHeight = (float) (spatial.cameraPos().y - spatial.cardY());
             assertEquals(7f, cameraHeight, 0.001f);
+        }
+    }
+
+    @Nested
+    class BotContextTests {
+
+        @Test
+        void botConstructorSetsNullPlayerRef() {
+            Duelist bot = new Bot();
+            DuelistContext ctx = new DuelistContext(null, bot);
+
+            assertNull(ctx.getPlayerRef());
+        }
+
+        @Test
+        void botConstructorSetsNullSpatialData() {
+            Duelist bot = new Bot();
+            DuelistContext ctx = new DuelistContext(null, bot);
+
+            assertNull(ctx.getSpatialData());
+        }
+
+        @Test
+        void botConstructorSetsDuelist() {
+            Duelist bot = new Bot();
+            DuelistContext ctx = new DuelistContext(null, bot);
+
+            assertSame(bot, ctx.getDuelist());
+        }
+
+        @Test
+        void botContextNotInPlayerRegistry() {
+            Duelist bot = new Bot();
+            new DuelistContext(null, bot);
+
+            // Bot context uses the bot constructor, which does not register in playerRegistry
+            // Any PlayerRef lookup should not find the bot context
+            assertTrue(DuelistContext.getByDuelRef(null).isEmpty()
+                    || DuelistContext.getByDuelRef(null).stream().noneMatch(c -> c.getDuelist() == bot));
         }
     }
 }

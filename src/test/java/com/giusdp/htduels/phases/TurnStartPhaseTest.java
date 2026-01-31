@@ -33,7 +33,12 @@ public class TurnStartPhaseTest {
     @Test
     void emitsDrawCardsMoves() {
         FakeEventBus eventBus = new FakeEventBus();
-        var duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
+        var duel = Duel.builder()
+                .eventBus(eventBus)
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new DuelPlayer(), false)
+                .build();
         duel.setup();
         // Tick through 10 draws in StartupPhase
         for (int i = 0; i < 10; i++) {

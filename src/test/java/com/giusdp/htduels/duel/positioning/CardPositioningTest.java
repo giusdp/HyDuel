@@ -20,7 +20,12 @@ class CardPositioningTest {
     @BeforeEach
     void setup() {
         boardLayout = TestBoardLayout.create();
-        duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new Bot(), false)
+                .build();
     }
 
     @Test

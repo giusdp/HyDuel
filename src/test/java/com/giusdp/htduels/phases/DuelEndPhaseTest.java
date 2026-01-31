@@ -14,7 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DuelEndPhaseTest {
 
     private Duel createDuel() {
-        return new Duel(new DuelPlayer(), new DuelPlayer(), new FakeEventBus(), new FakeCardRepo());
+        return Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new DuelPlayer(), false)
+                .build();
     }
 
     @Test

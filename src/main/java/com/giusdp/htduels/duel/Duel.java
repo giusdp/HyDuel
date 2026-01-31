@@ -22,7 +22,11 @@ public class Duel {
     public Duelist activeDuelist;
     private final List<DuelistContext> contexts = new ArrayList<>();
 
-    public Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
+    public static DuelBuilder builder() {
+        return new DuelBuilder();
+    }
+
+    Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
         this.duelists = List.of(duelist1, duelist2);
         this.eventBus = eventBus;
         this.cardRepo = cardRepo;

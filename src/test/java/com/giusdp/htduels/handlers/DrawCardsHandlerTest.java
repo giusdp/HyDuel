@@ -14,7 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DrawCardsHandlerTest {
     @Test
     void addsCardsToHand() {
-        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        Duel duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new Bot(), false)
+                .build();
         duel.setup();
 
         duel.getDuelist(0).getHand().getCards().clear();

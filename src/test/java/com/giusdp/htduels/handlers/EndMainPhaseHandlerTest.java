@@ -16,7 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class EndMainPhaseHandlerTest {
     @Test
     void addsCardsToHand() {
-        Duel duel = new Duel(new DuelPlayer(), new Bot(), new FakeEventBus(), new FakeCardRepo());
+        Duel duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new Bot(), false)
+                .build();
         duel.setup();
         // 10 ticks for startup draws, 1 to transition to TurnStart, 1 to transition to MainPhase
         for (int i = 0; i < 12; i++) {

@@ -24,7 +24,12 @@ class StartupPhaseTest {
     @BeforeEach
     void setup() {
         this.eventBus = new FakeEventBus();
-        duel = new Duel(new DuelPlayer(), new DuelPlayer(), eventBus, new FakeCardRepo());
+        duel = Duel.builder()
+                .eventBus(eventBus)
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new DuelPlayer(), false)
+                .build();
         duel.setup();
     }
 
