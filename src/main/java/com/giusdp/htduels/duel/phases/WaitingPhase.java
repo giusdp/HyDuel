@@ -26,8 +26,4 @@ public class WaitingPhase extends Phase {
     @Override
     public void onExit(Duel duel) {
     }
-
-    public int getTicksWaited() {
-        return ticksWaited;
-    }
 }
