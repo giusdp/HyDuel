@@ -29,24 +29,19 @@ public final class DuelCleanupService {
         // Player-specific cleanup per context
         for (DuelistContext ctx : duelComp.duel.getContexts()) {
             PlayerRef playerRef = ctx.getPlayerRef();
-            if (playerRef != null) {
-                // Dismiss the board game UI
-                Ref<EntityStore> playerEntityRef = playerRef.getReference();
-                if (playerEntityRef != null) {
-                    Store<EntityStore> store = playerEntityRef.getStore();
-                    Player player = store.getComponent(playerEntityRef, Player.getComponentType());
-                    if (player != null) {
-                        player.getPageManager().setPage(playerEntityRef, store, Page.None);
-                    }
-                }
-
-                // Reset camera to first person
-                playerRef.getPacketHandler()
-                        .writeNoCache(new SetServerCamera(ClientCameraView.FirstPerson, false, null));
-
-                // Clear hover state
-                CardInteractionService.clearHoveredCard(playerRef);
+            if (playerRef == null) {
+                continue;
             }
+
+            // Dismiss the board game UI
+            dismissBoardGameUi(playerRef);
+
+            // Reset camera to first person
+            resetCamera(playerRef);
+
+            // Clear hover state
+            CardInteractionService.clearHoveredCard(playerRef);
+
         }
 
         // Remove the duel entity itself
@@ -54,5 +49,23 @@ public final class DuelCleanupService {
 
         // Unregister all player contexts for this duel
         DuelistContext.unregisterByDuelRef(duelRef);
+    }
+
+    private static void resetCamera(PlayerRef playerRef) {
+        SetServerCamera serverCamera = new SetServerCamera(ClientCameraView.FirstPerson, false, null);
+        playerRef.getPacketHandler().writeNoCache(serverCamera);
+    }
+
+    private static void dismissBoardGameUi(PlayerRef playerRef) {
+        Ref<EntityStore> playerEntityRef = playerRef.getReference();
+        if (playerEntityRef == null) {
+            return;
+        }
+
+        Store<EntityStore> store = playerEntityRef.getStore();
+        Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+        if (player != null) {
+            player.getPageManager().setPage(playerEntityRef, store, Page.None);
+        }
     }
 }
