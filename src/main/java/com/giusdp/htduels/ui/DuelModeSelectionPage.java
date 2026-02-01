@@ -34,13 +34,31 @@ public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelec
 
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#BotButton",
                 EventData.of("Mode", "bot"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PvpButton",
+                EventData.of("Mode", "pvp"), false);
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store,
                                 @Nonnull ModeEventData data) {
-        if ("bot".equals(data.mode)) {
-            DuelSetupService.startBotDuel(playerRef, boardContext, store);
+        switch (data.mode) {
+            case "bot" -> {
+                Ref<EntityStore> duelRef = DuelSetupService.createAndSpawnDuel(boardContext, store);
+                DuelSetupService.joinAsPlayer(playerRef, boardContext, store, duelRef);
+                DuelSetupService.joinAsBot(duelRef, store);
+            }
+            case "pvp" -> {
+                Ref<EntityStore> existing = DuelSetupService.findDuelAt(boardContext.boardPosition());
+                if (existing == null) {
+                    Ref<EntityStore> duelRef = DuelSetupService.createAndSpawnDuel(boardContext, store);
+                    DuelSetupService.joinAsPlayer(playerRef, boardContext, store, duelRef);
+                    return;
+                }
+
+                DuelSetupService.joinAsPlayer(playerRef, boardContext, store, existing);
+            }
+            case null, default -> {
+            }
         }
     }
 

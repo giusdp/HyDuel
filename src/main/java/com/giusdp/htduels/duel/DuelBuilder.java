@@ -3,6 +3,7 @@ package com.giusdp.htduels.duel;
 import com.giusdp.htduels.CardRepo;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duelist.Duelist;
+import com.hypixel.hytale.math.vector.Vector3i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 public class DuelBuilder {
     private GameEventBus eventBus;
     private CardRepo cardRepo;
+    private Vector3i boardPosition;
     private final List<DuelistConfig> configs = new ArrayList<>();
 
     private record DuelistConfig(Duelist duelist, boolean isOpponentSide) {}
@@ -21,6 +23,11 @@ public class DuelBuilder {
 
     public DuelBuilder cardRepo(CardRepo cardRepo) {
         this.cardRepo = cardRepo;
+        return this;
+    }
+
+    public DuelBuilder boardPosition(Vector3i boardPosition) {
+        this.boardPosition = boardPosition;
         return this;
     }
 
@@ -36,14 +43,12 @@ public class DuelBuilder {
         if (cardRepo == null) {
             throw new IllegalStateException("cardRepo must be set");
         }
-        if (configs.size() != 2) {
-            throw new IllegalStateException("exactly 2 duelists are required, got " + configs.size());
-        }
-
         for (DuelistConfig config : configs) {
             config.duelist.setOpponentSide(config.isOpponentSide);
         }
 
-        return new Duel(configs.get(0).duelist, configs.get(1).duelist, eventBus, cardRepo);
+        Duel duel = new Duel(configs.stream().map(DuelistConfig::duelist).toList(), eventBus, cardRepo);
+        duel.setBoardPosition(boardPosition);
+        return duel;
     }
 }

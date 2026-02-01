@@ -77,24 +77,25 @@ class DuelBuilderTest {
     }
 
     @Test
-    void throwsWithOneDuelist() {
-        var builder = Duel.builder()
+    void buildsWithZeroDuelists() {
+        Duel duel = Duel.builder()
                 .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true);
+                .build();
 
-        assertThrows(IllegalStateException.class, builder::build);
+        assertEquals(0, duel.getDuelists().size());
     }
 
     @Test
-    void throwsWithThreeDuelists() {
-        var builder = Duel.builder()
+    void buildsWithOneDuelist() {
+        Duelist d1 = new DuelPlayer();
+        Duel duel = Duel.builder()
                 .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false)
-                .addDuelist(new DuelPlayer(), true);
+                .addDuelist(d1, true)
+                .build();
 
-        assertThrows(IllegalStateException.class, builder::build);
+        assertEquals(1, duel.getDuelists().size());
+        assertSame(d1, duel.getDuelist(0));
     }
 }

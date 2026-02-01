@@ -31,9 +31,9 @@ Group #ModeSelectionRoot {
         }
 
         TextButton #PvpButton {
+            Style: $C.@DefaultTextButtonStyle;
             Anchor: (Height: 44, Left: 20, Right: 20);
-            Disabled: true;
-            Text: "vs Player (Coming Soon)";
+            Text: "vs Player";
         }
     }
 }

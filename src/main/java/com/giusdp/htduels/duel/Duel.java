@@ -5,8 +5,10 @@ import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.duel.event.*;
 import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duel.handler.*;
-import com.giusdp.htduels.duel.phases.StartupPhase;
+import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.duelist.Duelist;
+
+import com.hypixel.hytale.math.vector.Vector3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -25,19 +27,32 @@ public class Duel {
     public Duelist activeDuelist;
     private final List<DuelistContext> contexts = new ArrayList<>();
     private final List<Ref<EntityStore>> cardEntities = new ArrayList<>();
+    private Vector3i boardPosition;
 
     public static DuelBuilder builder() {
         return new DuelBuilder();
     }
 
-    Duel(Duelist duelist1, Duelist duelist2, GameEventBus eventBus, CardRepo cardRepo) {
-        this.duelists = List.of(duelist1, duelist2);
+    Duel(List<Duelist> duelists, GameEventBus eventBus, CardRepo cardRepo) {
+        this.duelists = new ArrayList<>(duelists);
         this.eventBus = eventBus;
         this.cardRepo = cardRepo;
     }
 
+    public void addDuelist(Duelist duelist) {
+        duelists.add(duelist);
+    }
+
+    public Vector3i getBoardPosition() {
+        return boardPosition;
+    }
+
+    public void setBoardPosition(Vector3i boardPosition) {
+        this.boardPosition = boardPosition;
+    }
+
     public void setup() {
-        currentPhase = new StartupPhase();
+        currentPhase = new WaitingPhase();
 
         registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
 

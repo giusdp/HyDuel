@@ -1,5 +1,7 @@
 package com.giusdp.htduels.interaction;
 
+import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.ui.DuelModeSelectionPage;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -48,8 +50,18 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Rotation boardRotation = getBoardRotation(world, targetBlock);
         BoardContext boardContext = new BoardContext(targetBlock, boardRotation, ref);
 
-        DuelModeSelectionPage page = new DuelModeSelectionPage(playerRef, boardContext);
-        player.getPageManager().openCustomPage(ref, ref.getStore(), page);
+        Ref<EntityStore> existingDuel = DuelSetupService.findDuelAt(targetBlock);
+        if (existingDuel == null) {
+            DuelModeSelectionPage page = new DuelModeSelectionPage(playerRef, boardContext);
+            player.getPageManager().openCustomPage(ref, ref.getStore(), page);
+            return;
+        }
+
+        // otherwise if duel already exists on this board
+        DuelComponent duelComp = commandBuffer.getComponent(existingDuel, DuelComponent.getComponentType());
+        if (duelComp != null && duelComp.duel.currentPhase instanceof WaitingPhase) {
+            DuelSetupService.joinAsPlayer(playerRef, boardContext, ref.getStore(), existingDuel);
+        }
     }
 
     private Rotation getBoardRotation(@NonNull World world, @NonNull Vector3i blockPos) {

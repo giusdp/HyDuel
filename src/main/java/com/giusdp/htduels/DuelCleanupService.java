@@ -2,6 +2,8 @@ package com.giusdp.htduels;
 
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.interaction.CardInteractionService;
+import com.giusdp.htduels.interaction.DuelSetupService;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
@@ -42,6 +44,12 @@ public final class DuelCleanupService {
             // Clear hover state
             CardInteractionService.clearHoveredCard(playerRef);
 
+        }
+
+        // Remove from active duels registry
+        Vector3i boardPosition = duelComp.duel.getBoardPosition();
+        if (boardPosition != null) {
+            DuelSetupService.removeDuel(boardPosition);
         }
 
         // Remove the duel entity itself

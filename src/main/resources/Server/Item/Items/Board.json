@@ -33,7 +33,7 @@
   "BlockType": {
     "Material": "Solid",
     "DrawType": "Model",
-    "Opacity": "Transparent",
+    "Opacity": "Solid",
     "CustomModel": "Blocks/Board/Board.blockymodel",
     "CustomModelTexture": [
       {
@@ -58,11 +58,6 @@
         }
       }
     },
-    "Gathering": {
-      "Breaking": {
-        "GatherType": "Benches"
-      }
-    },
     "BlockParticleSetId": "Wood",
     "ParticleColor": "#6e4a2f",
     "Support": {
@@ -72,7 +67,8 @@
         }
       ]
     },
-    "BlockSoundSetId": "Wood"
+    "BlockSoundSetId": "Wood",
+    "AllowsMultipleUsers": true
   },
   "IconProperties": {
     "Scale": 0.42,

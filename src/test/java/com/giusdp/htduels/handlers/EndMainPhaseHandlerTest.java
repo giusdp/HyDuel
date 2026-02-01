@@ -23,8 +23,8 @@ class EndMainPhaseHandlerTest {
                 .addDuelist(new Bot(), false)
                 .build();
         duel.setup();
-        // 10 ticks for startup draws, 1 to transition to TurnStart, 1 to transition to MainPhase
-        for (int i = 0; i < 12; i++) {
+        // 1 tick WaitingPhase, 10 ticks for startup draws, 1 to transition to TurnStart, 1 to transition to MainPhase
+        for (int i = 0; i < 13; i++) {
             duel.tick();
         }
 
