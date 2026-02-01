@@ -8,6 +8,9 @@ import com.giusdp.htduels.duel.handler.*;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.Duelist;
 
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +24,7 @@ public class Duel {
     public Phase currentPhase;
     public Duelist activeDuelist;
     private final List<DuelistContext> contexts = new ArrayList<>();
+    private final List<Ref<EntityStore>> cardEntities = new ArrayList<>();
 
     public static DuelBuilder builder() {
         return new DuelBuilder();
@@ -83,6 +87,14 @@ public class Duel {
 
     public List<DuelistContext> getContexts() {
         return Collections.unmodifiableList(contexts);
+    }
+
+    public void addCardEntity(Ref<EntityStore> cardRef) {
+        cardEntities.add(cardRef);
+    }
+
+    public List<Ref<EntityStore>> getCardEntities() {
+        return Collections.unmodifiableList(cardEntities);
     }
 
     public void swapActiveDuelist() {

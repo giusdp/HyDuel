@@ -5,6 +5,7 @@ import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.duel.positioning.CardPositioningService;
 import com.giusdp.htduels.duelist.Duelist;
@@ -49,54 +50,57 @@ public class CardSpawnSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        // Collect all cards that already have entities
+        // Collect all cards that already have entities (from shared duel list)
         Set<Card> spawnedCards = new HashSet<>();
-        for (DuelistContext ctx : contexts) {
-            for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {
-                CardComponent cardComp = store.getComponent(cardRef, CardComponent.getComponentType());
-                if (cardComp != null) {
-                    spawnedCards.add(cardComp.getCard());
-                }
+        for (Ref<EntityStore> cardRef : duelComponent.duel.getCardEntities()) {
+            CardComponent cardComp = store.getComponent(cardRef, CardComponent.getComponentType());
+            if (cardComp != null) {
+                spawnedCards.add(cardComp.getCard());
             }
         }
 
         float yawRadians = (float) layout.rotation().getRadians();
 
         // Check all duelists' hand and battlefield for unspawned cards
-        for (Duelist duelist : duelComponent.duel.getDuelists()) {
-            spawnMissingCards(duelist, layout, yawRadians, duelRef, commandBuffer, spawnedCards, contexts);
+        Duel duel = duelComponent.duel;
+        for (Duelist duelist : duel.getDuelists()) {
+            spawnMissingCards(duelist, layout, yawRadians, duelRef, commandBuffer, spawnedCards, duel, contexts);
         }
     }
 
     private void spawnMissingCards(Duelist duelist, BoardLayout layout, float yawRadians,
                                    Ref<EntityStore> duelRef, CommandBuffer<EntityStore> commandBuffer,
-                                   Set<Card> spawnedCards, List<DuelistContext> contexts) {
-        Vector3f rotation = duelist.isBottomPlayer()
+                                   Set<Card> spawnedCards, Duel duel, List<DuelistContext> contexts) {
+        Vector3f rotation = duelist.isOpponentSide()
                 ? new Vector3f((float) Math.PI, yawRadians, 0)
                 : new Vector3f(0, yawRadians, 0);
 
         for (Card card : duelist.getHand().getCards()) {
             if (!spawnedCards.contains(card)) {
-                spawnAndRegister(card, layout, layout.handYOffset(), rotation, duelRef, commandBuffer, contexts);
+                spawnAndRegister(card, layout, layout.handYOffset(), rotation, duelRef, commandBuffer, duel, duelist, contexts);
             }
         }
 
         for (Card card : duelist.getBattlefield().getCards()) {
             if (!spawnedCards.contains(card)) {
-                spawnAndRegister(card, layout, layout.battlefieldYOffset(), rotation, duelRef, commandBuffer, contexts);
+                spawnAndRegister(card, layout, layout.battlefieldYOffset(), rotation, duelRef, commandBuffer, duel, duelist, contexts);
             }
         }
     }
 
     private void spawnAndRegister(Card card, BoardLayout layout, float y, Vector3f rotation,
                                   Ref<EntityStore> duelRef, CommandBuffer<EntityStore> commandBuffer,
-                                  List<DuelistContext> contexts) {
+                                  Duel duel, Duelist owner, List<DuelistContext> contexts) {
         Vec2f pos2d = CardPositioningService.getWorldPosition(card, layout);
         Vector3d pos = new Vector3d(pos2d.x, y, pos2d.y);
         Ref<EntityStore> cardRef = CardSpawner.spawn(commandBuffer, duelRef, card, pos, rotation);
         if (cardRef != null) {
+            duel.addCardEntity(cardRef);
             for (DuelistContext ctx : contexts) {
-                ctx.addCardEntity(cardRef);
+                if (ctx.getDuelist() == owner) {
+                    ctx.addCardEntity(cardRef);
+                    break;
+                }
             }
         }
     }

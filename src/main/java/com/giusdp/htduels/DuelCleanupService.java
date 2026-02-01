@@ -21,15 +21,13 @@ public final class DuelCleanupService {
     }
 
     public static void cleanup(Ref<EntityStore> duelRef, DuelComponent duelComp, CommandBuffer<EntityStore> commandBuffer) {
-        List<DuelistContext> contexts = duelComp.duel.getContexts();
+        // Remove all card entities from the duel
+        for (Ref<EntityStore> cardRef : duelComp.duel.getCardEntities()) {
+            commandBuffer.removeEntity(cardRef, RemoveReason.REMOVE);
+        }
 
-        for (DuelistContext ctx : contexts) {
-            // Remove all card entities
-            for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {
-                commandBuffer.removeEntity(cardRef, RemoveReason.REMOVE);
-            }
-
-            // Player-specific cleanup (skip for bot contexts)
+        // Player-specific cleanup per context
+        for (DuelistContext ctx : duelComp.duel.getContexts()) {
             PlayerRef playerRef = ctx.getPlayerRef();
             if (playerRef != null) {
                 // Dismiss the board game UI

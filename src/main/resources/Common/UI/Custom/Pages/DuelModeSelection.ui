@@ -1,0 +1,39 @@
+$C = "../Common.ui";
+
+Group #ModeSelectionRoot {
+    Anchor: (Full: 0);
+    LayoutMode: Center;
+
+    Group #ModeSelectionCard {
+        Anchor: (Width: 320, Height: 220);
+        Background: #1a1a2e(0.95);
+        Padding: (Full: 20);
+        LayoutMode: Top;
+
+        Label #Title {
+            Style: (FontSize: 28, Alignment: Center, TextColor: #e0e0ff);
+            Anchor: (Height: 40, Left: 0, Right: 0);
+            Text: "Duel Mode";
+        }
+
+        Group #Spacer1 {
+            Anchor: (Height: 20, Left: 0, Right: 0);
+        }
+
+        TextButton #BotButton {
+            Style: $C.@DefaultTextButtonStyle;
+            Anchor: (Height: 44, Left: 20, Right: 20);
+            Text: "vs Bot";
+        }
+
+        Group #Spacer2 {
+            Anchor: (Height: 12, Left: 0, Right: 0);
+        }
+
+        TextButton #PvpButton {
+            Anchor: (Height: 44, Left: 20, Right: 20);
+            Disabled: true;
+            Text: "vs Player (Coming Soon)";
+        }
+    }
+}
