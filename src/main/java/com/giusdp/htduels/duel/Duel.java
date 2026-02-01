@@ -106,6 +106,27 @@ public class Duel {
         return Collections.unmodifiableList(contexts);
     }
 
+    /**
+     * Updates the turn indicator on every duelist's {@link com.giusdp.htduels.ui.BoardGameUi}.
+     * Contexts without a UI instance are silently skipped.
+     *
+     * @param message the text to display; {@code null} is treated as empty (clears the indicator)
+     */
+    public void broadcastTurnIndicator(String message) {
+        String text = message == null ? "" : message;
+        for (DuelistContext ctx : contexts) {
+            var ui = ctx.getBoardGameUi();
+            if (ui != null) {
+                ui.updateTurnIndicator(text);
+            }
+        }
+    }
+
+    /** Clears the turn indicator for all duelists. */
+    public void clearTurnIndicator() {
+        broadcastTurnIndicator("");
+    }
+
     public void addCardEntity(Ref<EntityStore> cardRef) {
         cardEntities.add(cardRef);
     }
