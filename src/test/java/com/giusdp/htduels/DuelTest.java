@@ -6,60 +6,78 @@ import com.giusdp.htduels.duel.phases.TurnStartPhase;
 import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class DuelTest {
-    Duel duel;
 
-    @BeforeEach
-    void setup() {
-        duel = Duel.builder()
+    @Test
+    void setupWithTwoDuelistsSkipsWaitingPhase() {
+        Duel duel = Duel.builder()
                 .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(new DuelPlayer(), false)
                 .addDuelist(new Bot(), true)
                 .build();
         duel.setup();
-    }
-
-    @Test
-    void setupStartsInWaitingPhase() {
-        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
-    }
-
-    @Test
-    void waitingPhaseTransitionsToStartupWhenTwoDuelists() {
-        // Duel already has 2 duelists from builder, so first tick transitions
-        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
-        duel.tick();
         assertInstanceOf(StartupPhase.class, duel.currentPhase);
     }
 
     @Test
-    void fullFlowFromWaitingToTurnStart() {
-        // First tick: WaitingPhase -> StartupPhase
-        duel.tick();
+    void setupWithZeroDuelistsStaysInWaitingPhase() {
+        Duel duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .build();
+        duel.setup();
+        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
+    }
+
+    @Test
+    void addingSecondDuelistTransitionsToStartup() {
+        Duel duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .build();
+        duel.setup();
+        duel.addDuelist(new DuelPlayer());
+        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
+
+        duel.addDuelist(new Bot());
         assertInstanceOf(StartupPhase.class, duel.currentPhase);
+    }
+
+    @Test
+    void fullFlowToTurnStart() {
+        Duel duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), false)
+                .addDuelist(new Bot(), true)
+                .build();
+        duel.setup();
 
         // 10 ticks in StartupPhase (draw cards)
         for (int i = 0; i < 10; i++) {
             duel.tick();
             assertInstanceOf(StartupPhase.class, duel.currentPhase);
         }
-        // 11th tick transitions to TurnStartPhase
         duel.tick();
         assertInstanceOf(TurnStartPhase.class, duel.currentPhase);
     }
 
     @Test
     void handsGetFilledOnStartup() {
-        // WaitingPhase -> StartupPhase
-        duel.tick();
-        // 10 draw ticks
+        Duel duel = Duel.builder()
+                .eventBus(new FakeEventBus())
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), false)
+                .addDuelist(new Bot(), true)
+                .build();
+        duel.setup();
+
         for (int i = 0; i < 10; i++) {
             duel.tick();
         }

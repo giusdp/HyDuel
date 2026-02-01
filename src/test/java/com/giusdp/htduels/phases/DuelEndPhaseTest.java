@@ -5,7 +5,7 @@ import com.giusdp.htduels.FakeEventBus;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.phases.DuelEndPhase;
 import com.giusdp.htduels.duel.phases.MainPhase;
-import com.giusdp.htduels.duel.phases.WaitingPhase;
+import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +27,8 @@ public class DuelEndPhaseTest {
         Duel duel = createDuel();
         duel.setup();
 
-        // Tick through WaitingPhase (1) + StartupPhase (10 draws) + transition tick (1)
-        for (int i = 0; i < 12; i++) {
+        // Tick through StartupPhase (10 draws) + transition tick
+        for (int i = 0; i < 11; i++) {
             duel.tick();
         }
         // Now in TurnStartPhase, one more tick transitions to MainPhase
@@ -47,7 +47,7 @@ public class DuelEndPhaseTest {
     void forfeitDuringStartup() {
         Duel duel = createDuel();
         duel.setup();
-        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
+        assertInstanceOf(StartupPhase.class, duel.currentPhase);
 
         duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
         assertInstanceOf(DuelEndPhase.class, duel.currentPhase);

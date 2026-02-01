@@ -27,8 +27,8 @@ class PlayCardHandlerTest {
                 .addDuelist(new Bot(), false)
                 .build();
         this.duel.setup();
-        // 1 tick WaitingPhase + 10 startup draws
-        for (int i = 0; i < 11; i++) {
+        // Tick through all 10 startup draws
+        for (int i = 0; i < 10; i++) {
             this.duel.tick();
         }
         this.card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));

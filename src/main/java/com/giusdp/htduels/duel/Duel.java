@@ -41,6 +41,7 @@ public class Duel {
 
     public void addDuelist(Duelist duelist) {
         duelists.add(duelist);
+        emit(new DuelistJoined(this, duelist));
     }
 
     public Vector3i getBoardPosition() {
@@ -61,6 +62,7 @@ public class Duel {
         registerHandler(PlayCard.class, new PlayCardHandler());
         registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler());
         registerHandler(EndMainPhase.class, new EndMainPhaseHandler());
+        registerHandler(DuelistJoined.class, new DuelistJoinedHandler());
 
         currentPhase.onEnter(this);
     }

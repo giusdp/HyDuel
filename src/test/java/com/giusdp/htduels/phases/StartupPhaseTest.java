@@ -9,7 +9,6 @@ import com.giusdp.htduels.duel.event.DuelStarted;
 import com.giusdp.htduels.duel.event.RandomDuelistSelect;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duel.phases.TurnStartPhase;
-import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +31,6 @@ class StartupPhaseTest {
                 .addDuelist(new DuelPlayer(), false)
                 .build();
         duel.setup();
-        // Advance past WaitingPhase into StartupPhase
-        duel.tick();
         assertInstanceOf(StartupPhase.class, duel.currentPhase);
     }
 

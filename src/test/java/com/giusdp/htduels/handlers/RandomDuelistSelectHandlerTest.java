@@ -24,8 +24,6 @@ public class RandomDuelistSelectHandlerTest {
 
         assertNull(duel.activeDuelist);
         duel.setup();
-        // setup enters WaitingPhase; first tick transitions to StartupPhase which emits RandomDuelistSelect
-        duel.tick();
         assertTrue(duel.activeDuelist == duelist1 || duel.activeDuelist == duelist2);
     }
 }

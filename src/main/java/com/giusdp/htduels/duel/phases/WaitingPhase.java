@@ -9,14 +9,13 @@ public class WaitingPhase extends Phase {
 
     @Override
     public void onEnter(Duel duel) {
+        if (duel.getDuelists().size() >= 2) {
+            duel.transitionTo(new StartupPhase());
+        }
     }
 
     @Override
     public void tick(Duel duel) {
-        if (duel.getDuelists().size() >= 2) {
-            duel.transitionTo(new StartupPhase());
-            return;
-        }
         if (ticksWaited >= MAX_WAIT_TICKS) {
             duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT));
             return;

@@ -40,13 +40,11 @@ public class TurnStartPhaseTest {
                 .addDuelist(new DuelPlayer(), false)
                 .build();
         duel.setup();
-        // Tick 1: WaitingPhase -> StartupPhase
-        duel.tick();
         // Tick through 10 draws in StartupPhase
         for (int i = 0; i < 10; i++) {
             duel.tick();
         }
-        // Tick 12 transitions to TurnStartPhase, which draws 1 more
+        // Tick 11 transitions to TurnStartPhase, which draws 1 more
         duel.tick();
         List<DuelEvent> moves = eventBus.postedEvents();
         long drawCardsCount = moves.stream().filter(m -> m instanceof DrawCards).count();

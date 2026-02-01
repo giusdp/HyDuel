@@ -8,6 +8,7 @@ import com.giusdp.htduels.duelist.DuelPlayer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WaitingPhaseTest {
 
@@ -36,14 +37,13 @@ class WaitingPhaseTest {
     }
 
     @Test
-    void transitionsToStartupWhenSecondDuelistAdded() {
+    void transitionsToStartupImmediatelyWhenSecondDuelistJoins() {
         Duel duel = createDuelWithNoDuelists();
         duel.addDuelist(new DuelPlayer());
-        duel.tick();
         assertInstanceOf(WaitingPhase.class, duel.currentPhase);
 
+        // Adding second duelist triggers DuelistJoined event -> handler transitions immediately
         duel.addDuelist(new Bot());
-        duel.tick();
         assertInstanceOf(StartupPhase.class, duel.currentPhase);
     }
 
@@ -54,11 +54,8 @@ class WaitingPhaseTest {
             duel.tick();
             assertInstanceOf(WaitingPhase.class, duel.currentPhase);
         }
-        // One more tick after reaching max
         duel.tick();
         assertInstanceOf(DuelEndPhase.class, duel.currentPhase);
-        DuelEndPhase endPhase = (DuelEndPhase) duel.currentPhase;
-        assertInstanceOf(DuelEndPhase.class, endPhase);
-        assert endPhase.reason == DuelEndPhase.Reason.TIMEOUT;
+        assertEquals(DuelEndPhase.Reason.TIMEOUT, ((DuelEndPhase) duel.currentPhase).reason);
     }
 }

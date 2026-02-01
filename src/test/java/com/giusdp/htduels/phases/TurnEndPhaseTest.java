@@ -23,8 +23,6 @@ public class TurnEndPhaseTest {
                 .build();
 
         duel.setup();
-        // WaitingPhase -> StartupPhase
-        duel.tick();
         // StartupPhase draws (10 ticks) + transition to TurnStartPhase
         for (int i = 0; i < 10; i++) {
             duel.tick();
