@@ -19,7 +19,7 @@ public final class CardLayouts {
         int count = bf.getCards().size();
 
         float localX = (index - (count - 1) / 2.0f) * board.battlefieldSpacing();
-        float localZ = owner.isBottomPlayer()
+        float localZ = owner.isOpponentSide()
                 ? -board.playerBattlefieldDepth()
                 : board.opponentBattlefieldDepth();
 
@@ -34,7 +34,7 @@ public final class CardLayouts {
         int count = hand.getCards().size();
 
         float localX = (index - (count - 1) / 2.0f) * board.handSpacing();
-        float localZ = owner.isBottomPlayer()
+        float localZ = owner.isOpponentSide()
                 ? -board.playerHandDepth()
                 : board.opponentHandDepth();
 
@@ -44,7 +44,7 @@ public final class CardLayouts {
     public static Vec2f deck(Card card, BoardLayout board) {
         Duelist owner = card.getOwner();
 
-        float localZ = owner.isBottomPlayer()
+        float localZ = owner.isOpponentSide()
                 ? -board.playerHandDepth()
                 : board.opponentHandDepth();
 
@@ -54,7 +54,7 @@ public final class CardLayouts {
     public static Vec2f graveyard(Card card, BoardLayout board) {
         Duelist owner = card.getOwner();
 
-        float localZ = owner.isBottomPlayer()
+        float localZ = owner.isOpponentSide()
                 ? -board.playerHandDepth()
                 : board.opponentHandDepth();
 

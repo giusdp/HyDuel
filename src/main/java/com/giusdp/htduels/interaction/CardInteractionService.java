@@ -92,7 +92,7 @@ public class CardInteractionService {
                 return;
             }
             Duelist duelist = ctx.getDuelist();
-            if (boardLayout.isInBattlefieldZone(worldPos, duelist.isBottomPlayer())) {
+            if (boardLayout.isInBattlefieldZone(worldPos, duelist.isOpponentSide())) {
                 CardComponent cardComp = store.getComponent(draggedCard, CardComponent.getComponentType());
                 if (cardComp != null) {
                     duel.emit(new PlayCard(duel, duelist, cardComp.getCard()));

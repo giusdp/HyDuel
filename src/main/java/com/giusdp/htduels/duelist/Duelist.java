@@ -8,19 +8,19 @@ import com.giusdp.htduels.duel.zone.Hand;
 public abstract class Duelist {
     protected final Hand hand;
     protected final Battlefield battlefield;
-    private boolean bottomPlayer;
+    private boolean opponentSide;
 
     protected Duelist() {
         this.hand = new Hand();
         this.battlefield = new Battlefield();
     }
 
-    public boolean isBottomPlayer() {
-        return bottomPlayer;
+    public boolean isOpponentSide() {
+        return opponentSide;
     }
 
-    public void setBottomPlayer(boolean bottomPlayer) {
-        this.bottomPlayer = bottomPlayer;
+    public void setOpponentSide(boolean opponentSide) {
+        this.opponentSide = opponentSide;
     }
 
     public Hand getHand() {

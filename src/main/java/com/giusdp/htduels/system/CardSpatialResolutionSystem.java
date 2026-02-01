@@ -55,7 +55,7 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
     }
 
     public static float resolveFacing(Card card) {
-        if (card.getCurrentZoneType() == ZoneType.HAND && card.getOwner() != null && card.getOwner().isBottomPlayer()) {
+        if (card.getCurrentZoneType() == ZoneType.HAND && card.getOwner() != null && card.getOwner().isOpponentSide()) {
             return (float) Math.PI;
         }
         return 0f;

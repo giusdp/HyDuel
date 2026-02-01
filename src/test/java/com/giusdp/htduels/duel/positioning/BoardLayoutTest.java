@@ -102,9 +102,9 @@ class BoardLayoutTest {
         }
 
         @Test
-        void positionOnOpponentSideIsNotInZoneForBottomPlayer() {
+        void positionOnOpponentSideIsNotInZoneForOpponentPlayer() {
             BoardLayout layout = TestBoardLayout.create();
-            // Opponent side (positive Z for bottom player)
+            // Opponent side (positive Z for opponent player)
             Vec2f worldPos = layout.toWorldPosition(0f, layout.opponentBattlefieldDepth());
 
             assertFalse(layout.isInBattlefieldZone(worldPos, true));

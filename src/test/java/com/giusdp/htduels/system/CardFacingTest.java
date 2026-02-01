@@ -16,7 +16,7 @@ class CardFacingTest {
     @Test
     void topPlayerHandCardIsFaceUp() {
         DuelPlayer player = new DuelPlayer();
-        player.setBottomPlayer(false);
+        player.setOpponentSide(false);
         Card card = createCard();
         player.addToHand(card);
 
@@ -26,7 +26,7 @@ class CardFacingTest {
     @Test
     void bottomPlayerHandCardIsFaceDown() {
         DuelPlayer player = new DuelPlayer();
-        player.setBottomPlayer(true);
+        player.setOpponentSide(true);
         Card card = createCard();
         player.addToHand(card);
 
@@ -36,7 +36,7 @@ class CardFacingTest {
     @Test
     void topPlayerBattlefieldCardIsFaceUp() {
         DuelPlayer player = new DuelPlayer();
-        player.setBottomPlayer(false);
+        player.setOpponentSide(false);
         Card card = createCard();
         player.playCard(card);
 
@@ -46,7 +46,7 @@ class CardFacingTest {
     @Test
     void bottomPlayerBattlefieldCardIsFaceUp() {
         DuelPlayer player = new DuelPlayer();
-        player.setBottomPlayer(true);
+        player.setOpponentSide(true);
         Card card = createCard();
         player.playCard(card);
 

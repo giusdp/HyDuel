@@ -12,7 +12,7 @@ public class DuelBuilder {
     private CardRepo cardRepo;
     private final List<DuelistConfig> configs = new ArrayList<>();
 
-    private record DuelistConfig(Duelist duelist, boolean isBottomPlayer) {}
+    private record DuelistConfig(Duelist duelist, boolean isOpponentSide) {}
 
     public DuelBuilder eventBus(GameEventBus eventBus) {
         this.eventBus = eventBus;
@@ -24,8 +24,8 @@ public class DuelBuilder {
         return this;
     }
 
-    public DuelBuilder addDuelist(Duelist duelist, boolean isBottomPlayer) {
-        configs.add(new DuelistConfig(duelist, isBottomPlayer));
+    public DuelBuilder addDuelist(Duelist duelist, boolean isOpponentSide) {
+        configs.add(new DuelistConfig(duelist, isOpponentSide));
         return this;
     }
 
@@ -41,7 +41,7 @@ public class DuelBuilder {
         }
 
         for (DuelistConfig config : configs) {
-            config.duelist.setBottomPlayer(config.isBottomPlayer);
+            config.duelist.setOpponentSide(config.isOpponentSide);
         }
 
         return new Duel(configs.get(0).duelist, configs.get(1).duelist, eventBus, cardRepo);

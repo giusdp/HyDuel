@@ -37,8 +37,8 @@ class DuelBuilderTest {
                 .addDuelist(d2, false)
                 .build();
 
-        assertTrue(d1.isBottomPlayer());
-        assertFalse(d2.isBottomPlayer());
+        assertTrue(d1.isOpponentSide());
+        assertFalse(d2.isOpponentSide());
     }
 
     @Test
