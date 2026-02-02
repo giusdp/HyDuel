@@ -14,6 +14,12 @@ import org.jspecify.annotations.Nullable;
 
 public class DuelTicker extends EntityTickingSystem<EntityStore> {
 
+    private final DuelCleanupService cleanupService;
+
+    public DuelTicker(DuelCleanupService cleanupService) {
+        this.cleanupService = cleanupService;
+    }
+
     @Override
     public void tick(float deltaTime, int index, @NonNull ArchetypeChunk<EntityStore> archetypeChunk,
                      @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
@@ -31,7 +37,7 @@ public class DuelTicker extends EntityTickingSystem<EntityStore> {
 
         if (duelComponent.duel.isFinished()) {
             Ref<EntityStore> duelRef = archetypeChunk.getReferenceTo(index);
-            DuelCleanupService.cleanup(duelRef, duelComponent, commandBuffer);
+            cleanupService.cleanup(duelRef, duelComponent, commandBuffer);
         }
     }
 

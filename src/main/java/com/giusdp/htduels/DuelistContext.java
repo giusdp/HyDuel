@@ -13,14 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DuelistContext {
     public record DuelSpatialData(Position cameraPos, float cameraYaw, float cardY) {}
 
-    private static final Map<PlayerRef, DuelistContext> playerRegistry = new HashMap<>();
     final @Nullable DuelSpatialData spatialData;
 
     private final @Nullable PlayerRef playerRef;
@@ -31,23 +28,7 @@ public class DuelistContext {
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
-    public static DuelistContext registerGlobal(PlayerRef player, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
-        DuelistContext ctx = new DuelistContext(player, duelRef, duelist, cameraPos, cameraYaw, cardY);
-        playerRegistry.put(player, ctx);
-        return ctx;
-    }
-
-    @Nullable
-    public static DuelistContext get(PlayerRef player) {
-        return playerRegistry.get(player);
-    }
-
-    public static void unregisterByDuelRef(Ref<EntityStore> duelRef) {
-        playerRegistry.values().removeIf(ctx -> ctx.duelRef.equals(duelRef));
-    }
-
-
-    public DuelistContext(PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+    public DuelistContext(@Nullable PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
         this.playerRef = playerRef;
         this.duelRef = duelRef;
         this.duelist = duelist;

@@ -82,9 +82,10 @@ class DuelistContextTest {
             Duelist bot = new Bot();
             DuelistContext ctx = new DuelistContext(null, bot);
 
-            // Bot context uses the bot constructor, which does not register in playerRegistry
+            // Bot context uses the bot constructor, which does not register in the registry
             // A direct lookup by PlayerRef should not find the bot context
-            assertNull(DuelistContext.get(null));
+            DuelRegistry registry = new DuelRegistry();
+            assertNull(registry.getSession(null));
         }
     }
 }

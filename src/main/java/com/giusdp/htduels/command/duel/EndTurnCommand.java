@@ -1,5 +1,6 @@
 package com.giusdp.htduels.command.duel;
 
+import com.giusdp.htduels.DuelRegistry;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
@@ -16,8 +17,12 @@ import org.jspecify.annotations.NonNull;
 import java.util.concurrent.CompletableFuture;
 
 public class EndTurnCommand extends AbstractAsyncCommand {
-    public EndTurnCommand() {
+
+    private final DuelRegistry registry;
+
+    public EndTurnCommand(DuelRegistry registry) {
         super("endturn", "Ends your turn in the active duel");
+        this.registry = registry;
     }
 
     @Override
@@ -28,7 +33,7 @@ public class EndTurnCommand extends AbstractAsyncCommand {
         }
 
         Player player = ctx.senderAs(Player.class);
-        DuelistContext duelCtx = DuelistContext.get(player.getPlayerRef());
+        DuelistContext duelCtx = registry.getSession(player.getPlayerRef());
 
         if (duelCtx == null) {
             ctx.sendMessage(Message.raw("You are not in a duel!"));

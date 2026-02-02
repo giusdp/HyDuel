@@ -21,10 +21,12 @@ import javax.annotation.Nonnull;
 public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelectionPage.ModeEventData> {
 
     private final BoardContext boardContext;
+    private final DuelSetupService duelSetupService;
 
-    public DuelModeSelectionPage(@Nonnull PlayerRef playerRef, BoardContext boardContext) {
+    public DuelModeSelectionPage(@Nonnull PlayerRef playerRef, BoardContext boardContext, DuelSetupService duelSetupService) {
         super(playerRef, CustomPageLifetime.CanDismiss, ModeEventData.CODEC);
         this.boardContext = boardContext;
+        this.duelSetupService = duelSetupService;
     }
 
     @Override
@@ -43,19 +45,19 @@ public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelec
                                 @Nonnull ModeEventData data) {
         switch (data.mode) {
             case "bot" -> {
-                Ref<EntityStore> duelRef = DuelSetupService.createAndSpawnDuel(boardContext, store);
-                DuelSetupService.joinAsPlayer(playerRef, boardContext, store, duelRef);
-                DuelSetupService.joinAsBot(duelRef, store);
+                Ref<EntityStore> duelRef = duelSetupService.createAndSpawnDuel(boardContext, store);
+                duelSetupService.joinAsPlayer(playerRef, boardContext, store, duelRef);
+                duelSetupService.joinAsBot(duelRef, store);
             }
             case "pvp" -> {
-                Ref<EntityStore> existing = DuelSetupService.findDuelAt(boardContext.boardPosition());
+                Ref<EntityStore> existing = duelSetupService.findDuelAt(boardContext.boardPosition());
                 if (existing == null) {
-                    Ref<EntityStore> duelRef = DuelSetupService.createAndSpawnDuel(boardContext, store);
-                    DuelSetupService.joinAsPlayer(playerRef, boardContext, store, duelRef);
+                    Ref<EntityStore> duelRef = duelSetupService.createAndSpawnDuel(boardContext, store);
+                    duelSetupService.joinAsPlayer(playerRef, boardContext, store, duelRef);
                     return;
                 }
 
-                DuelSetupService.joinAsPlayer(playerRef, boardContext, store, existing);
+                duelSetupService.joinAsPlayer(playerRef, boardContext, store, existing);
             }
             case null, default -> {
             }

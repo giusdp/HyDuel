@@ -1,5 +1,6 @@
 package com.giusdp.htduels.handlers;
 
+import com.giusdp.htduels.DuelRegistry;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.component.Ref;
@@ -15,7 +16,13 @@ public class PlayerMouseMotionHandler {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    public static void handleMouseMotion(@Nonnull PlayerMouseMotionEvent event) {
+    private final DuelRegistry registry;
+
+    public PlayerMouseMotionHandler(DuelRegistry registry) {
+        this.registry = registry;
+    }
+
+    public void handleMouseMotion(@Nonnull PlayerMouseMotionEvent event) {
         // Get PlayerRef from the entity store using the player entity reference
         Ref<EntityStore> playerEntityRef = event.getPlayerRef();
         Store<EntityStore> store = playerEntityRef.getStore();
@@ -25,7 +32,7 @@ public class PlayerMouseMotionHandler {
             return;
         }
 
-        DuelistContext session = DuelistContext.get(playerRef);
+        DuelistContext session = registry.getSession(playerRef);
         if (session == null) {
             return;
         }

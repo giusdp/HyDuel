@@ -1,6 +1,7 @@
 package com.giusdp.htduels.interaction;
 
 import com.giusdp.htduels.CardAssetRepo;
+import com.giusdp.htduels.DuelRegistry;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
@@ -25,20 +26,19 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public final class DuelSetupService {
 
     private static final double Y_OFFSET = 1.75;
     private static final float CAMERA_PITCH = (float) Math.toRadians(-90.0f);
     public static final float CARD_Y_OFFSET = 1.1f;
 
-    private static final Map<Vector3i, Ref<EntityStore>> activeDuels = new HashMap<>();
+    private final DuelRegistry registry;
 
-    private DuelSetupService() {}
+    public DuelSetupService(DuelRegistry registry) {
+        this.registry = registry;
+    }
 
-    public static Ref<EntityStore> createAndSpawnDuel(BoardContext ctx, Store<EntityStore> store) {
+    public Ref<EntityStore> createAndSpawnDuel(BoardContext ctx, Store<EntityStore> store) {
         Vector3i boardPosition = ctx.boardPosition();
         Rotation boardRotation = ctx.boardRotation();
 
@@ -50,11 +50,11 @@ public final class DuelSetupService {
         BoardLayout layout = createBoardLayout(boardPosition, boardRotation);
         Ref<EntityStore> duelRef = spawnDuelEntity(store, duel, layout);
 
-        activeDuels.put(boardPosition, duelRef);
+        registry.registerDuel(boardPosition, duelRef);
         return duelRef;
     }
 
-    public static void joinAsPlayer(PlayerRef playerRef, BoardContext ctx, Store<EntityStore> store, Ref<EntityStore> duelRef) {
+    public void joinAsPlayer(PlayerRef playerRef, BoardContext ctx, Store<EntityStore> store, Ref<EntityStore> duelRef) {
         Vector3i boardPosition = ctx.boardPosition();
         Rotation boardRotation = ctx.boardRotation();
         Ref<EntityStore> playerEntityRef = ctx.playerEntityRef();
@@ -83,7 +83,7 @@ public final class DuelSetupService {
         registerPlayer(playerRef, duelRef, duel, humanDuelist, cameraPos, cameraYaw, cardY, player, playerEntityRef);
     }
 
-    public static void joinAsBot(Ref<EntityStore> duelRef, Store<EntityStore> store) {
+    public void joinAsBot(Ref<EntityStore> duelRef, Store<EntityStore> store) {
         DuelComponent duelComp = store.getComponent(duelRef, DuelComponent.getComponentType());
         assert duelComp != null;
         Duel duel = duelComp.duel;
@@ -96,12 +96,12 @@ public final class DuelSetupService {
         registerBot(duelRef, duel, botDuelist);
     }
 
-    public static Ref<EntityStore> findDuelAt(Vector3i boardPosition) {
-        return activeDuels.get(boardPosition);
+    public Ref<EntityStore> findDuelAt(Vector3i boardPosition) {
+        return registry.findDuelAt(boardPosition);
     }
 
-    public static void removeDuel(Vector3i boardPosition) {
-        activeDuels.remove(boardPosition);
+    public void removeDuel(Vector3i boardPosition) {
+        registry.removeDuel(boardPosition);
     }
 
     // --- Building blocks ---
@@ -113,17 +113,18 @@ public final class DuelSetupService {
         return store.addEntity(holder, AddReason.SPAWN);
     }
 
-    public static void registerPlayer(PlayerRef playerRef, Ref<EntityStore> duelRef,
+    public void registerPlayer(PlayerRef playerRef, Ref<EntityStore> duelRef,
                                       Duel duel, Duelist duelist, Position cameraPos,
                                       float cameraYaw, float cardY,
                                       Player player, Ref<EntityStore> playerEntityRef) {
-        DuelistContext ctx = DuelistContext.registerGlobal(playerRef, duelRef, duelist, cameraPos, cameraYaw, cardY);
+        DuelistContext ctx = new DuelistContext(playerRef, duelRef, duelist, cameraPos, cameraYaw, cardY);
+        registry.registerPlayer(playerRef, ctx);
         BoardGameUi boardGameUi = activateBoardUI(player, playerRef, playerEntityRef);
         ctx.setBoardGameUi(boardGameUi);
         duel.addContext(ctx);
     }
 
-    public static void registerBot(Ref<EntityStore> duelRef, Duel duel, Duelist duelist) {
+    public void registerBot(Ref<EntityStore> duelRef, Duel duel, Duelist duelist) {
         DuelistContext botCtx = new DuelistContext(duelRef, duelist);
         duel.addContext(botCtx);
     }

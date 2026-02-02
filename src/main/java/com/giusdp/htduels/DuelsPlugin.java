@@ -13,7 +13,9 @@ import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.handlers.PlayerMouseButtonHandler;
 import com.giusdp.htduels.handlers.PlayerMouseMotionHandler;
 import com.giusdp.htduels.interaction.BoardInteraction;
+import com.giusdp.htduels.interaction.DuelSetupService;
 import com.giusdp.htduels.interaction.InteractionNames;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.giusdp.htduels.system.CardDragSystem;
 import com.giusdp.htduels.system.CardHoverSystem;
 import com.giusdp.htduels.system.CardMovementSystem;
@@ -26,6 +28,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseMotionEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -49,14 +52,31 @@ public class DuelsPlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
+        DuelRegistry registry = new DuelRegistry();
+        DuelSetupService duelSetupService = new DuelSetupService(registry);
+        DuelCleanupService cleanupService = new DuelCleanupService(registry);
+
         setupComponents();
-        setupSystems();
 
-        setupCommands();
+        // Systems
+        this.getEntityStoreRegistry().registerSystem(new DuelTicker(cleanupService));
+        this.getEntityStoreRegistry().registerSystem(new CardSpawnSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardRotationSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardDragSystem(registry));
+        this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
 
-        setupInteractions();
-        setupEventHandlers();
+        // Commands
+        this.getCommandRegistry().registerCommand(new DuelCommand(registry));
 
+        // Event handlers
+        var mouseButtonHandler = new PlayerMouseButtonHandler(registry);
+        var mouseMotionHandler = new PlayerMouseMotionHandler(registry);
+        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, mouseButtonHandler::handleMouseClick);
+        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, mouseMotionHandler::handleMouseMotion);
+
+        setupInteractions(duelSetupService);
         setupCardAssetStore();
 
         LOGGER.atInfo().log("HyDuels plugin ready.");
@@ -72,29 +92,13 @@ public class DuelsPlugin extends JavaPlugin {
         duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
     }
 
-    private void setupCommands() {
-        this.getCommandRegistry().registerCommand(new DuelCommand());
-    }
+    private void setupInteractions(DuelSetupService duelSetupService) {
+        BuilderCodec<BoardInteraction> boardInteractionCodec = BuilderCodec
+                .builder(BoardInteraction.class, () -> new BoardInteraction(duelSetupService), SimpleBlockInteraction.CODEC)
+                .documentation("Goes to the duel board top-down camera view").build();
 
-    private void setupInteractions() {
         this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class,
-                BoardInteraction.CODEC);
-
-    }
-
-    private void setupEventHandlers() {
-        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, PlayerMouseButtonHandler::handleMouseClick);
-        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, PlayerMouseMotionHandler::handleMouseMotion);
-    }
-
-    private void setupSystems() {
-        this.getEntityStoreRegistry().registerSystem(new DuelTicker());
-        this.getEntityStoreRegistry().registerSystem(new CardSpawnSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardRotationSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardDragSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
+                boardInteractionCodec);
     }
 
     private void setupCardAssetStore() {

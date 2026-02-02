@@ -3,7 +3,6 @@ package com.giusdp.htduels.interaction;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.ui.DuelModeSelectionPage;
-import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -26,14 +25,12 @@ import org.jspecify.annotations.NonNull;
 import javax.annotation.Nullable;
 
 public class BoardInteraction extends SimpleBlockInteraction {
-    public static final BuilderCodec<BoardInteraction> CODEC = BuilderCodec
-            .builder(BoardInteraction.class, BoardInteraction::new, SimpleBlockInteraction.CODEC)
-            .documentation("Goes to the duel board top-down camera view").build();
 
-    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private final DuelSetupService duelSetupService;
 
-    public BoardInteraction() {
+    public BoardInteraction(DuelSetupService duelSetupService) {
         super("BoardActivation");
+        this.duelSetupService = duelSetupService;
     }
 
     @Override
@@ -50,9 +47,9 @@ public class BoardInteraction extends SimpleBlockInteraction {
         Rotation boardRotation = getBoardRotation(world, targetBlock);
         BoardContext boardContext = new BoardContext(targetBlock, boardRotation, ref);
 
-        Ref<EntityStore> existingDuel = DuelSetupService.findDuelAt(targetBlock);
+        Ref<EntityStore> existingDuel = duelSetupService.findDuelAt(targetBlock);
         if (existingDuel == null) {
-            DuelModeSelectionPage page = new DuelModeSelectionPage(playerRef, boardContext);
+            DuelModeSelectionPage page = new DuelModeSelectionPage(playerRef, boardContext, duelSetupService);
             player.getPageManager().openCustomPage(ref, ref.getStore(), page);
             return;
         }
@@ -60,7 +57,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
         // otherwise if duel already exists on this board
         DuelComponent duelComp = commandBuffer.getComponent(existingDuel, DuelComponent.getComponentType());
         if (duelComp != null && duelComp.duel.isInPhase(WaitingPhase.class)) {
-            DuelSetupService.joinAsPlayer(playerRef, boardContext, ref.getStore(), existingDuel);
+            duelSetupService.joinAsPlayer(playerRef, boardContext, ref.getStore(), existingDuel);
         }
     }
 

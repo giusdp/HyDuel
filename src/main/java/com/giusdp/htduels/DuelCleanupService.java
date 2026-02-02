@@ -2,7 +2,6 @@ package com.giusdp.htduels;
 
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.interaction.CardInteractionService;
-import com.giusdp.htduels.interaction.DuelSetupService;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -15,14 +14,15 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import java.util.List;
-
 public final class DuelCleanupService {
 
-    private DuelCleanupService() {
+    private final DuelRegistry registry;
+
+    public DuelCleanupService(DuelRegistry registry) {
+        this.registry = registry;
     }
 
-    public static void cleanup(Ref<EntityStore> duelRef, DuelComponent duelComp, CommandBuffer<EntityStore> commandBuffer) {
+    public void cleanup(Ref<EntityStore> duelRef, DuelComponent duelComp, CommandBuffer<EntityStore> commandBuffer) {
         // Remove all card entities from the duel
         for (Ref<EntityStore> cardRef : duelComp.duel.getCardEntities()) {
             commandBuffer.removeEntity(cardRef, RemoveReason.REMOVE);
@@ -49,14 +49,14 @@ public final class DuelCleanupService {
         // Remove from active duels registry
         Vector3i boardPosition = duelComp.duel.getBoardPosition();
         if (boardPosition != null) {
-            DuelSetupService.removeDuel(boardPosition);
+            registry.removeDuel(boardPosition);
         }
 
         // Remove the duel entity itself
         commandBuffer.removeEntity(duelRef, RemoveReason.REMOVE);
 
         // Unregister all player contexts for this duel
-        DuelistContext.unregisterByDuelRef(duelRef);
+        registry.unregisterByDuelRef(duelRef);
     }
 
     private static void resetCamera(PlayerRef playerRef) {

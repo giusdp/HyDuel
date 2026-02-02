@@ -1,5 +1,6 @@
 package com.giusdp.htduels.system;
 
+import com.giusdp.htduels.DuelRegistry;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.CardDragComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -15,6 +16,12 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class CardDragSystem extends EntityTickingSystem<EntityStore> {
+
+    private final DuelRegistry registry;
+
+    public CardDragSystem(DuelRegistry registry) {
+        this.registry = registry;
+    }
 
     @Override
     public void tick(float deltaTime, int index, @NonNull ArchetypeChunk<EntityStore> archetypeChunk,
@@ -34,7 +41,7 @@ public class CardDragSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        DuelistContext session = DuelistContext.get(dragger);
+        DuelistContext session = registry.getSession(dragger);
         if (session == null) {
             return;
         }
