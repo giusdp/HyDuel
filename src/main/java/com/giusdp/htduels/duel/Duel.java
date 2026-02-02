@@ -22,6 +22,7 @@ import java.util.Random;
 public class Duel {
     private static final CardAsset PLACEHOLDER = new CardAsset("Placeholder", "Placeholder", 0, 1, 1, "Minion");
 
+    private final DuelId id;
     private final List<Duelist> duelists;
     private final CardRepo cardRepo;
 
@@ -36,9 +37,14 @@ public class Duel {
         return new DuelBuilder();
     }
 
-    Duel(List<Duelist> duelists, CardRepo cardRepo) {
+    Duel(DuelId id, List<Duelist> duelists, CardRepo cardRepo) {
+        this.id = id;
         this.duelists = new ArrayList<>(duelists);
         this.cardRepo = cardRepo;
+    }
+
+    public DuelId getId() {
+        return id;
     }
 
     // --- Event accumulation ---
@@ -89,12 +95,12 @@ public class Duel {
             Card card = new Card(PLACEHOLDER);
             duelist.addToHand(card);
         }
-        recordEvent(new DrawCards(this, duelist, count));
+        recordEvent(new CardsDrawn(this, duelist, count));
     }
 
     public void playCard(Duelist duelist, Card card) {
         duelist.playCard(card);
-        recordEvent(new PlayCard(this, duelist, card));
+        recordEvent(new CardPlayed(this, duelist, card));
     }
 
     public void selectStartingDuelist() {
@@ -103,16 +109,16 @@ public class Duel {
         } else {
             setActiveDuelist(getDuelist(1));
         }
-        recordEvent(new RandomDuelistSelect(this));
+        recordEvent(new StartingDuelistSelected(this));
     }
 
     public void endMainPhase() {
-        recordEvent(new EndMainPhase(this));
+        recordEvent(new MainPhaseEnded(this));
         transitionTo(new TurnEndPhase());
     }
 
     public void forfeit() {
-        recordEvent(new EndMainPhase(this));
+        recordEvent(new MainPhaseEnded(this));
         transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
     }
 

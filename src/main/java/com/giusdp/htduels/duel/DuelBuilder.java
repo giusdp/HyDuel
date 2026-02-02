@@ -37,7 +37,7 @@ public class DuelBuilder {
             config.duelist.setOpponentSide(config.isOpponentSide);
         }
 
-        Duel duel = new Duel(configs.stream().map(DuelistConfig::duelist).toList(), cardRepo);
+        Duel duel = new Duel(DuelId.generate(), configs.stream().map(DuelistConfig::duelist).toList(), cardRepo);
         duel.setBoardPosition(boardPosition);
         return duel;
     }

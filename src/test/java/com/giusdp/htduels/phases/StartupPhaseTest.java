@@ -2,10 +2,10 @@ package com.giusdp.htduels.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.event.DrawCards;
+import com.giusdp.htduels.duel.event.CardsDrawn;
 import com.giusdp.htduels.duel.event.DuelEvent;
 import com.giusdp.htduels.duel.event.DuelStarted;
-import com.giusdp.htduels.duel.event.RandomDuelistSelect;
+import com.giusdp.htduels.duel.event.StartingDuelistSelected;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duel.phases.TurnStartPhase;
 import com.giusdp.htduels.duelist.DuelPlayer;
@@ -34,14 +34,14 @@ class StartupPhaseTest {
     void onEnterRecordsDuelStartedAndRandomDuelistSelect() {
         List<DuelEvent> events = duel.getAccumulatedEvents();
         assertInstanceOf(DuelStarted.class, events.get(0));
-        assertInstanceOf(RandomDuelistSelect.class, events.get(1));
+        assertInstanceOf(StartingDuelistSelected.class, events.get(1));
         assertEquals(2, events.size());
     }
 
     @Test
     void afterOneTickRecordsOneDrawCards() {
         duel.tick();
-        long drawCount = duel.getAccumulatedEvents().stream().filter(e -> e instanceof DrawCards).count();
+        long drawCount = duel.getAccumulatedEvents().stream().filter(e -> e instanceof CardsDrawn).count();
         assertEquals(1, drawCount);
         assertEquals(1, duel.getDuelist(0).getHand().getCards().size());
     }
@@ -51,7 +51,7 @@ class StartupPhaseTest {
         for (int i = 0; i < 5; i++) {
             duel.tick();
         }
-        long drawCount = duel.getAccumulatedEvents().stream().filter(e -> e instanceof DrawCards).count();
+        long drawCount = duel.getAccumulatedEvents().stream().filter(e -> e instanceof CardsDrawn).count();
         assertEquals(5, drawCount);
         assertEquals(5, duel.getDuelist(0).getHand().getCards().size());
         assertEquals(0, duel.getDuelist(1).getHand().getCards().size());
@@ -62,7 +62,7 @@ class StartupPhaseTest {
         for (int i = 0; i < 10; i++) {
             duel.tick();
         }
-        long drawCount = duel.getAccumulatedEvents().stream().filter(e -> e instanceof DrawCards).count();
+        long drawCount = duel.getAccumulatedEvents().stream().filter(e -> e instanceof CardsDrawn).count();
         assertEquals(10, drawCount);
         assertEquals(5, duel.getDuelist(0).getHand().getCards().size());
         assertEquals(5, duel.getDuelist(1).getHand().getCards().size());

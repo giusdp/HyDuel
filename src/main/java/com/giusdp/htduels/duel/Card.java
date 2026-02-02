@@ -6,12 +6,22 @@ import com.giusdp.htduels.duel.zone.ZoneType;
 import com.giusdp.htduels.duelist.Duelist;
 
 public class Card {
+    private final CardId id;
     private final CardAsset asset;
     private Duelist owner;
     private Zone zone;
 
-    public Card(CardAsset asset) {
+    public Card(CardId id, CardAsset asset) {
+        this.id = id;
         this.asset = asset;
+    }
+
+    public Card(CardAsset asset) {
+        this(CardId.generate(), asset);
+    }
+
+    public CardId getId() {
+        return id;
     }
 
     public CardAsset getAsset() {

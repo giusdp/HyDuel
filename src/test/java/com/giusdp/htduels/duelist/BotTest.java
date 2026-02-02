@@ -5,8 +5,8 @@ import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.DuelEvent;
-import com.giusdp.htduels.duel.event.EndMainPhase;
-import com.giusdp.htduels.duel.event.PlayCard;
+import com.giusdp.htduels.duel.event.MainPhaseEnded;
+import com.giusdp.htduels.duel.event.CardPlayed;
 import com.giusdp.htduels.duel.phases.MainPhase;
 import org.junit.jupiter.api.Test;
 
@@ -46,8 +46,8 @@ class BotTest {
         bot.takeTurn(duel);
 
         List<DuelEvent> events = duel.getAccumulatedEvents();
-        boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof PlayCard pc && pc.card.equals(card));
-        boolean hasEndMainPhase = events.stream().anyMatch(e -> e instanceof EndMainPhase);
+        boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof CardPlayed pc && pc.card.equals(card));
+        boolean hasEndMainPhase = events.stream().anyMatch(e -> e instanceof MainPhaseEnded);
 
         assertTrue(hasPlayCard);
         assertTrue(hasEndMainPhase);
@@ -64,6 +64,6 @@ class BotTest {
 
         var events = duel.getAccumulatedEvents();
         assertEquals(1, events.size());
-        assertInstanceOf(EndMainPhase.class, events.getFirst());
+        assertInstanceOf(MainPhaseEnded.class, events.getFirst());
     }
 }

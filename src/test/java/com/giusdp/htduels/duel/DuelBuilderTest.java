@@ -11,6 +11,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class DuelBuilderTest {
 
     @Test
+    void assignsDuelId() {
+        Duel duel = Duel.builder()
+                .cardRepo(new FakeCardRepo())
+                .addDuelist(new DuelPlayer(), true)
+                .addDuelist(new Bot(), false)
+                .build();
+
+        assertNotNull(duel.getId());
+        assertNotNull(duel.getId().value());
+    }
+
+    @Test
     void buildsWithTwoDuelists() {
         Duelist d1 = new DuelPlayer();
         Duelist d2 = new Bot();
