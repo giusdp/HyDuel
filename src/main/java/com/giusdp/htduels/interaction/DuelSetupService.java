@@ -51,6 +51,7 @@ public final class DuelSetupService {
         Ref<EntityStore> duelRef = spawnDuelEntity(store, duel, layout);
 
         registry.registerDuel(boardPosition, duelRef);
+        registry.registerDuel(duel.getId(), duel);
         return duelRef;
     }
 
@@ -61,7 +62,8 @@ public final class DuelSetupService {
 
         DuelComponent duelComp = store.getComponent(duelRef, DuelComponent.getComponentType());
         assert duelComp != null;
-        Duel duel = duelComp.duel;
+        Duel duel = registry.findDuel(duelComp.getDuelId());
+        assert duel != null;
 
         Duelist humanDuelist = new Duelist(new PlayerTurnStrategy());
         boolean isOpponentSide = !duel.getDuelists().isEmpty();
@@ -86,7 +88,8 @@ public final class DuelSetupService {
     public void joinAsBot(Ref<EntityStore> duelRef, Store<EntityStore> store) {
         DuelComponent duelComp = store.getComponent(duelRef, DuelComponent.getComponentType());
         assert duelComp != null;
-        Duel duel = duelComp.duel;
+        Duel duel = registry.findDuel(duelComp.getDuelId());
+        assert duel != null;
 
         Duelist botDuelist = new Duelist(new BotTurnStrategy());
         boolean isOpponentSide = !duel.getDuelists().isEmpty();
@@ -108,7 +111,7 @@ public final class DuelSetupService {
 
     public static Ref<EntityStore> spawnDuelEntity(Store<EntityStore> store, Duel duel, BoardLayout layout) {
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent(duel));
+        holder.addComponent(DuelComponent.getComponentType(), new DuelComponent(duel.getId()));
         holder.addComponent(BoardLayoutComponent.getComponentType(), new BoardLayoutComponent(layout));
         return store.addEntity(holder, AddReason.SPAWN);
     }
@@ -117,7 +120,7 @@ public final class DuelSetupService {
                                       Duel duel, Duelist duelist, Position cameraPos,
                                       float cameraYaw, float cardY,
                                       Player player, Ref<EntityStore> playerEntityRef) {
-        DuelistContext ctx = new DuelistContext(playerRef, duelRef, duelist, cameraPos, cameraYaw, cardY);
+        DuelistContext ctx = new DuelistContext(playerRef, duelRef, duelist, duel, cameraPos, cameraYaw, cardY);
         registry.registerPlayer(playerRef, ctx);
         BoardGameUi boardGameUi = activateBoardUI(player, playerRef, playerEntityRef);
         ctx.setBoardGameUi(boardGameUi);
@@ -125,7 +128,7 @@ public final class DuelSetupService {
     }
 
     public void registerBot(Ref<EntityStore> duelRef, Duel duel, Duelist duelist) {
-        DuelistContext botCtx = new DuelistContext(duelRef, duelist);
+        DuelistContext botCtx = new DuelistContext(duelRef, duelist, duel);
         duel.addContext(botCtx);
     }
 

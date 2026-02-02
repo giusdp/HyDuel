@@ -1,11 +1,12 @@
 package com.giusdp.htduels.interaction;
 
+import com.giusdp.htduels.DuelRegistry;
 import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.ui.DuelModeSelectionPage;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.InteractionType;
@@ -27,10 +28,12 @@ import javax.annotation.Nullable;
 public class BoardInteraction extends SimpleBlockInteraction {
 
     private final DuelSetupService duelSetupService;
+    private final DuelRegistry registry;
 
-    public BoardInteraction(DuelSetupService duelSetupService) {
+    public BoardInteraction(DuelSetupService duelSetupService, DuelRegistry registry) {
         super("BoardActivation");
         this.duelSetupService = duelSetupService;
+        this.registry = registry;
     }
 
     @Override
@@ -56,7 +59,12 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
         // otherwise if duel already exists on this board
         DuelComponent duelComp = commandBuffer.getComponent(existingDuel, DuelComponent.getComponentType());
-        if (duelComp != null && duelComp.duel.isInPhase(WaitingPhase.class)) {
+        if (duelComp == null) {
+            return;
+        }
+
+        Duel duel = registry.findDuel(duelComp.getDuelId());
+        if (duel != null && duel.isInPhase(WaitingPhase.class)) {
             duelSetupService.joinAsPlayer(playerRef, boardContext, ref.getStore(), existingDuel);
         }
     }

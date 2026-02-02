@@ -36,7 +36,8 @@ class CardLayoutsTest {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         duel.getDuelist(0).addToHand(card);
 
-        Vec2f position = CardLayouts.hand(card, boardLayout);
+        Vec2f position = CardLayouts.hand(card.getZoneIndex(),
+                card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
         // With origin at (0,0) and playerHandDepth=4, position should be at (0, -4)
         assertEquals(0, position.x, 0.001f);
@@ -52,9 +53,12 @@ class CardLayoutsTest {
         duel.getDuelist(0).addToHand(card2);
         duel.getDuelist(0).addToHand(card3);
 
-        Vec2f pos1 = CardLayouts.hand(card1, boardLayout);
-        Vec2f pos2 = CardLayouts.hand(card2, boardLayout);
-        Vec2f pos3 = CardLayouts.hand(card3, boardLayout);
+        int handSize = duel.getDuelist(0).getHand().getCards().size();
+        boolean opponentSide = duel.getDuelist(0).isOpponentSide();
+
+        Vec2f pos1 = CardLayouts.hand(card1.getZoneIndex(), handSize, opponentSide, boardLayout);
+        Vec2f pos2 = CardLayouts.hand(card2.getZoneIndex(), handSize, opponentSide, boardLayout);
+        Vec2f pos3 = CardLayouts.hand(card3.getZoneIndex(), handSize, opponentSide, boardLayout);
 
         float spacing = boardLayout.handSpacing();
 
@@ -76,7 +80,8 @@ class CardLayoutsTest {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         duel.getDuelist(0).addToHand(card);
 
-        Vec2f position = CardLayouts.hand(card, boardLayout);
+        Vec2f position = CardLayouts.hand(card.getZoneIndex(),
+                card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
         assertEquals(-4, position.y, 0.001f);
     }
@@ -86,7 +91,8 @@ class CardLayoutsTest {
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
         duel.getDuelist(1).addToHand(card);
 
-        Vec2f position = CardLayouts.hand(card, boardLayout);
+        Vec2f position = CardLayouts.hand(card.getZoneIndex(),
+                card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
         assertEquals(4, position.y, 0.001f);
     }
@@ -98,8 +104,11 @@ class CardLayoutsTest {
         duel.getDuelist(0).addToHand(card1);
         duel.getDuelist(0).addToHand(card2);
 
-        Vec2f pos1 = CardLayouts.hand(card1, boardLayout);
-        Vec2f pos2 = CardLayouts.hand(card2, boardLayout);
+        int handSize = duel.getDuelist(0).getHand().getCards().size();
+        boolean opponentSide = duel.getDuelist(0).isOpponentSide();
+
+        Vec2f pos1 = CardLayouts.hand(card1.getZoneIndex(), handSize, opponentSide, boardLayout);
+        Vec2f pos2 = CardLayouts.hand(card2.getZoneIndex(), handSize, opponentSide, boardLayout);
 
         float spacing = boardLayout.handSpacing();
 
@@ -119,7 +128,8 @@ class CardLayoutsTest {
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
             duel.getDuelist(0).addToHand(card);
 
-            Vec2f pos = CardLayouts.hand(card, boardLayout);
+            Vec2f pos = CardLayouts.hand(card.getZoneIndex(),
+                    card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
             // No rotation: local (0, -4) stays at world (0, -4)
             assertEquals(0, pos.x, 0.001f);
@@ -132,7 +142,8 @@ class CardLayoutsTest {
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
             duel.getDuelist(0).addToHand(card);
 
-            Vec2f pos = CardLayouts.hand(card, boardLayout);
+            Vec2f pos = CardLayouts.hand(card.getZoneIndex(),
+                    card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
             // Ninety.rotateY: (x,y,z) -> (z, y, -x) so (0, 0, -4) -> (-4, 0, 0)
             assertEquals(-4, pos.x, 0.001f);
@@ -145,11 +156,9 @@ class CardLayoutsTest {
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
             duel.getDuelist(0).addToHand(card);
 
-            Vec2f pos = CardLayouts.hand(card, boardLayout);
+            Vec2f pos = CardLayouts.hand(card.getZoneIndex(),
+                    card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
-            // 180° rotation: local (0, -4) becomes world (0, 4)
-            // rotateY for 180°: (x,y,z) -> (-x, y, -z)
-            // So (0, 0, -4) -> (0, 0, 4)
             assertEquals(0, pos.x, 0.001f);
             assertEquals(4, pos.y, 0.001f);
         }
@@ -160,7 +169,8 @@ class CardLayoutsTest {
             Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
             duel.getDuelist(0).addToHand(card);
 
-            Vec2f pos = CardLayouts.hand(card, boardLayout);
+            Vec2f pos = CardLayouts.hand(card.getZoneIndex(),
+                    card.getZone().getCards().size(), card.getOwner().isOpponentSide(), boardLayout);
 
             // TwoSeventy.rotateY: (x,y,z) -> (-z, y, x) so (0, 0, -4) -> (4, 0, 0)
             assertEquals(4, pos.x, 0.001f);
@@ -177,12 +187,13 @@ class CardLayoutsTest {
             duel.getDuelist(0).addToHand(card2);
             duel.getDuelist(0).addToHand(card3);
 
-            Vec2f pos1 = CardLayouts.hand(card1, boardLayout);
-            Vec2f pos2 = CardLayouts.hand(card2, boardLayout);
-            Vec2f pos3 = CardLayouts.hand(card3, boardLayout);
+            int handSize = duel.getDuelist(0).getHand().getCards().size();
+            boolean opponentSide = duel.getDuelist(0).isOpponentSide();
 
-            // Ninety.rotateY: (x,y,z) -> (z, y, -x)
-            // Cards spread along Y axis (world Z) instead of X
+            Vec2f pos1 = CardLayouts.hand(card1.getZoneIndex(), handSize, opponentSide, boardLayout);
+            Vec2f pos2 = CardLayouts.hand(card2.getZoneIndex(), handSize, opponentSide, boardLayout);
+            Vec2f pos3 = CardLayouts.hand(card3.getZoneIndex(), handSize, opponentSide, boardLayout);
+
             // Middle card at center
             assertEquals(-4, pos2.x, 0.001f);
             assertEquals(0, pos2.y, 0.001f);

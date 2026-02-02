@@ -1,17 +1,14 @@
 package com.giusdp.htduels.duel.event;
 
-import com.giusdp.htduels.duel.Card;
-import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.duel.CardId;
+import com.giusdp.htduels.duel.DuelId;
 import org.jspecify.annotations.NonNull;
 
 public class CardPlayed extends DuelEvent {
-    public Duelist duelist;
-    public Card card;
+    public final CardId cardId;
 
-    public CardPlayed(@NonNull Duel duel, Duelist duelist, Card card) {
-        super(duel);
-        this.duelist = duelist;
-        this.card = card;
+    public CardPlayed(@NonNull DuelId duelId, CardId cardId) {
+        super(duelId);
+        this.cardId = cardId;
     }
 }

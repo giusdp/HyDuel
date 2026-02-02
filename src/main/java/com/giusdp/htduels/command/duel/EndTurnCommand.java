@@ -55,7 +55,7 @@ public class EndTurnCommand extends AbstractAsyncCommand {
                 return;
             }
 
-            Duel duel = duelComp.duel;
+            Duel duel = duelCtx.getDuel();
 
             if (!duel.isInPhase(MainPhase.class)) {
                 ctx.sendMessage(Message.raw("Cannot end turn right now!"));

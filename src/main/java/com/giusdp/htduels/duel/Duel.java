@@ -11,12 +11,11 @@ import com.giusdp.htduels.duelist.Duelist;
 
 import com.hypixel.hytale.math.vector.Vector3i;
 
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Duel {
@@ -29,8 +28,8 @@ public class Duel {
     private Phase currentPhase;
     private Duelist activeDuelist;
     private final List<DuelEvent> accumulatedEvents = new ArrayList<>();
+    private final Map<CardId, Card> cardIndex = new HashMap<>();
     private final List<DuelistContext> contexts = new ArrayList<>();
-    private final List<Ref<EntityStore>> cardEntities = new ArrayList<>();
     private Vector3i boardPosition;
 
     public static DuelBuilder builder() {
@@ -91,16 +90,31 @@ public class Duel {
     // --- Domain methods ---
 
     public void drawCards(Duelist duelist, int count) {
+        List<CardId> drawnIds = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             Card card = new Card(PLACEHOLDER);
             duelist.addToHand(card);
+            drawnIds.add(card.getId());
+            cardIndex.put(card.getId(), card);
         }
-        recordEvent(new CardsDrawn(this, duelist, count));
+        recordEvent(new CardsDrawn(this.id, drawnIds));
     }
 
     public void playCard(Duelist duelist, Card card) {
         duelist.playCard(card);
-        recordEvent(new CardPlayed(this, duelist, card));
+        recordEvent(new CardPlayed(this.id, card.getId()));
+    }
+
+    public void playCard(Duelist duelist, CardId cardId) {
+        Card card = findCard(cardId);
+        if (card == null) {
+            throw new IllegalArgumentException("Card not found: " + cardId);
+        }
+        playCard(duelist, card);
+    }
+
+    public Card findCard(CardId cardId) {
+        return cardIndex.get(cardId);
     }
 
     public void selectStartingDuelist() {
@@ -109,22 +123,22 @@ public class Duel {
         } else {
             setActiveDuelist(getDuelist(1));
         }
-        recordEvent(new StartingDuelistSelected(this));
+        recordEvent(new StartingDuelistSelected(this.id));
     }
 
     public void endMainPhase() {
-        recordEvent(new MainPhaseEnded(this));
+        recordEvent(new MainPhaseEnded(this.id));
         transitionTo(new TurnEndPhase());
     }
 
     public void forfeit() {
-        recordEvent(new MainPhaseEnded(this));
+        recordEvent(new MainPhaseEnded(this.id));
         transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
     }
 
     public void addDuelist(Duelist duelist) {
         duelists.add(duelist);
-        recordEvent(new DuelistJoined(this, duelist));
+        recordEvent(new DuelistJoined(this.id));
         if (currentPhase instanceof WaitingPhase waitingPhase) {
             waitingPhase.onDuelistJoined(this);
         }
@@ -205,13 +219,5 @@ public class Duel {
     /** Clears the turn indicator for all duelists. */
     public void clearTurnIndicator() {
         broadcastTurnIndicator("");
-    }
-
-    public void addCardEntity(Ref<EntityStore> cardRef) {
-        cardEntities.add(cardRef);
-    }
-
-    public List<Ref<EntityStore>> getCardEntities() {
-        return Collections.unmodifiableList(cardEntities);
     }
 }

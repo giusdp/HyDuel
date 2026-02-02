@@ -4,7 +4,8 @@ import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardDragComponent;
 import com.giusdp.htduels.component.CardHoverComponent;
 import com.giusdp.htduels.component.CardSpatialComponent;
-import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.CardId;
+import com.giusdp.htduels.duel.zone.ZoneType;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Holder;
@@ -36,7 +37,11 @@ public final class CardSpawner {
     public static Ref<EntityStore> spawn(
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull Ref<EntityStore> duelEntityRef,
-            @Nonnull Card card,
+            @Nonnull CardId cardId,
+            @Nonnull ZoneType zoneType,
+            int zoneIndex,
+            int zoneSize,
+            boolean opponentSide,
             @Nonnull Vector3d position,
             @Nonnull Vector3f rotation
     ) {
@@ -67,7 +72,7 @@ public final class CardSpawner {
         }
 
         // Game data
-        holder.addComponent(CardComponent.getComponentType(), new CardComponent(card, duelEntityRef));
+        holder.addComponent(CardComponent.getComponentType(), new CardComponent(cardId, duelEntityRef, zoneType, zoneIndex, zoneSize, opponentSide));
         holder.addComponent(CardDragComponent.getComponentType(), new CardDragComponent());
         holder.addComponent(CardHoverComponent.getComponentType(), new CardHoverComponent());
         holder.addComponent(CardSpatialComponent.getComponentType(), new CardSpatialComponent());

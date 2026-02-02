@@ -1,8 +1,6 @@
 package com.giusdp.htduels.component;
 
 import com.giusdp.htduels.DuelsPlugin;
-import com.giusdp.htduels.duel.Card;
-import com.giusdp.htduels.duel.zone.Zone;
 import com.giusdp.htduels.duel.zone.ZoneType;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -20,19 +18,17 @@ public class CardSpatialComponent implements Component<EntityStore> {
         return DuelsPlugin.cardSpatialComponent;
     }
 
-    public boolean needsResolution(Card card) {
-        Zone zone = card.getZone();
-        if (zone == null) return false;
+    public boolean needsResolution(CardComponent cc) {
+        if (cc.getZoneType() == null) return false;
         return lastResolvedZoneType == null
-                || zone.getType() != lastResolvedZoneType
-                || card.getZoneIndex() != lastResolvedIndex;
+                || cc.getZoneType() != lastResolvedZoneType
+                || cc.getZoneIndex() != lastResolvedIndex;
     }
 
-    public void markResolved(Card card) {
-        Zone zone = card.getZone();
-        if (zone != null) {
-            lastResolvedZoneType = zone.getType();
-            lastResolvedIndex = card.getZoneIndex();
+    public void markResolved(CardComponent cc) {
+        if (cc.getZoneType() != null) {
+            lastResolvedZoneType = cc.getZoneType();
+            lastResolvedIndex = cc.getZoneIndex();
         }
     }
 

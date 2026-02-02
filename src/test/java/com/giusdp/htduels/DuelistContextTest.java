@@ -56,7 +56,7 @@ class DuelistContextTest {
         @Test
         void botConstructorSetsNullPlayerRef() {
             Duelist bot = new Duelist(new BotTurnStrategy());
-            DuelistContext ctx = new DuelistContext(null, bot);
+            DuelistContext ctx = new DuelistContext(null, bot, null);
 
             assertNull(ctx.getPlayerRef());
         }
@@ -64,7 +64,7 @@ class DuelistContextTest {
         @Test
         void botConstructorSetsNullSpatialData() {
             Duelist bot = new Duelist(new BotTurnStrategy());
-            DuelistContext ctx = new DuelistContext(null, bot);
+            DuelistContext ctx = new DuelistContext(null, bot, null);
 
             assertNull(ctx.getSpatialData());
         }
@@ -72,7 +72,7 @@ class DuelistContextTest {
         @Test
         void botConstructorSetsDuelist() {
             Duelist bot = new Duelist(new BotTurnStrategy());
-            DuelistContext ctx = new DuelistContext(null, bot);
+            DuelistContext ctx = new DuelistContext(null, bot, null);
 
             assertSame(bot, ctx.getDuelist());
         }
@@ -80,7 +80,7 @@ class DuelistContextTest {
         @Test
         void botContextNotInPlayerRegistry() {
             Duelist bot = new Duelist(new BotTurnStrategy());
-            DuelistContext ctx = new DuelistContext(null, bot);
+            DuelistContext ctx = new DuelistContext(null, bot, null);
 
             // Bot context uses the bot constructor, which does not register in the registry
             // A direct lookup by PlayerRef should not find the bot context

@@ -1,20 +1,38 @@
 package com.giusdp.htduels.component;
 
 import com.giusdp.htduels.DuelsPlugin;
-import com.giusdp.htduels.duel.Duel;
+import com.giusdp.htduels.duel.DuelId;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class DuelComponent implements Component<EntityStore> {
-    public Duel duel;
+    private DuelId duelId;
+    private final List<Ref<EntityStore>> cardEntities = new ArrayList<>();
 
     public DuelComponent() {
-        this.duel = null;
+        this.duelId = null;
     }
 
-    public DuelComponent(Duel duel) {
-        this.duel = duel;
+    public DuelComponent(DuelId duelId) {
+        this.duelId = duelId;
+    }
+
+    public DuelId getDuelId() {
+        return duelId;
+    }
+
+    public List<Ref<EntityStore>> getCardEntities() {
+        return Collections.unmodifiableList(cardEntities);
+    }
+
+    public void addCardEntity(Ref<EntityStore> cardRef) {
+        cardEntities.add(cardRef);
     }
 
     public static ComponentType<EntityStore, DuelComponent> getComponentType() {

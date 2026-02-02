@@ -46,7 +46,7 @@ class BotTurnStrategyTest {
         bot.takeTurn(duel);
 
         List<DuelEvent> events = duel.getAccumulatedEvents();
-        boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof CardPlayed pc && pc.card.equals(card));
+        boolean hasPlayCard = events.stream().anyMatch(e -> e instanceof CardPlayed pc && pc.cardId.equals(card.getId()));
         boolean hasEndMainPhase = events.stream().anyMatch(e -> e instanceof MainPhaseEnded);
 
         assertTrue(hasPlayCard);

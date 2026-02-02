@@ -1,6 +1,5 @@
 package com.giusdp.htduels.duel.positioning;
 
-import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.zone.ZoneType;
 import com.hypixel.hytale.math.Vec2f;
 
@@ -18,13 +17,13 @@ public class CardPositioningService {
     private CardPositioningService() {
     }
 
-    public static Vec2f getWorldPosition(Card card, BoardLayout board) {
-        CardPositionFunction fn = FUNCTIONS.get(card.getCurrentZoneType());
+    public static Vec2f getWorldPosition(ZoneType zoneType, int index, int zoneSize, boolean opponentSide, BoardLayout board) {
+        CardPositionFunction fn = FUNCTIONS.get(zoneType);
 
         if (fn == null) {
-            throw new IllegalStateException("No layout function for zone " + card.getCurrentZoneType());
+            throw new IllegalStateException("No layout function for zone " + zoneType);
         }
 
-        return fn.compute(card, board);
+        return fn.compute(index, zoneSize, opponentSide, board);
     }
 }

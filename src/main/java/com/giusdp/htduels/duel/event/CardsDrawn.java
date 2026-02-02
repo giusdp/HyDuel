@@ -1,16 +1,16 @@
 package com.giusdp.htduels.duel.event;
 
-import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.duel.CardId;
+import com.giusdp.htduels.duel.DuelId;
 import org.jspecify.annotations.NonNull;
 
-public class CardsDrawn extends DuelEvent {
-    public Duelist duelist;
-    public int count;
+import java.util.List;
 
-    public CardsDrawn(@NonNull Duel duel, Duelist duelist, int count) {
-        super(duel);
-        this.duelist = duelist;
-        this.count = count;
+public class CardsDrawn extends DuelEvent {
+    public final List<CardId> cardIds;
+
+    public CardsDrawn(@NonNull DuelId duelId, List<CardId> cardIds) {
+        super(duelId);
+        this.cardIds = cardIds;
     }
 }

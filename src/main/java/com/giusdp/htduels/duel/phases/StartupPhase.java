@@ -10,7 +10,7 @@ public class StartupPhase extends Phase {
     @Override
     public void onEnter(Duel duel) {
         System.out.println("[Duel] Duel started!");
-        duel.recordEvent(new DuelStarted(duel));
+        duel.recordEvent(new DuelStarted(duel.getId()));
         duel.selectStartingDuelist();
     }
 

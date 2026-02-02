@@ -1,6 +1,7 @@
 package com.giusdp.htduels;
 
 
+import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duelist.Duelist;
 import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.component.Ref;
@@ -23,22 +24,25 @@ public class DuelistContext {
     private final @Nullable PlayerRef playerRef;
     private final Ref<EntityStore> duelRef;
     private final Duelist duelist;
+    private final Duel duel;
     private final List<Ref<EntityStore>> cardRefs = new ArrayList<>();
     private @Nullable BoardGameUi boardGameUi;
     private @Nullable Vec2f mouseWorldPosition;
     private @Nullable Ref<EntityStore> draggedCard;
 
-    public DuelistContext(@Nullable PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Position cameraPos, float cameraYaw, float cardY) {
+    public DuelistContext(@Nullable PlayerRef playerRef, Ref<EntityStore> duelRef, Duelist duelist, Duel duel, Position cameraPos, float cameraYaw, float cardY) {
         this.playerRef = playerRef;
         this.duelRef = duelRef;
         this.duelist = duelist;
+        this.duel = duel;
         this.spatialData = new DuelSpatialData(cameraPos, cameraYaw, cardY);
     }
 
-    public DuelistContext(Ref<EntityStore> duelRef, Duelist duelist) {
+    public DuelistContext(Ref<EntityStore> duelRef, Duelist duelist, Duel duel) {
         this.playerRef = null;
         this.duelRef = duelRef;
         this.duelist = duelist;
+        this.duel = duel;
         this.spatialData = null;
     }
 
@@ -53,6 +57,10 @@ public class DuelistContext {
 
     public Duelist getDuelist() {
         return duelist;
+    }
+
+    public Duel getDuel() {
+        return duel;
     }
 
     @Nullable

@@ -3,7 +3,6 @@ package com.giusdp.htduels.system;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardSpatialComponent;
-import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.duel.positioning.CardPositioningService;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -40,30 +39,30 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
             return;
         }
 
-        resolvePosition(cardComponent.getCard(), spatialComponent, layoutComponent.getBoardLayout());
+        resolvePosition(cardComponent, spatialComponent, layoutComponent.getBoardLayout());
     }
 
-    public static void resolvePosition(Card card, CardSpatialComponent spatial, BoardLayout boardLayout) {
-        if (!spatial.needsResolution(card)) {
+    public static void resolvePosition(CardComponent cc, CardSpatialComponent spatial, BoardLayout boardLayout) {
+        if (!spatial.needsResolution(cc)) {
             return;
         }
 
-        Vec2f pos = CardPositioningService.getWorldPosition(card, boardLayout);
+        Vec2f pos = CardPositioningService.getWorldPosition(
+                cc.getZoneType(), cc.getZoneIndex(), cc.getZoneSize(), cc.isOpponentSide(), boardLayout);
         spatial.setTargetPosition(pos);
-        spatial.setTargetY(resolveY(card, boardLayout));
-        spatial.markResolved(card);
+        spatial.setTargetY(resolveY(cc.getZoneType(), boardLayout));
+        spatial.markResolved(cc);
     }
 
-    public static float resolveFacing(Card card) {
-        if (card.getCurrentZoneType() == ZoneType.HAND && card.getOwner() != null && card.getOwner().isOpponentSide()) {
+    public static float resolveFacing(CardComponent cc) {
+        if (cc.getZoneType() == ZoneType.HAND && cc.isOpponentSide()) {
             return (float) Math.PI;
         }
         return 0f;
     }
 
-    private static float resolveY(Card card, BoardLayout boardLayout) {
-        ZoneType zone = card.getCurrentZoneType();
-        if (zone == ZoneType.BATTLEFIELD) {
+    private static float resolveY(ZoneType zoneType, BoardLayout boardLayout) {
+        if (zoneType == ZoneType.BATTLEFIELD) {
             return boardLayout.battlefieldYOffset();
         }
         return boardLayout.handYOffset();

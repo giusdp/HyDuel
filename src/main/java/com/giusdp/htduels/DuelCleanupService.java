@@ -1,6 +1,7 @@
 package com.giusdp.htduels;
 
 import com.giusdp.htduels.component.DuelComponent;
+import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.interaction.CardInteractionService;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -22,14 +23,14 @@ public final class DuelCleanupService {
         this.registry = registry;
     }
 
-    public void cleanup(Ref<EntityStore> duelRef, DuelComponent duelComp, CommandBuffer<EntityStore> commandBuffer) {
-        // Remove all card entities from the duel
-        for (Ref<EntityStore> cardRef : duelComp.duel.getCardEntities()) {
+    public void cleanup(Ref<EntityStore> duelRef, DuelComponent duelComp, Duel duel, CommandBuffer<EntityStore> commandBuffer) {
+        // Remove all card entities from the duel component
+        for (Ref<EntityStore> cardRef : duelComp.getCardEntities()) {
             commandBuffer.removeEntity(cardRef, RemoveReason.REMOVE);
         }
 
         // Player-specific cleanup per context
-        for (DuelistContext ctx : duelComp.duel.getContexts()) {
+        for (DuelistContext ctx : duel.getContexts()) {
             PlayerRef playerRef = ctx.getPlayerRef();
             if (playerRef == null) {
                 continue;
@@ -47,10 +48,13 @@ public final class DuelCleanupService {
         }
 
         // Remove from active duels registry
-        Vector3i boardPosition = duelComp.duel.getBoardPosition();
+        Vector3i boardPosition = duel.getBoardPosition();
         if (boardPosition != null) {
             registry.removeDuel(boardPosition);
         }
+
+        // Remove from duel ID registry
+        registry.removeDuelById(duelComp.getDuelId());
 
         // Remove the duel entity itself
         commandBuffer.removeEntity(duelRef, RemoveReason.REMOVE);

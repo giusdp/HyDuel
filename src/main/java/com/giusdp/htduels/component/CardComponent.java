@@ -1,7 +1,8 @@
 package com.giusdp.htduels.component;
 
 import com.giusdp.htduels.DuelsPlugin;
-import com.giusdp.htduels.duel.Card;
+import com.giusdp.htduels.duel.CardId;
+import com.giusdp.htduels.duel.zone.ZoneType;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -9,31 +10,63 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.jspecify.annotations.Nullable;
 
 public class CardComponent implements Component<EntityStore> {
-    private Card card;
+    private CardId cardId;
     private Ref<EntityStore> duelEntity;
+    private ZoneType zoneType;
+    private int zoneIndex;
+    private int zoneSize;
+    private boolean opponentSide;
 
     public CardComponent() {
     }
 
-    public CardComponent(Card card, Ref<EntityStore> duelEntity) {
-        this.card = card;
+    public CardComponent(CardId cardId, Ref<EntityStore> duelEntity, ZoneType zoneType, int zoneIndex, int zoneSize, boolean opponentSide) {
+        this.cardId = cardId;
         this.duelEntity = duelEntity;
+        this.zoneType = zoneType;
+        this.zoneIndex = zoneIndex;
+        this.zoneSize = zoneSize;
+        this.opponentSide = opponentSide;
     }
 
-    public Card getCard() {
-        return card;
-    }
-
-    public void setCard(Card card) {
-        this.card = card;
+    public CardId getCardId() {
+        return cardId;
     }
 
     public Ref<EntityStore> getDuelEntity() {
         return duelEntity;
     }
 
-    public void setDuelEntity(Ref<EntityStore> duelEntity) {
-        this.duelEntity = duelEntity;
+    public ZoneType getZoneType() {
+        return zoneType;
+    }
+
+    public void setZoneType(ZoneType zoneType) {
+        this.zoneType = zoneType;
+    }
+
+    public int getZoneIndex() {
+        return zoneIndex;
+    }
+
+    public void setZoneIndex(int zoneIndex) {
+        this.zoneIndex = zoneIndex;
+    }
+
+    public int getZoneSize() {
+        return zoneSize;
+    }
+
+    public void setZoneSize(int zoneSize) {
+        this.zoneSize = zoneSize;
+    }
+
+    public boolean isOpponentSide() {
+        return opponentSide;
+    }
+
+    public void setOpponentSide(boolean opponentSide) {
+        this.opponentSide = opponentSide;
     }
 
     public static ComponentType<EntityStore, CardComponent> getComponentType() {

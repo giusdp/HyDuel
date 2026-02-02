@@ -26,7 +26,7 @@ public class CardRotationSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        float targetPitch = CardSpatialResolutionSystem.resolveFacing(cardComponent.getCard());
+        float targetPitch = CardSpatialResolutionSystem.resolveFacing(cardComponent);
         Vector3f rotation = transform.getRotation();
         if (rotation.getPitch() != targetPitch) {
             transform.setRotation(new Vector3f(targetPitch, rotation.getYaw(), rotation.getRoll()));

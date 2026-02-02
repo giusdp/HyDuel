@@ -5,11 +5,8 @@ import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.CardComponent;
 import com.giusdp.htduels.component.CardDragComponent;
 import com.giusdp.htduels.component.CardHoverComponent;
-import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.duel.zone.ZoneType;
-import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Vec2f;
@@ -42,6 +39,7 @@ public class CardInteractionService {
     public static void processClick(PlayerMouseButtonEvent event, DuelistContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
         var spatialData = ctx.getSpatialData();
+        assert spatialData != null;
         Vec2f worldPos = screenToWorld(screenPoint, spatialData);
 
         Store<EntityStore> store = ctx.getDuelRef().getStore();
@@ -53,11 +51,11 @@ public class CardInteractionService {
             }
 
             CardComponent cardComp = store.getComponent(cardUnderMouse, CardComponent.getComponentType());
-            if (cardComp == null || cardComp.getCard().getOwner() != ctx.getDuelist()) {
+            if (cardComp == null || cardComp.isOpponentSide() != ctx.getDuelist().isOpponentSide()) {
                 return;
             }
 
-            if (cardComp.getCard().getCurrentZoneType() != ZoneType.HAND) {
+            if (cardComp.getZoneType() != ZoneType.HAND) {
                 return;
             }
 
@@ -86,15 +84,13 @@ public class CardInteractionService {
             }
 
             BoardLayout boardLayout = getBoardLayout(store, ctx.getDuelRef());
-            Duel duel = getDuel(store, ctx.getDuelRef());
-            if (boardLayout == null || duel == null) {
+            if (boardLayout == null) {
                 return;
             }
-            Duelist duelist = ctx.getDuelist();
-            if (boardLayout.isInBattlefieldZone(worldPos, duelist.isOpponentSide())) {
+            if (boardLayout.isInBattlefieldZone(worldPos, ctx.getDuelist().isOpponentSide())) {
                 CardComponent cardComp = store.getComponent(draggedCard, CardComponent.getComponentType());
                 if (cardComp != null) {
-                    duel.playCard(duelist, cardComp.getCard());
+                    ctx.getDuel().playCard(ctx.getDuelist(), cardComp.getCardId());
                 }
             }
         }
@@ -102,6 +98,7 @@ public class CardInteractionService {
 
     public static void processMotion(PlayerMouseMotionEvent event, DuelistContext ctx) {
         Vector2f screenPoint = event.getScreenPoint();
+        assert ctx.getSpatialData() != null;
         Vec2f worldPos = screenToWorld(screenPoint, ctx.getSpatialData());
 
         ctx.setMouseWorldPosition(worldPos);
@@ -205,12 +202,6 @@ public class CardInteractionService {
     }
 
     @Nullable
-    private static Duel getDuel(Store<EntityStore> store, Ref<EntityStore> duelRef) {
-        DuelComponent duelComp = store.getComponent(duelRef, DuelComponent.getComponentType());
-        return duelComp != null ? duelComp.duel : null;
-    }
-
-    @Nullable
     private static BoardLayout getBoardLayout(Store<EntityStore> store, Ref<EntityStore> duelRef) {
         BoardLayoutComponent layoutComp = store.getComponent(duelRef, BoardLayoutComponent.getComponentType());
         return layoutComp != null ? layoutComp.getBoardLayout() : null;
@@ -218,6 +209,6 @@ public class CardInteractionService {
 
     private static boolean isInHand(Store<EntityStore> store, Ref<EntityStore> cardRef) {
         CardComponent comp = store.getComponent(cardRef, CardComponent.getComponentType());
-        return comp != null && comp.getCard().getCurrentZoneType() == ZoneType.HAND;
+        return comp != null && comp.getZoneType() == ZoneType.HAND;
     }
 }
