@@ -30,13 +30,13 @@ public class CardInteractionService {
     private static final float FOV_RADIANS = (float) Math.toRadians(80);
     private static final float ASPECT_RATIO = 16f / 9f;
 
-    private static final Map<PlayerRef, Ref<EntityStore>> hoveredCards = new HashMap<>();
+    private final Map<PlayerRef, Ref<EntityStore>> hoveredCards = new HashMap<>();
 
-    public static void clearHoveredCard(PlayerRef playerRef) {
+    public void clearHoveredCard(PlayerRef playerRef) {
         hoveredCards.remove(playerRef);
     }
 
-    public static void processClick(PlayerMouseButtonEvent event, DuelistSessionManager ctx) {
+    public void processClick(PlayerMouseButtonEvent event, DuelistSessionManager ctx) {
         Vector2f screenPoint = event.getScreenPoint();
         var spatialData = ctx.getSpatialData();
         assert spatialData != null;
@@ -96,7 +96,7 @@ public class CardInteractionService {
         }
     }
 
-    public static void processMotion(PlayerMouseMotionEvent event, DuelistSessionManager ctx) {
+    public void processMotion(PlayerMouseMotionEvent event, DuelistSessionManager ctx) {
         Vector2f screenPoint = event.getScreenPoint();
         assert ctx.getSpatialData() != null;
         Vec2f worldPos = screenToWorld(screenPoint, ctx.getSpatialData());

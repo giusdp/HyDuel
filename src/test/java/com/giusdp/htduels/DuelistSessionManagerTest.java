@@ -3,6 +3,7 @@ import com.giusdp.htduels.presentation.DuelistSessionManager;
 import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.match.DuelService;
 import com.giusdp.htduels.presentation.DuelPresentationService;
+import com.giusdp.htduels.presentation.input.CardInteractionService;
 
 import com.giusdp.htduels.match.BotTurnStrategy;
 import com.giusdp.htduels.match.Duelist;
@@ -90,7 +91,7 @@ class DuelistSessionManagerTest {
             // A direct lookup by PlayerRef should not find the bot context
             DuelRegistry registry = new DuelRegistry();
             DuelService duelService = new DuelService(registry);
-            DuelPresentationService presentationService = new DuelPresentationService(duelService, registry);
+            DuelPresentationService presentationService = new DuelPresentationService(duelService, registry, new CardInteractionService());
             assertNull(presentationService.getSession(null));
         }
     }

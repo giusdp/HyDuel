@@ -38,11 +38,13 @@ public class DuelPresentationService {
 
     private final DuelService duelService;
     private final DuelRegistry registry;
+    private final CardInteractionService cardInteractionService;
     private final Map<PlayerRef, DuelistSessionManager> playerSessions = new HashMap<>();
 
-    public DuelPresentationService(DuelService duelService, DuelRegistry registry) {
+    public DuelPresentationService(DuelService duelService, DuelRegistry registry, CardInteractionService cardInteractionService) {
         this.duelService = duelService;
         this.registry = registry;
+        this.cardInteractionService = cardInteractionService;
     }
 
     // --- Session management (moved from DuelRegistry) ---
@@ -139,7 +141,7 @@ public class DuelPresentationService {
             }
             dismissBoardGameUi(playerRef);
             BoardCameraService.resetToFirstPerson(playerRef);
-            CardInteractionService.clearHoveredCard(playerRef);
+            cardInteractionService.clearHoveredCard(playerRef);
         }
 
         Vector3i boardPosition = duel.getBoardPosition();

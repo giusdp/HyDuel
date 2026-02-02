@@ -17,9 +17,11 @@ public class PlayerMouseMotionHandler {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final DuelPresentationService presentationService;
+    private final CardInteractionService cardInteractionService;
 
-    public PlayerMouseMotionHandler(DuelPresentationService presentationService) {
+    public PlayerMouseMotionHandler(DuelPresentationService presentationService, CardInteractionService cardInteractionService) {
         this.presentationService = presentationService;
+        this.cardInteractionService = cardInteractionService;
     }
 
     public void handleMouseMotion(@Nonnull PlayerMouseMotionEvent event) {
@@ -36,6 +38,6 @@ public class PlayerMouseMotionHandler {
             return;
         }
 
-        CardInteractionService.processMotion(event, session);
+        cardInteractionService.processMotion(event, session);
     }
 }

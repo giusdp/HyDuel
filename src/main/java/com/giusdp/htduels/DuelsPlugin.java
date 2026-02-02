@@ -6,6 +6,7 @@ import com.giusdp.htduels.presentation.DuelPresentationService;
 import com.giusdp.htduels.catalog.CardAsset;
 import com.giusdp.htduels.catalog.CardAssetCodec;
 import com.giusdp.htduels.catalog.CardAssetStore;
+import com.giusdp.htduels.presentation.input.CardInteractionService;
 import com.giusdp.htduels.presentation.command.DuelCommand;
 import com.giusdp.htduels.presentation.ecs.component.BoardLayoutComponent;
 import com.giusdp.htduels.presentation.ecs.component.CardComponent;
@@ -56,7 +57,8 @@ public class DuelsPlugin extends JavaPlugin {
     protected void setup() {
         DuelRegistry registry = new DuelRegistry();
         DuelService duelService = new DuelService(registry);
-        DuelPresentationService presentationService = new DuelPresentationService(duelService, registry);
+        CardInteractionService cardInteractionService = new CardInteractionService();
+        DuelPresentationService presentationService = new DuelPresentationService(duelService, registry, cardInteractionService);
         DomainEventSync domainEventSync = new DomainEventSync(registry);
 
         setupComponents();
@@ -73,8 +75,8 @@ public class DuelsPlugin extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new DuelCommand(presentationService));
 
         // Event handlers
-        var mouseButtonHandler = new PlayerMouseButtonHandler(presentationService);
-        var mouseMotionHandler = new PlayerMouseMotionHandler(presentationService);
+        var mouseButtonHandler = new PlayerMouseButtonHandler(presentationService, cardInteractionService);
+        var mouseMotionHandler = new PlayerMouseMotionHandler(presentationService, cardInteractionService);
         this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, mouseButtonHandler::handleMouseClick);
         this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, mouseMotionHandler::handleMouseMotion);
 
