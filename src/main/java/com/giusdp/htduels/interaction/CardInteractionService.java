@@ -7,7 +7,6 @@ import com.giusdp.htduels.component.CardDragComponent;
 import com.giusdp.htduels.component.CardHoverComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.event.PlayCard;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.duel.zone.ZoneType;
 import com.giusdp.htduels.duelist.Duelist;
@@ -95,7 +94,7 @@ public class CardInteractionService {
             if (boardLayout.isInBattlefieldZone(worldPos, duelist.isOpponentSide())) {
                 CardComponent cardComp = store.getComponent(draggedCard, CardComponent.getComponentType());
                 if (cardComp != null) {
-                    duel.emit(new PlayCard(duel, duelist, cardComp.getCard()));
+                    duel.playCard(duelist, cardComp.getCard());
                 }
             }
         }

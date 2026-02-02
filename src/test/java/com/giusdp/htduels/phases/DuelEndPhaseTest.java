@@ -1,7 +1,6 @@
 package com.giusdp.htduels.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.FakeEventBus;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.phases.DuelEndPhase;
 import com.giusdp.htduels.duel.phases.MainPhase;
@@ -15,7 +14,6 @@ public class DuelEndPhaseTest {
 
     private Duel createDuel() {
         return Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(new DuelPlayer(), true)
                 .addDuelist(new DuelPlayer(), false)
@@ -33,42 +31,52 @@ public class DuelEndPhaseTest {
         }
         // Now in TurnStartPhase, one more tick transitions to MainPhase
         duel.tick();
-        assertInstanceOf(MainPhase.class, duel.currentPhase);
+        assertTrue(duel.isInPhase(MainPhase.class));
 
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
-        assertInstanceOf(DuelEndPhase.class, duel.currentPhase);
+        duel.forfeit();
+        assertTrue(duel.isInPhase(DuelEndPhase.class));
 
         // Tick is a no-op — phase stays the same
         duel.tick();
-        assertInstanceOf(DuelEndPhase.class, duel.currentPhase);
+        assertTrue(duel.isInPhase(DuelEndPhase.class));
     }
 
     @Test
     void forfeitDuringStartup() {
         Duel duel = createDuel();
         duel.setup();
-        assertInstanceOf(StartupPhase.class, duel.currentPhase);
+        assertTrue(duel.isInPhase(StartupPhase.class));
 
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
-        assertInstanceOf(DuelEndPhase.class, duel.currentPhase);
+        duel.forfeit();
+        assertTrue(duel.isInPhase(DuelEndPhase.class));
     }
 
     @Test
-    void reasonIsPreserved() {
+    void forfeitReasonIsPreserved() {
         Duel duel = createDuel();
         duel.setup();
 
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
-        assertEquals(DuelEndPhase.Reason.FORFEIT, ((DuelEndPhase) duel.currentPhase).reason);
+        duel.forfeit();
+        assertEquals(DuelEndPhase.Reason.FORFEIT, duel.getEndReason());
+    }
 
-        duel = createDuel();
+    @Test
+    void timeoutReasonIsPreserved() {
+        Duel duel = Duel.builder()
+                .cardRepo(new FakeCardRepo())
+                .build();
         duel.setup();
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.WIN));
-        assertEquals(DuelEndPhase.Reason.WIN, ((DuelEndPhase) duel.currentPhase).reason);
 
-        duel = createDuel();
-        duel.setup();
         duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT));
-        assertEquals(DuelEndPhase.Reason.TIMEOUT, ((DuelEndPhase) duel.currentPhase).reason);
+        assertEquals(DuelEndPhase.Reason.TIMEOUT, duel.getEndReason());
+    }
+
+    @Test
+    void winReasonIsPreserved() {
+        Duel duel = createDuel();
+        duel.setup();
+
+        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.WIN));
+        assertEquals(DuelEndPhase.Reason.WIN, duel.getEndReason());
     }
 }

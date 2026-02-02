@@ -2,8 +2,6 @@ package com.giusdp.htduels.duelist;
 
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.event.EndMainPhase;
-import com.giusdp.htduels.duel.event.PlayCard;
 
 public class Bot extends Duelist {
     public Bot() {
@@ -13,12 +11,12 @@ public class Bot extends Duelist {
     @Override
     public void takeTurn(Duel duel) {
         if (hand.getCards().isEmpty()) {
-            duel.emit(new EndMainPhase(duel));
+            duel.endMainPhase();
             return;
         }
 
         Card cardToPlay = hand.getCards().getFirst();
-        duel.emit(new PlayCard(duel, this, cardToPlay));
-        duel.emit(new EndMainPhase(duel));
+        duel.playCard(this, cardToPlay);
+        duel.endMainPhase();
     }
 }

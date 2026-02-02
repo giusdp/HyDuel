@@ -3,7 +3,6 @@ package com.giusdp.htduels.command.duel;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.event.EndMainPhase;
 import com.giusdp.htduels.duel.phases.MainPhase;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -53,17 +52,17 @@ public class EndTurnCommand extends AbstractAsyncCommand {
 
             Duel duel = duelComp.duel;
 
-            if (!(duel.currentPhase instanceof MainPhase)) {
+            if (!duel.isInPhase(MainPhase.class)) {
                 ctx.sendMessage(Message.raw("Cannot end turn right now!"));
                 return;
             }
 
-            if (duel.activeDuelist != duelCtx.getDuelist()) {
+            if (duel.getActiveDuelist() != duelCtx.getDuelist()) {
                 ctx.sendMessage(Message.raw("It's not your turn!"));
                 return;
             }
 
-            duel.emit(new EndMainPhase(duel));
+            duel.endMainPhase();
         });
 
         return CompletableFuture.completedFuture(null);

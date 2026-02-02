@@ -3,7 +3,6 @@ package com.giusdp.htduels.duel.phases;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.Phase;
-import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duelist.Duelist;
 import com.giusdp.htduels.ui.BoardGameUi;
 
@@ -11,9 +10,7 @@ public class TurnStartPhase extends Phase {
 
     @Override
     public void onEnter(Duel duel) {
-        duel.emit(new DrawCards(duel, duel.activeDuelist, 1));
-
-        System.out.println("[Duel] Turn started for duelist: " + duel.activeDuelist);
+        duel.drawCards(duel.getActiveDuelist(), 1);
 
         updateTurnIndicators(duel);
     }
@@ -23,7 +20,7 @@ public class TurnStartPhase extends Phase {
             BoardGameUi ui = ctx.getBoardGameUi();
             if (ui == null) continue;
 
-            String text = turnIndicatorText(ctx.getDuelist(), duel.activeDuelist);
+            String text = turnIndicatorText(ctx.getDuelist(), duel.getActiveDuelist());
             ui.updateTurnIndicator(text);
         }
     }

@@ -2,9 +2,10 @@ package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
 import com.giusdp.htduels.DuelistContext;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.event.*;
-import com.giusdp.htduels.duel.eventbus.GameEventBus;
-import com.giusdp.htduels.duel.handler.*;
+import com.giusdp.htduels.duel.phases.DuelEndPhase;
+import com.giusdp.htduels.duel.phases.TurnEndPhase;
 import com.giusdp.htduels.duel.phases.WaitingPhase;
 import com.giusdp.htduels.duelist.Duelist;
 
@@ -16,15 +17,17 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Duel {
+    private static final CardAsset PLACEHOLDER = new CardAsset("Placeholder", "Placeholder", 0, 1, 1, "Minion");
+
     private final List<Duelist> duelists;
+    private final CardRepo cardRepo;
 
-    public final GameEventBus eventBus;
-    public final CardRepo cardRepo;
-
-    public Phase currentPhase;
-    public Duelist activeDuelist;
+    private Phase currentPhase;
+    private Duelist activeDuelist;
+    private final List<DuelEvent> accumulatedEvents = new ArrayList<>();
     private final List<DuelistContext> contexts = new ArrayList<>();
     private final List<Ref<EntityStore>> cardEntities = new ArrayList<>();
     private Vector3i boardPosition;
@@ -33,37 +36,98 @@ public class Duel {
         return new DuelBuilder();
     }
 
-    Duel(List<Duelist> duelists, GameEventBus eventBus, CardRepo cardRepo) {
+    Duel(List<Duelist> duelists, CardRepo cardRepo) {
         this.duelists = new ArrayList<>(duelists);
-        this.eventBus = eventBus;
         this.cardRepo = cardRepo;
+    }
+
+    // --- Event accumulation ---
+
+    public void recordEvent(DuelEvent event) {
+        accumulatedEvents.add(event);
+    }
+
+    public List<DuelEvent> flushEvents() {
+        List<DuelEvent> copy = new ArrayList<>(accumulatedEvents);
+        accumulatedEvents.clear();
+        return copy;
+    }
+
+    public List<DuelEvent> getAccumulatedEvents() {
+        return Collections.unmodifiableList(accumulatedEvents);
+    }
+
+    // --- Query methods ---
+
+    public boolean isInPhase(Class<? extends Phase> phaseClass) {
+        return phaseClass.isInstance(currentPhase);
+    }
+
+    public Duelist getActiveDuelist() {
+        return activeDuelist;
+    }
+
+    public boolean isSetUp() {
+        return currentPhase != null;
+    }
+
+    public boolean isFinished() {
+        return currentPhase instanceof DuelEndPhase;
+    }
+
+    public DuelEndPhase.Reason getEndReason() {
+        if (currentPhase instanceof DuelEndPhase endPhase) {
+            return endPhase.reason;
+        }
+        return null;
+    }
+
+    // --- Domain methods ---
+
+    public void drawCards(Duelist duelist, int count) {
+        for (int i = 0; i < count; i++) {
+            Card card = new Card(PLACEHOLDER);
+            duelist.addToHand(card);
+        }
+        recordEvent(new DrawCards(this, duelist, count));
+    }
+
+    public void playCard(Duelist duelist, Card card) {
+        duelist.playCard(card);
+        recordEvent(new PlayCard(this, duelist, card));
+    }
+
+    public void selectStartingDuelist() {
+        if (new Random().nextBoolean()) {
+            setActiveDuelist(getDuelist(0));
+        } else {
+            setActiveDuelist(getDuelist(1));
+        }
+        recordEvent(new RandomDuelistSelect(this));
+    }
+
+    public void endMainPhase() {
+        recordEvent(new EndMainPhase(this));
+        transitionTo(new TurnEndPhase());
+    }
+
+    public void forfeit() {
+        recordEvent(new EndMainPhase(this));
+        transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
     }
 
     public void addDuelist(Duelist duelist) {
         duelists.add(duelist);
-        emit(new DuelistJoined(this, duelist));
+        recordEvent(new DuelistJoined(this, duelist));
+        if (currentPhase instanceof WaitingPhase waitingPhase) {
+            waitingPhase.onDuelistJoined(this);
+        }
     }
 
-    public Vector3i getBoardPosition() {
-        return boardPosition;
-    }
-
-    public void setBoardPosition(Vector3i boardPosition) {
-        this.boardPosition = boardPosition;
-    }
+    // --- Lifecycle ---
 
     public void setup() {
         currentPhase = new WaitingPhase();
-
-        registerHandler(DrawCards.class, new DrawCardsHandler(this, cardRepo));
-
-        registerHandler(DrawCards.class, new DrawCardsLogHandler());
-
-        registerHandler(PlayCard.class, new PlayCardHandler());
-        registerHandler(RandomDuelistSelect.class, new RandomDuelistSelectHandler());
-        registerHandler(EndMainPhase.class, new EndMainPhaseHandler());
-        registerHandler(DuelistJoined.class, new DuelistJoinedHandler());
-
         currentPhase.onEnter(this);
     }
 
@@ -77,18 +141,20 @@ public class Duel {
         currentPhase.onEnter(this);
     }
 
-    public <T extends DuelEvent> void registerHandler(Class<T> eventType, DuelEventHandler handler) {
-        this.eventBus.register(eventType, this, (short) 0, handler);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends DuelEvent> void emit(T event) {
-        this.eventBus.post((Class<T>) event.getClass(), this, event);
-    }
-
     public void setActiveDuelist(Duelist duelist) {
         this.activeDuelist = duelist;
     }
+
+    public void swapActiveDuelist() {
+        for (Duelist d : duelists) {
+            if (d != activeDuelist) {
+                this.activeDuelist = d;
+                return;
+            }
+        }
+    }
+
+    // --- Accessors ---
 
     public Duelist getDuelist(int index) {
         return duelists.get(index);
@@ -96,6 +162,14 @@ public class Duel {
 
     public List<Duelist> getDuelists() {
         return duelists;
+    }
+
+    public Vector3i getBoardPosition() {
+        return boardPosition;
+    }
+
+    public void setBoardPosition(Vector3i boardPosition) {
+        this.boardPosition = boardPosition;
     }
 
     public void addContext(DuelistContext ctx) {
@@ -133,14 +207,5 @@ public class Duel {
 
     public List<Ref<EntityStore>> getCardEntities() {
         return Collections.unmodifiableList(cardEntities);
-    }
-
-    public void swapActiveDuelist() {
-        for (Duelist d : duelists) {
-            if (d != activeDuelist) {
-                this.activeDuelist = d;
-                return;
-            }
-        }
     }
 }

@@ -5,7 +5,6 @@ import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.eventbus.HytaleEventBus;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
 import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
@@ -44,7 +43,6 @@ public final class DuelSetupService {
         Rotation boardRotation = ctx.boardRotation();
 
         Duel duel = Duel.builder()
-                .eventBus(new HytaleEventBus())
                 .cardRepo(new CardAssetRepo())
                 .boardPosition(boardPosition)
                 .build();

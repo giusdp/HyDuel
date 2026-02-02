@@ -1,7 +1,6 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.FakeEventBus;
 import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import com.giusdp.htduels.duelist.Duelist;
@@ -16,7 +15,6 @@ class DuelBuilderTest {
         Duelist d1 = new DuelPlayer();
         Duelist d2 = new Bot();
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(d1, true)
                 .addDuelist(d2, false)
@@ -31,7 +29,6 @@ class DuelBuilderTest {
         Duelist d1 = new DuelPlayer();
         Duelist d2 = new Bot();
         Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(d1, true)
                 .addDuelist(d2, false)
@@ -42,34 +39,8 @@ class DuelBuilderTest {
     }
 
     @Test
-    void wiresEventBusAndCardRepo() {
-        var eventBus = new FakeEventBus();
-        var cardRepo = new FakeCardRepo();
-        Duel duel = Duel.builder()
-                .eventBus(eventBus)
-                .cardRepo(cardRepo)
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false)
-                .build();
-
-        assertSame(eventBus, duel.eventBus);
-        assertSame(cardRepo, duel.cardRepo);
-    }
-
-    @Test
-    void throwsWithoutEventBus() {
-        var builder = Duel.builder()
-                .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false);
-
-        assertThrows(IllegalStateException.class, builder::build);
-    }
-
-    @Test
     void throwsWithoutCardRepo() {
         var builder = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .addDuelist(new DuelPlayer(), true)
                 .addDuelist(new Bot(), false);
 
@@ -79,7 +50,6 @@ class DuelBuilderTest {
     @Test
     void buildsWithZeroDuelists() {
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .build();
 
@@ -90,7 +60,6 @@ class DuelBuilderTest {
     void buildsWithOneDuelist() {
         Duelist d1 = new DuelPlayer();
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(d1, true)
                 .build();

@@ -1,7 +1,7 @@
 package com.giusdp.htduels.duel.positioning;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.FakeEventBus;
+
 import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
@@ -24,7 +24,6 @@ class CardLayoutsTest {
     void setup() {
         boardLayout = TestBoardLayout.create();
         duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(new DuelPlayer(), true)
                 .addDuelist(new Bot(), false)

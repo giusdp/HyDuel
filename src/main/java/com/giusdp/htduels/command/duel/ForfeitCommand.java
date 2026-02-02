@@ -3,7 +3,6 @@ package com.giusdp.htduels.command.duel;
 import com.giusdp.htduels.DuelistContext;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.phases.DuelEndPhase;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -51,7 +50,7 @@ public class ForfeitCommand extends AbstractAsyncCommand {
             }
 
             Duel duel = duelComp.duel;
-            duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
+            duel.forfeit();
         });
 
         return CompletableFuture.completedFuture(null);

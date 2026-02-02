@@ -1,7 +1,6 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.CardRepo;
-import com.giusdp.htduels.duel.eventbus.GameEventBus;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.math.vector.Vector3i;
 
@@ -9,17 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DuelBuilder {
-    private GameEventBus eventBus;
     private CardRepo cardRepo;
     private Vector3i boardPosition;
     private final List<DuelistConfig> configs = new ArrayList<>();
 
     private record DuelistConfig(Duelist duelist, boolean isOpponentSide) {}
-
-    public DuelBuilder eventBus(GameEventBus eventBus) {
-        this.eventBus = eventBus;
-        return this;
-    }
 
     public DuelBuilder cardRepo(CardRepo cardRepo) {
         this.cardRepo = cardRepo;
@@ -37,9 +30,6 @@ public class DuelBuilder {
     }
 
     public Duel build() {
-        if (eventBus == null) {
-            throw new IllegalStateException("eventBus must be set");
-        }
         if (cardRepo == null) {
             throw new IllegalStateException("cardRepo must be set");
         }
@@ -47,7 +37,7 @@ public class DuelBuilder {
             config.duelist.setOpponentSide(config.isOpponentSide);
         }
 
-        Duel duel = new Duel(configs.stream().map(DuelistConfig::duelist).toList(), eventBus, cardRepo);
+        Duel duel = new Duel(configs.stream().map(DuelistConfig::duelist).toList(), cardRepo);
         duel.setBoardPosition(boardPosition);
         return duel;
     }

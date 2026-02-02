@@ -2,7 +2,6 @@ package com.giusdp.htduels.system;
 
 import com.giusdp.htduels.DuelCleanupService;
 import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.duel.phases.DuelEndPhase;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -22,13 +21,15 @@ public class DuelTicker extends EntityTickingSystem<EntityStore> {
         if (duelComponent == null) {
             return;
         }
-        if (duelComponent.duel.currentPhase == null) {
+        if (!duelComponent.duel.isSetUp()) {
             duelComponent.duel.setup();
+            duelComponent.duel.flushEvents();
         } else {
             duelComponent.duel.tick();
+            duelComponent.duel.flushEvents();
         }
 
-        if (duelComponent.duel.currentPhase instanceof DuelEndPhase) {
+        if (duelComponent.duel.isFinished()) {
             Ref<EntityStore> duelRef = archetypeChunk.getReferenceTo(index);
             DuelCleanupService.cleanup(duelRef, duelComponent, commandBuffer);
         }

@@ -1,10 +1,7 @@
 package com.giusdp.htduels.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.FakeEventBus;
-import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.event.EndMainPhase;
 import com.giusdp.htduels.duelist.Bot;
 import com.giusdp.htduels.duelist.DuelPlayer;
 import org.junit.jupiter.api.Test;
@@ -16,7 +13,6 @@ public class TurnEndPhaseTest {
     @Test
     void transitionsToTurnStartFromEndTurnSwappingDuelists() {
         var duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(new DuelPlayer(), true)
                 .addDuelist(new Bot(), false)
@@ -28,13 +24,13 @@ public class TurnEndPhaseTest {
             duel.tick();
         }
         duel.tick(); // Move to TurnStartPhase
-        var initialDuelist = duel.activeDuelist;
+        var initialDuelist = duel.getActiveDuelist();
 
         duel.tick(); // Move to MainPhase
-        duel.emit(new EndMainPhase(duel));
+        duel.endMainPhase();
         duel.tick(); // Move to TurnEndPhase
 
-        var newDuelist = duel.activeDuelist;
+        var newDuelist = duel.getActiveDuelist();
         assertNotEquals(initialDuelist, newDuelist);
     }
 }

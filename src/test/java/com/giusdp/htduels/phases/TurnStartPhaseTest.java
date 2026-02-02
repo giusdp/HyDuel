@@ -1,8 +1,6 @@
 package com.giusdp.htduels.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.FakeEventBus;
-import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.DrawCards;
 import com.giusdp.htduels.duel.event.DuelEvent;
@@ -31,10 +29,8 @@ public class TurnStartPhaseTest {
     }
 
     @Test
-    void emitsDrawCardsMoves() {
-        FakeEventBus eventBus = new FakeEventBus();
+    void recordsDrawCardsEvents() {
         var duel = Duel.builder()
-                .eventBus(eventBus)
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(new DuelPlayer(), true)
                 .addDuelist(new DuelPlayer(), false)
@@ -46,8 +42,8 @@ public class TurnStartPhaseTest {
         }
         // Tick 11 transitions to TurnStartPhase, which draws 1 more
         duel.tick();
-        List<DuelEvent> moves = eventBus.postedEvents();
-        long drawCardsCount = moves.stream().filter(m -> m instanceof DrawCards).count();
+        List<DuelEvent> events = duel.getAccumulatedEvents();
+        long drawCardsCount = events.stream().filter(e -> e instanceof DrawCards).count();
         assertEquals(11, drawCardsCount);
     }
 

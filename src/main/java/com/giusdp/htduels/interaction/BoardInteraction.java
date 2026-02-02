@@ -59,7 +59,7 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
         // otherwise if duel already exists on this board
         DuelComponent duelComp = commandBuffer.getComponent(existingDuel, DuelComponent.getComponentType());
-        if (duelComp != null && duelComp.duel.currentPhase instanceof WaitingPhase) {
+        if (duelComp != null && duelComp.duel.isInPhase(WaitingPhase.class)) {
             DuelSetupService.joinAsPlayer(playerRef, boardContext, ref.getStore(), existingDuel);
         }
     }

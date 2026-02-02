@@ -11,7 +11,7 @@ public class MainPhase extends Phase {
 
     @Override
     public void tick(Duel duel) {
-        duel.activeDuelist.takeTurn(duel);
+        duel.getActiveDuelist().takeTurn(duel);
     }
 
     @Override
