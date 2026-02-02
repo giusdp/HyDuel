@@ -5,14 +5,16 @@ import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.zone.Battlefield;
 import com.giusdp.htduels.duel.zone.Hand;
 
-public abstract class Duelist {
-    protected final Hand hand;
-    protected final Battlefield battlefield;
+public class Duelist {
+    private final Hand hand;
+    private final Battlefield battlefield;
+    private final TurnStrategy turnStrategy;
     private boolean opponentSide;
 
-    protected Duelist() {
+    public Duelist(TurnStrategy turnStrategy) {
         this.hand = new Hand();
         this.battlefield = new Battlefield();
+        this.turnStrategy = turnStrategy;
     }
 
     public boolean isOpponentSide() {
@@ -41,5 +43,7 @@ public abstract class Duelist {
         battlefield.place(card, 0);
     }
 
-    public abstract void takeTurn(Duel duel);
+    public void takeTurn(Duel duel) {
+        turnStrategy.takeTurn(duel, this);
+    }
 }

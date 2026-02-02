@@ -5,7 +5,8 @@ import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.phases.DuelEndPhase;
 import com.giusdp.htduels.duel.phases.MainPhase;
 import com.giusdp.htduels.duel.phases.StartupPhase;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,8 +16,8 @@ public class DuelEndPhaseTest {
     private Duel createDuel() {
         return Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new DuelPlayer(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), false)
                 .build();
     }
 

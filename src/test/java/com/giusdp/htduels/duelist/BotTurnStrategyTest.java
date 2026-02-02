@@ -14,10 +14,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BotTest {
+class BotTurnStrategyTest {
 
-    private Duel createDuelInMainPhase(Bot bot) {
-        DuelPlayer player = new DuelPlayer();
+    private Duel createDuelInMainPhase(Duelist bot) {
+        Duelist player = new Duelist(new PlayerTurnStrategy());
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(player, true)
@@ -37,7 +37,7 @@ class BotTest {
 
     @Test
     void takeTurnPlaysCardAndEndsPhase() {
-        Bot bot = new Bot();
+        Duelist bot = new Duelist(new BotTurnStrategy());
         Duel duel = createDuelInMainPhase(bot);
 
         Card card = new Card(new CardAsset("test", "Test Card", 1, 2, 3, "Minion"));
@@ -55,7 +55,7 @@ class BotTest {
 
     @Test
     void takeTurnEndsMainPhaseWhenHandIsEmpty() {
-        Bot bot = new Bot();
+        Duelist bot = new Duelist(new BotTurnStrategy());
         Duel duel = createDuelInMainPhase(bot);
         // Clear bot's hand from startup draws
         bot.getHand().getCards().clear();

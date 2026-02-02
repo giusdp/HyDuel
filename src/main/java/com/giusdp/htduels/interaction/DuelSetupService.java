@@ -7,9 +7,9 @@ import com.giusdp.htduels.component.BoardLayoutComponent;
 import com.giusdp.htduels.component.DuelComponent;
 import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.positioning.BoardLayout;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
 import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
 import com.giusdp.htduels.ui.BoardGameUi;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Holder;
@@ -63,7 +63,7 @@ public final class DuelSetupService {
         assert duelComp != null;
         Duel duel = duelComp.duel;
 
-        DuelPlayer humanDuelist = new DuelPlayer();
+        Duelist humanDuelist = new Duelist(new PlayerTurnStrategy());
         boolean isOpponentSide = !duel.getDuelists().isEmpty();
         humanDuelist.setOpponentSide(isOpponentSide);
         duel.addDuelist(humanDuelist);
@@ -88,7 +88,7 @@ public final class DuelSetupService {
         assert duelComp != null;
         Duel duel = duelComp.duel;
 
-        Bot botDuelist = new Bot();
+        Duelist botDuelist = new Duelist(new BotTurnStrategy());
         boolean isOpponentSide = !duel.getDuelists().isEmpty();
         botDuelist.setOpponentSide(isOpponentSide);
         duel.addDuelist(botDuelist);

@@ -6,8 +6,9 @@ import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +23,8 @@ class CardPositioningTest {
         boardLayout = TestBoardLayout.create();
         duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new BotTurnStrategy()), false)
                 .build();
     }
 

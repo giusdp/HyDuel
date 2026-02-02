@@ -2,8 +2,9 @@ package com.giusdp.htduels.duel.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,7 +30,7 @@ class WaitingPhaseTest {
     @Test
     void staysInWaitingPhaseWithOneDuelist() {
         Duel duel = createDuelWithNoDuelists();
-        duel.addDuelist(new DuelPlayer());
+        duel.addDuelist(new Duelist(new PlayerTurnStrategy()));
         duel.tick();
         assertTrue(duel.isInPhase(WaitingPhase.class));
     }
@@ -37,11 +38,11 @@ class WaitingPhaseTest {
     @Test
     void transitionsToStartupImmediatelyWhenSecondDuelistJoins() {
         Duel duel = createDuelWithNoDuelists();
-        duel.addDuelist(new DuelPlayer());
+        duel.addDuelist(new Duelist(new PlayerTurnStrategy()));
         assertTrue(duel.isInPhase(WaitingPhase.class));
 
         // Adding second duelist triggers transition immediately
-        duel.addDuelist(new Bot());
+        duel.addDuelist(new Duelist(new BotTurnStrategy()));
         assertTrue(duel.isInPhase(StartupPhase.class));
     }
 

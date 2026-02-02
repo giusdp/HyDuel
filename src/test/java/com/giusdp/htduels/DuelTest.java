@@ -4,8 +4,9 @@ import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duel.phases.TurnStartPhase;
 import com.giusdp.htduels.duel.phases.WaitingPhase;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,8 +18,8 @@ class DuelTest {
     void setupWithTwoDuelistsSkipsWaitingPhase() {
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), false)
-                .addDuelist(new Bot(), true)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), false)
+                .addDuelist(new Duelist(new BotTurnStrategy()), true)
                 .build();
         duel.setup();
         assertTrue(duel.isInPhase(StartupPhase.class));
@@ -39,10 +40,10 @@ class DuelTest {
                 .cardRepo(new FakeCardRepo())
                 .build();
         duel.setup();
-        duel.addDuelist(new DuelPlayer());
+        duel.addDuelist(new Duelist(new PlayerTurnStrategy()));
         assertTrue(duel.isInPhase(WaitingPhase.class));
 
-        duel.addDuelist(new Bot());
+        duel.addDuelist(new Duelist(new BotTurnStrategy()));
         assertTrue(duel.isInPhase(StartupPhase.class));
     }
 
@@ -50,8 +51,8 @@ class DuelTest {
     void fullFlowToTurnStart() {
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), false)
-                .addDuelist(new Bot(), true)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), false)
+                .addDuelist(new Duelist(new BotTurnStrategy()), true)
                 .build();
         duel.setup();
 
@@ -68,8 +69,8 @@ class DuelTest {
     void handsGetFilledOnStartup() {
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), false)
-                .addDuelist(new Bot(), true)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), false)
+                .addDuelist(new Duelist(new BotTurnStrategy()), true)
                 .build();
         duel.setup();
 

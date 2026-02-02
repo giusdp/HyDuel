@@ -5,7 +5,7 @@ import com.giusdp.htduels.duel.Duel;
 import com.giusdp.htduels.duel.event.CardsDrawn;
 import com.giusdp.htduels.duel.event.DuelEvent;
 import com.giusdp.htduels.duel.phases.TurnStartPhase;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
 import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
@@ -17,14 +17,14 @@ public class TurnStartPhaseTest {
 
     @Test
     void turnIndicatorTextReturnsYourTurnForActiveDuelist() {
-        Duelist active = new DuelPlayer();
+        Duelist active = new Duelist(new PlayerTurnStrategy());
         assertEquals("Your Turn", TurnStartPhase.turnIndicatorText(active, active));
     }
 
     @Test
     void turnIndicatorTextReturnsOpponentsTurnForInactiveDuelist() {
-        Duelist player = new DuelPlayer();
-        Duelist opponent = new DuelPlayer();
+        Duelist player = new Duelist(new PlayerTurnStrategy());
+        Duelist opponent = new Duelist(new PlayerTurnStrategy());
         assertEquals("Opponent's Turn", TurnStartPhase.turnIndicatorText(player, opponent));
     }
 
@@ -32,8 +32,8 @@ public class TurnStartPhaseTest {
     void recordsDrawCardsEvents() {
         var duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new DuelPlayer(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), false)
                 .build();
         duel.setup();
         // Tick through 10 draws in StartupPhase

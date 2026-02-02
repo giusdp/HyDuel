@@ -2,7 +2,8 @@ package com.giusdp.htduels.system;
 
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +16,7 @@ class CardFacingTest {
 
     @Test
     void topPlayerHandCardIsFaceUp() {
-        DuelPlayer player = new DuelPlayer();
+        Duelist player = new Duelist(new PlayerTurnStrategy());
         player.setOpponentSide(false);
         Card card = createCard();
         player.addToHand(card);
@@ -25,7 +26,7 @@ class CardFacingTest {
 
     @Test
     void bottomPlayerHandCardIsFaceDown() {
-        DuelPlayer player = new DuelPlayer();
+        Duelist player = new Duelist(new PlayerTurnStrategy());
         player.setOpponentSide(true);
         Card card = createCard();
         player.addToHand(card);
@@ -35,7 +36,7 @@ class CardFacingTest {
 
     @Test
     void topPlayerBattlefieldCardIsFaceUp() {
-        DuelPlayer player = new DuelPlayer();
+        Duelist player = new Duelist(new PlayerTurnStrategy());
         player.setOpponentSide(false);
         Card card = createCard();
         player.playCard(card);
@@ -45,7 +46,7 @@ class CardFacingTest {
 
     @Test
     void bottomPlayerBattlefieldCardIsFaceUp() {
-        DuelPlayer player = new DuelPlayer();
+        Duelist player = new Duelist(new PlayerTurnStrategy());
         player.setOpponentSide(true);
         Card card = createCard();
         player.playCard(card);

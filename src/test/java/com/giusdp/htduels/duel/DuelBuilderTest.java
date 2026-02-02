@@ -1,8 +1,8 @@
 package com.giusdp.htduels.duel;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
 import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +14,8 @@ class DuelBuilderTest {
     void assignsDuelId() {
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new BotTurnStrategy()), false)
                 .build();
 
         assertNotNull(duel.getId());
@@ -24,8 +24,8 @@ class DuelBuilderTest {
 
     @Test
     void buildsWithTwoDuelists() {
-        Duelist d1 = new DuelPlayer();
-        Duelist d2 = new Bot();
+        Duelist d1 = new Duelist(new PlayerTurnStrategy());
+        Duelist d2 = new Duelist(new BotTurnStrategy());
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(d1, true)
@@ -38,8 +38,8 @@ class DuelBuilderTest {
 
     @Test
     void setsBottomPlayer() {
-        Duelist d1 = new DuelPlayer();
-        Duelist d2 = new Bot();
+        Duelist d1 = new Duelist(new PlayerTurnStrategy());
+        Duelist d2 = new Duelist(new BotTurnStrategy());
         Duel.builder()
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(d1, true)
@@ -53,8 +53,8 @@ class DuelBuilderTest {
     @Test
     void throwsWithoutCardRepo() {
         var builder = Duel.builder()
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false);
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new BotTurnStrategy()), false);
 
         assertThrows(IllegalStateException.class, builder::build);
     }
@@ -70,7 +70,7 @@ class DuelBuilderTest {
 
     @Test
     void buildsWithOneDuelist() {
-        Duelist d1 = new DuelPlayer();
+        Duelist d1 = new Duelist(new PlayerTurnStrategy());
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(d1, true)

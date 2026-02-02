@@ -6,8 +6,9 @@ import com.giusdp.htduels.TestBoardLayout;
 import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.duel.Card;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +26,8 @@ class CardLayoutsTest {
         boardLayout = TestBoardLayout.create();
         duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new BotTurnStrategy()), false)
                 .build();
     }
 

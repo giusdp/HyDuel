@@ -8,7 +8,8 @@ import com.giusdp.htduels.duel.event.DuelStarted;
 import com.giusdp.htduels.duel.event.StartingDuelistSelected;
 import com.giusdp.htduels.duel.phases.StartupPhase;
 import com.giusdp.htduels.duel.phases.TurnStartPhase;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +24,8 @@ class StartupPhaseTest {
     void setup() {
         duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new DuelPlayer(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), false)
                 .build();
         duel.setup();
         assertTrue(duel.isInPhase(StartupPhase.class));

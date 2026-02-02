@@ -1,6 +1,6 @@
 package com.giusdp.htduels;
 
-import com.giusdp.htduels.duelist.Bot;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
 import com.giusdp.htduels.duelist.Duelist;
 import com.hypixel.hytale.protocol.Position;
 import org.junit.jupiter.api.Nested;
@@ -55,7 +55,7 @@ class DuelistContextTest {
 
         @Test
         void botConstructorSetsNullPlayerRef() {
-            Duelist bot = new Bot();
+            Duelist bot = new Duelist(new BotTurnStrategy());
             DuelistContext ctx = new DuelistContext(null, bot);
 
             assertNull(ctx.getPlayerRef());
@@ -63,7 +63,7 @@ class DuelistContextTest {
 
         @Test
         void botConstructorSetsNullSpatialData() {
-            Duelist bot = new Bot();
+            Duelist bot = new Duelist(new BotTurnStrategy());
             DuelistContext ctx = new DuelistContext(null, bot);
 
             assertNull(ctx.getSpatialData());
@@ -71,7 +71,7 @@ class DuelistContextTest {
 
         @Test
         void botConstructorSetsDuelist() {
-            Duelist bot = new Bot();
+            Duelist bot = new Duelist(new BotTurnStrategy());
             DuelistContext ctx = new DuelistContext(null, bot);
 
             assertSame(bot, ctx.getDuelist());
@@ -79,7 +79,7 @@ class DuelistContextTest {
 
         @Test
         void botContextNotInPlayerRegistry() {
-            Duelist bot = new Bot();
+            Duelist bot = new Duelist(new BotTurnStrategy());
             DuelistContext ctx = new DuelistContext(null, bot);
 
             // Bot context uses the bot constructor, which does not register in the registry

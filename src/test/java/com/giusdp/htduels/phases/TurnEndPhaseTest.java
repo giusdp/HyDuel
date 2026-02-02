@@ -2,8 +2,9 @@ package com.giusdp.htduels.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.duelist.BotTurnStrategy;
+import com.giusdp.htduels.duelist.PlayerTurnStrategy;
+import com.giusdp.htduels.duelist.Duelist;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -14,8 +15,8 @@ public class TurnEndPhaseTest {
     void transitionsToTurnStartFromEndTurnSwappingDuelists() {
         var duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), true)
-                .addDuelist(new Bot(), false)
+                .addDuelist(new Duelist(new PlayerTurnStrategy()), true)
+                .addDuelist(new Duelist(new BotTurnStrategy()), false)
                 .build();
 
         duel.setup();
