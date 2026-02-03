@@ -1,0 +1,8 @@
+{
+  "Id": "AldorPeacekeeper",
+  "Name": "Aldor Peacekeeper",
+  "Cost": 3,
+  "Attack": 3,
+  "Health": 3,
+  "Type": "Minion"
+}

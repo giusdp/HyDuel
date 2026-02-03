@@ -1,0 +1,8 @@
+{
+  "Id": "Abomination",
+  "Name": "Abomination",
+  "Cost": 5,
+  "Attack": 4,
+  "Health": 4,
+  "Type": "Minion"
+}

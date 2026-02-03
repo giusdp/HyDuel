@@ -1,0 +1,8 @@
+{
+  "Id": "AlarmOBot",
+  "Name": "Alarm-o-Bot",
+  "Cost": 3,
+  "Attack": 0,
+  "Health": 3,
+  "Type": "Minion"
+}

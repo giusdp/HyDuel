@@ -1,0 +1,8 @@
+{
+  "Id": "AcolyteOfPain",
+  "Name": "Acolyte of Pain",
+  "Cost": 3,
+  "Attack": 1,
+  "Health": 3,
+  "Type": "Minion"
+}
