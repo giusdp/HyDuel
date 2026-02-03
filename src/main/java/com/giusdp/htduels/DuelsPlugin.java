@@ -1,31 +1,37 @@
 package com.giusdp.htduels;
+import com.giusdp.htduels.match.DuelRegistry;
+import com.giusdp.htduels.match.DuelService;
+import com.giusdp.htduels.presentation.DuelPresentationService;
 
-import com.giusdp.htduels.asset.CardAsset;
-import com.giusdp.htduels.asset.CardAssetCodec;
-import com.giusdp.htduels.asset.CardAssetStore;
-import com.giusdp.htduels.command.duel.DuelCommand;
-import com.giusdp.htduels.component.BoardLayoutComponent;
-import com.giusdp.htduels.component.CardComponent;
-import com.giusdp.htduels.component.CardDragComponent;
-import com.giusdp.htduels.component.CardHoverComponent;
-import com.giusdp.htduels.component.CardSpatialComponent;
-import com.giusdp.htduels.component.DuelComponent;
-import com.giusdp.htduels.handlers.PlayerMouseButtonHandler;
-import com.giusdp.htduels.handlers.PlayerMouseMotionHandler;
-import com.giusdp.htduels.interaction.BoardInteraction;
-import com.giusdp.htduels.interaction.InteractionNames;
-import com.giusdp.htduels.system.CardDragSystem;
-import com.giusdp.htduels.system.CardHoverSystem;
-import com.giusdp.htduels.system.CardMovementSystem;
-import com.giusdp.htduels.system.CardRotationSystem;
-import com.giusdp.htduels.system.CardSpawnSystem;
-import com.giusdp.htduels.system.CardSpatialResolutionSystem;
-import com.giusdp.htduels.system.DuelTicker;
+import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.catalog.CardAssetCodec;
+import com.giusdp.htduels.catalog.CardAssetStore;
+import com.giusdp.htduels.presentation.input.CardInteractionService;
+import com.giusdp.htduels.presentation.command.DuelCommand;
+import com.giusdp.htduels.presentation.ecs.component.BoardLayoutComponent;
+import com.giusdp.htduels.presentation.ecs.component.CardComponent;
+import com.giusdp.htduels.presentation.ecs.component.CardDragComponent;
+import com.giusdp.htduels.presentation.ecs.component.CardHoverComponent;
+import com.giusdp.htduels.presentation.ecs.component.CardSpatialComponent;
+import com.giusdp.htduels.presentation.ecs.component.DuelComponent;
+import com.giusdp.htduels.presentation.input.PlayerMouseButtonHandler;
+import com.giusdp.htduels.presentation.input.PlayerMouseMotionHandler;
+import com.giusdp.htduels.presentation.input.BoardInteraction;
+import com.giusdp.htduels.presentation.input.InteractionNames;
+import com.giusdp.htduels.presentation.DomainEventSync;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.giusdp.htduels.presentation.ecs.system.CardDragSystem;
+import com.giusdp.htduels.presentation.ecs.system.CardHoverSystem;
+import com.giusdp.htduels.presentation.ecs.system.CardMovementSystem;
+import com.giusdp.htduels.presentation.ecs.system.CardRotationSystem;
+import com.giusdp.htduels.presentation.ecs.system.CardSpatialResolutionSystem;
+import com.giusdp.htduels.presentation.ecs.system.DuelTicker;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseMotionEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -49,14 +55,32 @@ public class DuelsPlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
+        DuelRegistry registry = new DuelRegistry();
+        DuelService duelService = new DuelService(registry);
+        CardInteractionService cardInteractionService = new CardInteractionService();
+        DuelPresentationService presentationService = new DuelPresentationService(duelService, registry, cardInteractionService);
+        DomainEventSync domainEventSync = new DomainEventSync(registry);
+
         setupComponents();
-        setupSystems();
 
-        setupCommands();
+        // Systems
+        this.getEntityStoreRegistry().registerSystem(new DuelTicker(presentationService, registry, domainEventSync));
+        this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardRotationSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardDragSystem(presentationService));
+        this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
 
-        setupInteractions();
-        setupEventHandlers();
+        // Commands
+        this.getCommandRegistry().registerCommand(new DuelCommand(presentationService));
 
+        // Event handlers
+        var mouseButtonHandler = new PlayerMouseButtonHandler(presentationService, cardInteractionService);
+        var mouseMotionHandler = new PlayerMouseMotionHandler(presentationService, cardInteractionService);
+        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, mouseButtonHandler::handleMouseClick);
+        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, mouseMotionHandler::handleMouseMotion);
+
+        setupInteractions(presentationService, registry);
         setupCardAssetStore();
 
         LOGGER.atInfo().log("HyDuels plugin ready.");
@@ -72,29 +96,13 @@ public class DuelsPlugin extends JavaPlugin {
         duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
     }
 
-    private void setupCommands() {
-        this.getCommandRegistry().registerCommand(new DuelCommand());
-    }
+    private void setupInteractions(DuelPresentationService presentationService, DuelRegistry registry) {
+        BuilderCodec<BoardInteraction> boardInteractionCodec = BuilderCodec
+                .builder(BoardInteraction.class, () -> new BoardInteraction(presentationService, registry), SimpleBlockInteraction.CODEC)
+                .documentation("Goes to the duel board top-down camera view").build();
 
-    private void setupInteractions() {
         this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class,
-                BoardInteraction.CODEC);
-
-    }
-
-    private void setupEventHandlers() {
-        this.getEventRegistry().registerGlobal(PlayerMouseButtonEvent.class, PlayerMouseButtonHandler::handleMouseClick);
-        this.getEventRegistry().registerGlobal(PlayerMouseMotionEvent.class, PlayerMouseMotionHandler::handleMouseMotion);
-    }
-
-    private void setupSystems() {
-        this.getEntityStoreRegistry().registerSystem(new DuelTicker());
-        this.getEntityStoreRegistry().registerSystem(new CardSpawnSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardRotationSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardDragSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
+                boardInteractionCodec);
     }
 
     private void setupCardAssetStore() {

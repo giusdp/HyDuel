@@ -1,6 +1,6 @@
 package com.giusdp.htduels;
 
-import com.giusdp.htduels.duel.positioning.BoardLayout;
+import com.giusdp.htduels.presentation.layout.BoardLayout;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 

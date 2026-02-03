@@ -1,80 +1,76 @@
 package com.giusdp.htduels;
 
-import com.giusdp.htduels.duel.Duel;
-import com.giusdp.htduels.duel.phases.StartupPhase;
-import com.giusdp.htduels.duel.phases.TurnStartPhase;
-import com.giusdp.htduels.duel.phases.WaitingPhase;
-import com.giusdp.htduels.duelist.Bot;
-import com.giusdp.htduels.duelist.DuelPlayer;
+import com.giusdp.htduels.match.Duel;
+import com.giusdp.htduels.match.phases.StartupPhase;
+import com.giusdp.htduels.match.phases.TurnStartPhase;
+import com.giusdp.htduels.match.phases.WaitingPhase;
+import com.giusdp.htduels.match.BotTurnStrategy;
+import com.giusdp.htduels.match.Duelist;
+import com.giusdp.htduels.match.HumanTurnStrategy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DuelTest {
 
     @Test
     void setupWithTwoDuelistsSkipsWaitingPhase() {
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), false)
-                .addDuelist(new Bot(), true)
+                .addDuelist(new Duelist(new HumanTurnStrategy()), false)
+                .addDuelist(new Duelist(new BotTurnStrategy()), true)
                 .build();
         duel.setup();
-        assertInstanceOf(StartupPhase.class, duel.currentPhase);
+        assertTrue(duel.isInPhase(StartupPhase.class));
     }
 
     @Test
     void setupWithZeroDuelistsStaysInWaitingPhase() {
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .build();
         duel.setup();
-        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
+        assertTrue(duel.isInPhase(WaitingPhase.class));
     }
 
     @Test
     void addingSecondDuelistTransitionsToStartup() {
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
                 .build();
         duel.setup();
-        duel.addDuelist(new DuelPlayer());
-        assertInstanceOf(WaitingPhase.class, duel.currentPhase);
+        duel.addDuelist(new Duelist(new HumanTurnStrategy()));
+        assertTrue(duel.isInPhase(WaitingPhase.class));
 
-        duel.addDuelist(new Bot());
-        assertInstanceOf(StartupPhase.class, duel.currentPhase);
+        duel.addDuelist(new Duelist(new BotTurnStrategy()));
+        assertTrue(duel.isInPhase(StartupPhase.class));
     }
 
     @Test
     void fullFlowToTurnStart() {
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), false)
-                .addDuelist(new Bot(), true)
+                .addDuelist(new Duelist(new HumanTurnStrategy()), false)
+                .addDuelist(new Duelist(new BotTurnStrategy()), true)
                 .build();
         duel.setup();
 
         // 10 ticks in StartupPhase (draw cards)
         for (int i = 0; i < 10; i++) {
             duel.tick();
-            assertInstanceOf(StartupPhase.class, duel.currentPhase);
+            assertTrue(duel.isInPhase(StartupPhase.class));
         }
         duel.tick();
-        assertInstanceOf(TurnStartPhase.class, duel.currentPhase);
+        assertTrue(duel.isInPhase(TurnStartPhase.class));
     }
 
     @Test
     void handsGetFilledOnStartup() {
         Duel duel = Duel.builder()
-                .eventBus(new FakeEventBus())
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new DuelPlayer(), false)
-                .addDuelist(new Bot(), true)
+                .addDuelist(new Duelist(new HumanTurnStrategy()), false)
+                .addDuelist(new Duelist(new BotTurnStrategy()), true)
                 .build();
         duel.setup();
 
