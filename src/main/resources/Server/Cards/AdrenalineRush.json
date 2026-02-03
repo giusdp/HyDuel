@@ -1,0 +1,8 @@
+{
+  "Id": "AdrenalineRush",
+  "Name": "Adrenaline Rush",
+  "Cost": 1,
+  "Attack": 0,
+  "Health": 0,
+  "Type": "Spell"
+}

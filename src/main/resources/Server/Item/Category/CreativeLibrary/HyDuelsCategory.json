@@ -1,0 +1,18 @@
+{
+  "Icon": "Icons/ItemCategories/KaupenCategory.png",
+  "Order": 9,
+  "Children": [
+    {
+      "Id": "Tools",
+      "Name": "server.ui.hyduelscategory.tools",
+      "Icon": "Icons/ItemCategories/KaupenCategory-Items.png"
+    },
+    {
+      "Id": "Cards",
+      "Name": "server.ui.hyduelscategory.cards",
+      "Icon": "Icons/ItemCategories/KaupenCategory-Blocks.png"
+    }
+  ],
+  "Id": "HyDuelsCategory",
+  "Name": "HyDuels"
+}

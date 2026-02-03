@@ -1,0 +1,23 @@
+{
+  "Parent": "Card_Base",
+  "Variant": false,
+  "TranslationProperties": {
+    "Name": "server.items.AlarmOBot.name",
+    "Description": ""
+  },
+  "Texture": "Items/Cards/Wisp_Texture.png",
+  "Icon": "Icons/ItemsGenerated/Wisp.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      270,
+      180,
+      0
+    ],
+    "Translation": [
+      0,
+      0
+    ]
+  },
+  "Model": "Items/Cards/Models/Card.blockymodel"
+}

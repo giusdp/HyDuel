@@ -5,7 +5,7 @@
   "ItemLevel": 600,
   "Icon": "Icons/ItemsGenerated/Example_Block.png",
   "Categories": [
-    "Blocks.Soils"
+    "HyDuelsCategory.Cards"
   ],
   "PlayerAnimationsId": "Block",
   "Set": "Soil",

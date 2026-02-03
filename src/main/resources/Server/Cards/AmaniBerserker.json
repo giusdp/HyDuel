@@ -1,0 +1,8 @@
+{
+  "Id": "AmaniBerserker",
+  "Name": "Amani Berserker",
+  "Cost": 2,
+  "Attack": 2,
+  "Health": 3,
+  "Type": "Minion"
+}

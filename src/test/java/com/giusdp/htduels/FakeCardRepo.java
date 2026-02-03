@@ -5,6 +5,7 @@ import com.giusdp.htduels.catalog.CardAsset;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class FakeCardRepo implements CardRepo {
 
@@ -16,5 +17,15 @@ public class FakeCardRepo implements CardRepo {
     @Override
     public Collection<CardAsset> getAvailableCards() {
         return TEST_CARDS;
+    }
+
+    @Override
+    public Optional<CardAsset> findById(String cardAssetId) {
+        if (cardAssetId == null) {
+            return Optional.empty();
+        }
+        return TEST_CARDS.stream()
+                .filter(card -> card.id().equals(cardAssetId))
+                .findFirst();
     }
 }

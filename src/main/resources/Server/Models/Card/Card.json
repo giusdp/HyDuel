@@ -1,6 +1,6 @@
 {
-  "Model": "NPC/MISC/Card/Models/Card2.blockymodel",
-  "Texture": "NPC/MISC/Card/Models/Card2.png",
+  "Model": "Items/Cards/Models/Card.blockymodel",
+  "Texture": "Items/Cards/Wisp_Texture.png",
   "EyeHeight": 0.5,
   "MinScale": 1.0,
   "MaxScale": 1.0,
