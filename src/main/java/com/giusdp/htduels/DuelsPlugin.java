@@ -16,6 +16,7 @@ import com.giusdp.htduels.presentation.ecs.component.CardSpatialComponent;
 import com.giusdp.htduels.presentation.ecs.component.DuelComponent;
 import com.giusdp.htduels.presentation.input.PlayerMouseButtonHandler;
 import com.giusdp.htduels.presentation.input.PlayerMouseMotionHandler;
+import com.giusdp.htduels.presentation.deck.DeckOpenInteraction;
 import com.giusdp.htduels.presentation.input.BoardInteraction;
 import com.giusdp.htduels.presentation.input.InteractionNames;
 import com.giusdp.htduels.presentation.DomainEventSync;
@@ -103,6 +104,12 @@ public class DuelsPlugin extends JavaPlugin {
 
         this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class,
                 boardInteractionCodec);
+
+        this.getCodecRegistry(Interaction.CODEC).register(
+                "DeckOpen",
+                DeckOpenInteraction.class,
+                DeckOpenInteraction.CODEC
+        );
     }
 
     private void setupCardAssetStore() {
