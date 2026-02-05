@@ -1,7 +1,6 @@
 package com.giusdp.htduels.match;
 
 import com.giusdp.htduels.hytale.DuelistSessionManager;
-import com.giusdp.htduels.catalog.CardAsset;
 import com.giusdp.htduels.match.event.*;
 import com.giusdp.htduels.match.phases.DuelEndPhase;
 import com.giusdp.htduels.match.phases.TurnEndPhase;
@@ -17,8 +16,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class Duel {
-    private static final CardAsset PLACEHOLDER = new CardAsset("Placeholder", "Placeholder", 0, 1, 1, "Minion");
-
     private final DuelId id;
     private final List<Duelist> duelists;
     private final CardRepo cardRepo;
@@ -89,12 +86,24 @@ public class Duel {
 
     public void drawCards(Duelist duelist, int count) {
         List<CardId> drawnIds = new ArrayList<>();
+
         for (int i = 0; i < count; i++) {
-            Card card = new Card(PLACEHOLDER);
+            Card card = duelist.getDeck().drawTop();
+
+            if (card == null) {
+                // Record partial draw before loss
+                if (!drawnIds.isEmpty()) {
+                    recordEvent(new CardsDrawn(this.id, drawnIds));
+                }
+                declareLoss(duelist);
+                return;
+            }
+
             duelist.addToHand(card);
             drawnIds.add(card.getId());
             cardIndex.put(card.getId(), card);
         }
+
         recordEvent(new CardsDrawn(this.id, drawnIds));
     }
 
@@ -132,6 +141,10 @@ public class Duel {
     public void forfeit() {
         recordEvent(new MainPhaseEnded(this.id));
         transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
+    }
+
+    public void declareLoss(Duelist loser) {
+        transitionTo(new DuelEndPhase(DuelEndPhase.Reason.DECK_OUT));
     }
 
     public void addDuelist(Duelist duelist) {

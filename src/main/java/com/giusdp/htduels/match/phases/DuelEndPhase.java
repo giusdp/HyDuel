@@ -6,7 +6,7 @@ import com.giusdp.htduels.match.DuelPhase;
 public class DuelEndPhase extends DuelPhase {
 
     public enum Reason {
-        FORFEIT, WIN, TIMEOUT
+        FORFEIT, WIN, TIMEOUT, DECK_OUT
     }
 
     public final Reason reason;

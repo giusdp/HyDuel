@@ -1,18 +1,19 @@
 package com.giusdp.htduels.match.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
+import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.match.Card;
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.event.CardsDrawn;
 import com.giusdp.htduels.match.event.DuelEvent;
 import com.giusdp.htduels.match.event.DuelStarted;
 import com.giusdp.htduels.match.event.StartingDuelistSelected;
-import com.giusdp.htduels.match.phases.StartupPhase;
-import com.giusdp.htduels.match.phases.TurnStartPhase;
 import com.giusdp.htduels.match.HumanTurnStrategy;
 import com.giusdp.htduels.match.Duelist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,12 +21,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class StartupPhaseTest {
     Duel duel;
 
+    private List<Card> createTestDeck() {
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            cards.add(new Card(new CardAsset("card" + i, "Test Card " + i, 1, 1, 1, "Minion")));
+        }
+        return cards;
+    }
+
     @BeforeEach
     void setup() {
+        Duelist duelist0 = new Duelist(new HumanTurnStrategy());
+        Duelist duelist1 = new Duelist(new HumanTurnStrategy());
+        duelist0.initializeDeck(createTestDeck());
+        duelist1.initializeDeck(createTestDeck());
         duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
-                .addDuelist(new Duelist(new HumanTurnStrategy()), true)
-                .addDuelist(new Duelist(new HumanTurnStrategy()), false)
+                .addDuelist(duelist0, true)
+                .addDuelist(duelist1, false)
                 .build();
         duel.setup();
         assertTrue(duel.isInPhase(StartupPhase.class));
