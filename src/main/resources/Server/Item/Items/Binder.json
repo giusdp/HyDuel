@@ -1,0 +1,35 @@
+{
+  "Variant": false,
+  "MaxStack": 1,
+  "Model": "Items/Binder.blockymodel",
+  "Texture": "Items/Binder.png",
+  "Icon": "Icons/ItemsGenerated/Binder.png",
+  "Categories": [
+    "HyDuelsCategory.Cards"
+  ],
+  "TranslationProperties": {
+    "Name": "server.items.Binder.name",
+    "Description": "server.items.Binder.description"
+  },
+  "Container": {
+    "Capacity": 54,
+    "ItemTag": "Card"
+  },
+  "Interactions": {
+    "Secondary": "BinderOpen"
+  },
+  "IconProperties": {
+    "Scale": 0.52,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -45
+    ]
+  },
+  "UsePlayerAnimations": true,
+  "Scale": 0.8
+}
