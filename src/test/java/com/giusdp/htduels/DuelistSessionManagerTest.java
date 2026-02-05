@@ -1,9 +1,9 @@
 package com.giusdp.htduels;
-import com.giusdp.htduels.presentation.DuelistSessionManager;
+import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.match.DuelService;
-import com.giusdp.htduels.presentation.DuelPresentationService;
-import com.giusdp.htduels.presentation.input.CardInteractionService;
+import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.input.CardInteractionService;
 
 import com.giusdp.htduels.match.BotTurnStrategy;
 import com.giusdp.htduels.match.Duelist;

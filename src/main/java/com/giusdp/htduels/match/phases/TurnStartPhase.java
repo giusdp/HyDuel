@@ -1,10 +1,10 @@
 package com.giusdp.htduels.match.phases;
 
-import com.giusdp.htduels.presentation.DuelistSessionManager;
+import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.DuelPhase;
 import com.giusdp.htduels.match.Duelist;
-import com.giusdp.htduels.presentation.ui.BoardGameUi;
+import com.giusdp.htduels.hytale.ui.BoardGameUi;
 
 public class TurnStartPhase extends DuelPhase {
 

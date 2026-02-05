@@ -13,7 +13,7 @@ The codebase has three layers. Think of it like a sandwich:
   |              PRESENTATION LAYER                  |
   |   What you see and touch: entities, cameras,     |
   |   mouse input, UI pages, card animations         |
-  |   (com.giusdp.htduels.presentation)              |
+  |   (com.giusdp.htduels.hytale)              |
   +-------------------------------------------------+
                         |
                         | reads state, translates events
