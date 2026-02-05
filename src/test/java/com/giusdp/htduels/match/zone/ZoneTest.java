@@ -17,7 +17,8 @@ class ZoneTest {
     static Stream<Arguments> zoneProvider() {
         return Stream.of(
                 Arguments.of(new Hand(), ZoneType.HAND),
-                Arguments.of(new Battlefield(), ZoneType.BATTLEFIELD)
+                Arguments.of(new Battlefield(), ZoneType.BATTLEFIELD),
+                Arguments.of(new Deck(), ZoneType.DECK)
         );
     }
 
@@ -35,14 +36,14 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("new zone has empty card list")
-    void newZoneHasEmptyCardList(Zone zone, ZoneType expectedType) {
+    void newZoneHasEmptyCardList(Zone zone) {
         assertTrue(zone.getCards().isEmpty());
     }
 
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("add card makes it appear in getCards")
-    void addCardAppearsInGetCards(Zone zone, ZoneType expectedType) {
+    void addCardAppearsInGetCards(Zone zone) {
         Card card = createCard("card1");
 
         zone.place(card, 0);
@@ -54,7 +55,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("add card at index 0 inserts at beginning")
-    void addCardAtIndexZeroInsertsAtBeginning(Zone zone, ZoneType expectedType) {
+    void addCardAtIndexZeroInsertsAtBeginning(Zone zone) {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
 
@@ -68,7 +69,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("add card at end appends to list")
-    void addCardAtEndAppendsToList(Zone zone, ZoneType expectedType) {
+    void addCardAtEndAppendsToList(Zone zone) {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
 
@@ -82,7 +83,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("remove card removes it from list")
-    void removeCardRemovesFromList(Zone zone, ZoneType expectedType) {
+    void removeCardRemovesFromList(Zone zone) {
         Card card = createCard("card1");
         zone.place(card, 0);
 
@@ -95,7 +96,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("remove card keeps other cards intact")
-    void removeCardKeepsOtherCards(Zone zone, ZoneType expectedType) {
+    void removeCardKeepsOtherCards(Zone zone) {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
         Card card3 = createCard("card3");
@@ -113,7 +114,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("add sets card's zone reference")
-    void addSetsCardZoneReference(Zone zone, ZoneType expectedType) {
+    void addSetsCardZoneReference(Zone zone) {
         Card card = createCard("card1");
 
         zone.place(card, 0);
@@ -124,7 +125,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("remove clears card's zone reference")
-    void removeClearsCardZoneReference(Zone zone, ZoneType expectedType) {
+    void removeClearsCardZoneReference(Zone zone) {
         Card card = createCard("card1");
         zone.place(card, 0);
 
@@ -136,7 +137,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("card's getZoneIndex returns correct index")
-    void cardGetZoneIndexReturnsCorrectIndex(Zone zone, ZoneType expectedType) {
+    void cardGetZoneIndexReturnsCorrectIndex(Zone zone) {
         Card card1 = createCard("card1");
         Card card2 = createCard("card2");
         Card card3 = createCard("card3");
@@ -153,7 +154,7 @@ class ZoneTest {
     @ParameterizedTest
     @MethodSource("zoneProvider")
     @DisplayName("card's getZoneIndex returns -1 when not in zone")
-    void cardGetZoneIndexReturnsMinusOneWhenNotInZone(Zone zone, ZoneType expectedType) {
+    void cardGetZoneIndexReturnsMinusOneWhenNotInZone() {
         Card card = createCard("card1");
 
         assertEquals(-1, card.getZoneIndex());
