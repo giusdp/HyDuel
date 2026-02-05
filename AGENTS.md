@@ -62,7 +62,7 @@ com.giusdp.htduels/
 │       ├── Hand.java
 │       └── Battlefield.java
 │
-└── presentation/                 # PRESENTATION LAYER - Hytale ECS, UI, input
+└── hytale/                       # HYTALE LAYER - Hytale ECS, UI, input
     ├── DuelPresentationService.java   # Orchestrator: setup, join, cleanup
     ├── DuelistSessionManager.java     # Per-player state (camera, mouse, cards)
     ├── DomainEventSync.java           # Domain events → ECS mutations
@@ -74,6 +74,10 @@ com.giusdp.htduels/
     │   ├── DuelCommand.java           # /duel parent command
     │   ├── EndTurnCommand.java        # /duel endturn
     │   └── ForfeitCommand.java        # /duel forfeit
+    │
+    ├── deck/
+    │   ├── DeckOpenInteraction.java   # Opens deck with 2-copy filter
+    │   └── DeckSlotFilterAdapter.java # Enforces deck building rules
     │
     ├── ecs/
     │   ├── CardSpawner.java           # Factory for card entities
@@ -96,8 +100,11 @@ com.giusdp.htduels/
     │
     ├── input/
     │   ├── CardInteractionService.java    # Mouse click/hover on cards
+    │   ├── PlayerMouseButtonHandler.java  # Mouse button events
+    │   ├── PlayerMouseMotionHandler.java  # Mouse motion events
     │   ├── BoardInteraction.java          # Board block right-click
-    │   └── BoardContext.java              # Board position + rotation
+    │   ├── BoardContext.java              # Board position + rotation
+    │   └── InteractionNames.java          # Interaction name constants
     │
     ├── layout/
     │   ├── BoardLayout.java               # Board geometry (13 params)
