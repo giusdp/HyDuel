@@ -1,6 +1,7 @@
 package com.giusdp.htduels.match;
 
 import com.giusdp.htduels.hytale.DuelistSessionManager;
+import com.giusdp.htduels.hytale.ui.BoardGameUi;
 import com.giusdp.htduels.match.event.*;
 import com.giusdp.htduels.match.phases.DuelEndPhase;
 import com.giusdp.htduels.match.phases.TurnEndPhase;
@@ -144,6 +145,10 @@ public class Duel {
     }
 
     public void declareLoss(Duelist loser) {
+        Duelist winner = getOpponent(loser);
+        int loserIndex = getDuelistIndex(loser);
+        int winnerIndex = getDuelistIndex(winner);
+        recordEvent(new DuelEnded(this.id, winnerIndex, loserIndex, DuelEndPhase.Reason.DECK_OUT));
         transitionTo(new DuelEndPhase(DuelEndPhase.Reason.DECK_OUT));
     }
 
@@ -191,6 +196,19 @@ public class Duel {
         return duelists.get(index);
     }
 
+    public Duelist getOpponent(Duelist duelist) {
+        for (Duelist d : duelists) {
+            if (d != duelist) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    public int getDuelistIndex(Duelist duelist) {
+        return duelists.indexOf(duelist);
+    }
+
     public List<Duelist> getDuelists() {
         return duelists;
     }
@@ -212,7 +230,7 @@ public class Duel {
     }
 
     /**
-     * Updates the turn indicator on every duelist's {@link com.giusdp.htduels.ui.BoardGameUi}.
+     * Updates the turn indicator on every duelist's {@link BoardGameUi}.
      * Contexts without a UI instance are silently skipped.
      *
      * @param message the text to display; {@code null} is treated as empty (clears the indicator)

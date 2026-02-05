@@ -3,6 +3,7 @@ package com.giusdp.htduels.match;
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.catalog.CardAsset;
 import com.giusdp.htduels.match.event.CardsDrawn;
+import com.giusdp.htduels.match.event.DuelEnded;
 import com.giusdp.htduels.match.event.DuelEvent;
 import com.giusdp.htduels.match.phases.DuelEndPhase;
 import org.junit.jupiter.api.BeforeEach;
@@ -135,5 +136,37 @@ class DuelDrawTest {
 
         assertTrue(duel.isFinished());
         assertEquals(DuelEndPhase.Reason.DECK_OUT, duel.getEndReason());
+    }
+
+    @Test
+    @DisplayName("declareLoss records DuelEnded event with correct winner/loser")
+    void declareLossRecordsDuelEndedEvent() {
+        duel.flushEvents(); // Clear setup events
+
+        duel.declareLoss(duelist0);
+
+        List<DuelEvent> events = duel.getAccumulatedEvents();
+        boolean hasDuelEnded = events.stream().anyMatch(e -> e instanceof DuelEnded);
+        assertTrue(hasDuelEnded);
+
+        DuelEnded duelEnded = (DuelEnded) events.stream()
+                .filter(e -> e instanceof DuelEnded)
+                .findFirst()
+                .orElseThrow();
+        assertEquals(0, duelEnded.loserIndex);
+        assertEquals(1, duelEnded.winnerIndex);
+        assertEquals(DuelEndPhase.Reason.DECK_OUT, duelEnded.reason);
+    }
+
+    @Test
+    @DisplayName("deck exhaustion records DuelEnded event")
+    void deckExhaustionRecordsDuelEndedEvent() {
+        duel.flushEvents();
+
+        duel.drawCards(duelist0, 1); // Empty deck triggers loss
+
+        List<DuelEvent> events = duel.getAccumulatedEvents();
+        boolean hasDuelEnded = events.stream().anyMatch(e -> e instanceof DuelEnded);
+        assertTrue(hasDuelEnded);
     }
 }
