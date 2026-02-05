@@ -42,6 +42,7 @@ public class DomainEventSync {
         if (duel == null) return;
 
         for (DuelEvent event : events) {
+            // TODO refactor this with some generic handler thingy to not have an evergrowing if else if
             if (event instanceof CardsDrawn drawn) {
                 handleCardsDrawn(drawn, duel, duelComp, layout, duelRef, commandBuffer);
             } else if (event instanceof CardPlayed played) {
