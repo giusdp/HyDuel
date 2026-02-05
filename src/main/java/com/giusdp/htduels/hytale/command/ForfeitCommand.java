@@ -55,7 +55,7 @@ public class ForfeitCommand extends AbstractAsyncCommand {
             }
 
             Duel duel = duelCtx.getDuel();
-            duel.forfeit();
+            duel.forfeit(duelCtx.getDuelist());
         });
 
         return CompletableFuture.completedFuture(null);

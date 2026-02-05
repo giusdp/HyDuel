@@ -9,6 +9,7 @@ import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.DuelId;
 import com.giusdp.htduels.match.event.CardPlayed;
 import com.giusdp.htduels.match.event.CardsDrawn;
+import com.giusdp.htduels.match.event.DuelEnded;
 import com.giusdp.htduels.match.event.DuelEvent;
 import com.giusdp.htduels.hytale.layout.BoardLayout;
 import com.giusdp.htduels.hytale.layout.CardPositioningService;
@@ -21,7 +22,10 @@ import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 
 import java.util.List;
@@ -46,6 +50,8 @@ public class DomainEventSync {
                 handleCardsDrawn(drawn, duel, duelComp, layout, duelRef, commandBuffer);
             } else if (event instanceof CardPlayed played) {
                 handleCardPlayed(played, duel, duelComp, duelRef);
+            } else if (event instanceof DuelEnded ended) {
+                handleDuelEnded(ended, duel);
             }
         }
     }
@@ -125,5 +131,35 @@ public class DomainEventSync {
     private static int getZoneSize(Card card) {
         if (card.getZone() == null) return 0;
         return card.getZone().getCards().size();
+    }
+
+    private void handleDuelEnded(DuelEnded ended, Duel duel) {
+        Duelist winner = duel.getDuelist(ended.winnerIndex);
+        Duelist loser = duel.getDuelist(ended.loserIndex);
+
+        String reasonText = switch (ended.reason) {
+            case DECK_OUT -> "ran out of cards";
+            case FORFEIT -> "forfeited";
+            case TIMEOUT -> "timed out";
+            case WIN -> "was defeated";
+        };
+
+        for (DuelistSessionManager ctx : duel.getContexts()) {
+            PlayerRef playerRef = ctx.getPlayerRef();
+            if (playerRef == null) continue;
+
+            Ref<EntityStore> playerEntityRef = playerRef.getReference();
+            if (playerEntityRef == null) continue;
+
+            Store<EntityStore> store = playerEntityRef.getStore();
+            Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+            if (player == null) continue;
+
+            if (ctx.getDuelist() == winner) {
+                player.sendMessage(Message.raw("You win! Your opponent " + reasonText + "."));
+            } else if (ctx.getDuelist() == loser) {
+                player.sendMessage(Message.raw("You lose! You " + reasonText + "."));
+            }
+        }
     }
 }

@@ -139,17 +139,19 @@ public class Duel {
         transitionTo(new TurnEndPhase());
     }
 
-    public void forfeit() {
+    public void forfeit(Duelist forfeiter) {
+        Duelist winner = getOpponent(forfeiter);
+        int loserIndex = getDuelistIndex(forfeiter);
+        int winnerIndex = getDuelistIndex(winner);
         recordEvent(new MainPhaseEnded(this.id));
-        transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT));
+        transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT, winnerIndex, loserIndex));
     }
 
     public void declareLoss(Duelist loser) {
         Duelist winner = getOpponent(loser);
         int loserIndex = getDuelistIndex(loser);
         int winnerIndex = getDuelistIndex(winner);
-        recordEvent(new DuelEnded(this.id, winnerIndex, loserIndex, DuelEndPhase.Reason.DECK_OUT));
-        transitionTo(new DuelEndPhase(DuelEndPhase.Reason.DECK_OUT));
+        transitionTo(new DuelEndPhase(DuelEndPhase.Reason.DECK_OUT, winnerIndex, loserIndex));
     }
 
     public void addDuelist(Duelist duelist) {

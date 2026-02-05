@@ -6,6 +6,8 @@ import com.giusdp.htduels.match.Card;
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.HumanTurnStrategy;
 import com.giusdp.htduels.match.Duelist;
+import com.giusdp.htduels.match.event.DuelEnded;
+import com.giusdp.htduels.match.event.DuelEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -35,20 +37,25 @@ public class DuelEndPhaseTest {
                 .build();
     }
 
-    @Test
-    void forfeitDuringMainPhase() {
-        Duel duel = createDuel();
-        duel.setup();
-
+    private void advanceToMainPhase(Duel duel) {
         // Tick through StartupPhase (10 draws) + transition tick
         for (int i = 0; i < 11; i++) {
             duel.tick();
         }
         // Now in TurnStartPhase, one more tick transitions to MainPhase
         duel.tick();
+    }
+
+    @Test
+    void forfeitDuringMainPhase() {
+        Duel duel = createDuel();
+        duel.setup();
+
+        advanceToMainPhase(duel);
         assertTrue(duel.isInPhase(MainPhase.class));
 
-        duel.forfeit();
+        Duelist forfeiter = duel.getDuelist(0);
+        duel.forfeit(forfeiter);
         assertTrue(duel.isInPhase(DuelEndPhase.class));
 
         // Tick is a no-op — phase stays the same
@@ -62,7 +69,8 @@ public class DuelEndPhaseTest {
         duel.setup();
         assertTrue(duel.isInPhase(StartupPhase.class));
 
-        duel.forfeit();
+        Duelist forfeiter = duel.getDuelist(0);
+        duel.forfeit(forfeiter);
         assertTrue(duel.isInPhase(DuelEndPhase.class));
     }
 
@@ -71,7 +79,8 @@ public class DuelEndPhaseTest {
         Duel duel = createDuel();
         duel.setup();
 
-        duel.forfeit();
+        Duelist forfeiter = duel.getDuelist(0);
+        duel.forfeit(forfeiter);
         assertEquals(DuelEndPhase.Reason.FORFEIT, duel.getEndReason());
     }
 
@@ -82,7 +91,7 @@ public class DuelEndPhaseTest {
                 .build();
         duel.setup();
 
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT));
+        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT, -1, -1));
         assertEquals(DuelEndPhase.Reason.TIMEOUT, duel.getEndReason());
     }
 
@@ -91,7 +100,29 @@ public class DuelEndPhaseTest {
         Duel duel = createDuel();
         duel.setup();
 
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.WIN));
+        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.WIN, 0, 1));
         assertEquals(DuelEndPhase.Reason.WIN, duel.getEndReason());
+    }
+
+    @Test
+    void forfeitEmitsDuelEndedEvent() {
+        Duel duel = createDuel();
+        duel.setup();
+        advanceToMainPhase(duel);
+        duel.flushEvents();
+
+        Duelist forfeiter = duel.getDuelist(1);
+        duel.forfeit(forfeiter);
+
+        List<DuelEvent> events = duel.getAccumulatedEvents();
+        DuelEnded ended = events.stream()
+                .filter(e -> e instanceof DuelEnded)
+                .map(e -> (DuelEnded) e)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(0, ended.winnerIndex);
+        assertEquals(1, ended.loserIndex);
+        assertEquals(DuelEndPhase.Reason.FORFEIT, ended.reason);
     }
 }

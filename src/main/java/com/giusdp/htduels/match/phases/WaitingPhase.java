@@ -16,7 +16,7 @@ public class WaitingPhase extends DuelPhase {
     @Override
     public void tick(Duel duel) {
         if (ticksWaited >= MAX_WAIT_TICKS) {
-            duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT));
+            duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT, -1, -1));
             return;
         }
         ticksWaited++;
