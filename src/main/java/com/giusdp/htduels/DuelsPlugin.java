@@ -1,31 +1,32 @@
 package com.giusdp.htduels;
 import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.match.DuelService;
-import com.giusdp.htduels.presentation.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelPresentationService;
 
 import com.giusdp.htduels.catalog.CardAsset;
 import com.giusdp.htduels.catalog.CardAssetCodec;
 import com.giusdp.htduels.catalog.CardAssetStore;
-import com.giusdp.htduels.presentation.input.CardInteractionService;
-import com.giusdp.htduels.presentation.command.DuelCommand;
-import com.giusdp.htduels.presentation.ecs.component.BoardLayoutComponent;
-import com.giusdp.htduels.presentation.ecs.component.CardComponent;
-import com.giusdp.htduels.presentation.ecs.component.CardDragComponent;
-import com.giusdp.htduels.presentation.ecs.component.CardHoverComponent;
-import com.giusdp.htduels.presentation.ecs.component.CardSpatialComponent;
-import com.giusdp.htduels.presentation.ecs.component.DuelComponent;
-import com.giusdp.htduels.presentation.input.PlayerMouseButtonHandler;
-import com.giusdp.htduels.presentation.input.PlayerMouseMotionHandler;
-import com.giusdp.htduels.presentation.input.BoardInteraction;
-import com.giusdp.htduels.presentation.input.InteractionNames;
-import com.giusdp.htduels.presentation.DomainEventSync;
+import com.giusdp.htduels.hytale.input.CardInteractionService;
+import com.giusdp.htduels.hytale.command.DuelCommand;
+import com.giusdp.htduels.hytale.ecs.component.BoardLayoutComponent;
+import com.giusdp.htduels.hytale.ecs.component.CardComponent;
+import com.giusdp.htduels.hytale.ecs.component.CardDragComponent;
+import com.giusdp.htduels.hytale.ecs.component.CardHoverComponent;
+import com.giusdp.htduels.hytale.ecs.component.CardSpatialComponent;
+import com.giusdp.htduels.hytale.ecs.component.DuelComponent;
+import com.giusdp.htduels.hytale.input.PlayerMouseButtonHandler;
+import com.giusdp.htduels.hytale.input.PlayerMouseMotionHandler;
+import com.giusdp.htduels.hytale.deck.DeckOpenInteraction;
+import com.giusdp.htduels.hytale.input.BoardInteraction;
+import com.giusdp.htduels.hytale.input.InteractionNames;
+import com.giusdp.htduels.hytale.DomainEventSync;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.giusdp.htduels.presentation.ecs.system.CardDragSystem;
-import com.giusdp.htduels.presentation.ecs.system.CardHoverSystem;
-import com.giusdp.htduels.presentation.ecs.system.CardMovementSystem;
-import com.giusdp.htduels.presentation.ecs.system.CardRotationSystem;
-import com.giusdp.htduels.presentation.ecs.system.CardSpatialResolutionSystem;
-import com.giusdp.htduels.presentation.ecs.system.DuelTicker;
+import com.giusdp.htduels.hytale.ecs.system.CardDragSystem;
+import com.giusdp.htduels.hytale.ecs.system.CardHoverSystem;
+import com.giusdp.htduels.hytale.ecs.system.CardMovementSystem;
+import com.giusdp.htduels.hytale.ecs.system.CardRotationSystem;
+import com.giusdp.htduels.hytale.ecs.system.CardSpatialResolutionSystem;
+import com.giusdp.htduels.hytale.ecs.system.DuelTicker;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
@@ -103,6 +104,12 @@ public class DuelsPlugin extends JavaPlugin {
 
         this.getCodecRegistry(Interaction.CODEC).register(InteractionNames.BOARD_INTERACTION, BoardInteraction.class,
                 boardInteractionCodec);
+
+        this.getCodecRegistry(Interaction.CODEC).register(
+                "DeckOpen",
+                DeckOpenInteraction.class,
+                DeckOpenInteraction.CODEC
+        );
     }
 
     private void setupCardAssetStore() {

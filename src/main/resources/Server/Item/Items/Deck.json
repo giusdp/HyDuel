@@ -1,0 +1,34 @@
+{
+  "Variant": false,
+  "MaxStack": 1,
+  "Model": "Items/Deck.blockymodel",
+  "Texture": "Items/Deck.png",
+  "Icon": "Icons/ItemsGenerated/Deck.png",
+  "Categories": [
+    "HyDuelsCategory.Cards"
+  ],
+  "TranslationProperties": {
+    "Name": "server.items.Deck.name",
+    "Description": "server.items.Deck.description"
+  },
+  "Container": {
+    "Capacity": 20,
+    "ItemTag": "Card"
+  },
+  "Interactions": {
+    "Secondary": "DeckOpen"
+  },
+  "Scale": 0.6,
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -43
+    ]
+  }
+}

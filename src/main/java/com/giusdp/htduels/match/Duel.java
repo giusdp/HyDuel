@@ -1,13 +1,11 @@
 package com.giusdp.htduels.match;
 
-import com.giusdp.htduels.match.CardRepo;
-import com.giusdp.htduels.presentation.DuelistSessionManager;
+import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.giusdp.htduels.catalog.CardAsset;
 import com.giusdp.htduels.match.event.*;
 import com.giusdp.htduels.match.phases.DuelEndPhase;
 import com.giusdp.htduels.match.phases.TurnEndPhase;
 import com.giusdp.htduels.match.phases.WaitingPhase;
-import com.giusdp.htduels.match.Duelist;
 
 import com.hypixel.hytale.math.vector.Vector3i;
 
