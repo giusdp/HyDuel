@@ -1,7 +1,7 @@
 package com.giusdp.htduels.hytale.ecs.system;
 import com.giusdp.htduels.hytale.DomainEventSync;
 
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.hytale.ecs.component.BoardLayoutComponent;
 import com.giusdp.htduels.hytale.ecs.component.DuelComponent;
@@ -21,11 +21,11 @@ import java.util.List;
 
 public class DuelTicker extends EntityTickingSystem<EntityStore> {
 
-    private final DuelPresentationService presentationService;
+    private final DuelManager presentationService;
     private final DuelRegistry registry;
     private final DomainEventSync domainEventSync;
 
-    public DuelTicker(DuelPresentationService presentationService, DuelRegistry registry, DomainEventSync domainEventSync) {
+    public DuelTicker(DuelManager presentationService, DuelRegistry registry, DomainEventSync domainEventSync) {
         this.presentationService = presentationService;
         this.registry = registry;
         this.domainEventSync = domainEventSync;

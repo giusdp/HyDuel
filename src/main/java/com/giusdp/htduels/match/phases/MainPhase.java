@@ -2,6 +2,7 @@ package com.giusdp.htduels.match.phases;
 
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.DuelPhase;
+import com.giusdp.htduels.match.event.MainPhaseEnded;
 
 public class MainPhase extends DuelPhase {
 
@@ -16,5 +17,6 @@ public class MainPhase extends DuelPhase {
 
     @Override
     public void onExit(Duel duel) {
+        duel.recordEvent(new MainPhaseEnded(duel.getId()));
     }
 }

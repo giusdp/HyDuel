@@ -9,7 +9,6 @@ import com.hypixel.hytale.server.core.inventory.container.filter.FilterActionTyp
 import com.hypixel.hytale.server.core.inventory.container.filter.SlotFilter;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DeckSlotFilterAdapter implements SlotFilter {
@@ -48,13 +47,6 @@ public class DeckSlotFilterAdapter implements SlotFilter {
     }
 
     private List<String> extractCurrentCardIds() {
-        List<String> ids = new ArrayList<>();
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack s = container.getItemStack(i);
-            if (s != null && !ItemStack.isEmpty(s)) {
-                ids.add(s.getItemId());
-            }
-        }
-        return ids;
+        return DeckContainerUtils.extractCardIds(container);
     }
 }

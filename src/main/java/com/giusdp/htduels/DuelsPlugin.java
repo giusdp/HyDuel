@@ -1,7 +1,7 @@
 package com.giusdp.htduels;
 import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.match.DuelService;
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 
 import com.giusdp.htduels.catalog.CardAsset;
 import com.giusdp.htduels.catalog.CardAssetCodec;
@@ -59,7 +59,7 @@ public class DuelsPlugin extends JavaPlugin {
         DuelRegistry registry = new DuelRegistry();
         DuelService duelService = new DuelService(registry);
         CardInteractionService cardInteractionService = new CardInteractionService();
-        DuelPresentationService presentationService = new DuelPresentationService(duelService, registry, cardInteractionService);
+        DuelManager presentationService = new DuelManager(duelService, registry, cardInteractionService);
         DomainEventSync domainEventSync = new DomainEventSync(registry);
 
         setupComponents();
@@ -97,7 +97,7 @@ public class DuelsPlugin extends JavaPlugin {
         duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);
     }
 
-    private void setupInteractions(DuelPresentationService presentationService, DuelRegistry registry) {
+    private void setupInteractions(DuelManager presentationService, DuelRegistry registry) {
         BuilderCodec<BoardInteraction> boardInteractionCodec = BuilderCodec
                 .builder(BoardInteraction.class, () -> new BoardInteraction(presentationService, registry), SimpleBlockInteraction.CODEC)
                 .documentation("Goes to the duel board top-down camera view").build();

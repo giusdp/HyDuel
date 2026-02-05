@@ -1,6 +1,6 @@
 package com.giusdp.htduels.hytale.command;
 
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.giusdp.htduels.hytale.ecs.component.DuelComponent;
 import com.giusdp.htduels.match.Duel;
@@ -17,9 +17,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class ForfeitCommand extends AbstractAsyncCommand {
 
-    private final DuelPresentationService presentationService;
+    private final DuelManager presentationService;
 
-    public ForfeitCommand(DuelPresentationService presentationService) {
+    public ForfeitCommand(DuelManager presentationService) {
         super("forfeit", "Forfeit the current duel");
         this.presentationService = presentationService;
     }
@@ -55,7 +55,7 @@ public class ForfeitCommand extends AbstractAsyncCommand {
             }
 
             Duel duel = duelCtx.getDuel();
-            duel.forfeit();
+            duel.forfeit(duelCtx.getDuelist());
         });
 
         return CompletableFuture.completedFuture(null);

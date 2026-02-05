@@ -2,22 +2,31 @@ package com.giusdp.htduels.match;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.catalog.CardAsset;
-import com.giusdp.htduels.match.Card;
-import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.event.DuelEvent;
 import com.giusdp.htduels.match.event.MainPhaseEnded;
 import com.giusdp.htduels.match.event.CardPlayed;
 import com.giusdp.htduels.match.phases.MainPhase;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BotTurnStrategyTest {
 
+    private List<Card> createTestDeck() {
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            cards.add(new Card(new CardAsset("card" + i, "Test Card " + i, 1, 1, 1, "Minion")));
+        }
+        return cards;
+    }
+
     private Duel createDuelInMainPhase(Duelist bot) {
         Duelist player = new Duelist(new HumanTurnStrategy());
+        player.initializeDeck(createTestDeck());
+        bot.initializeDeck(createTestDeck());
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
                 .addDuelist(player, true)

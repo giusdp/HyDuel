@@ -1,6 +1,10 @@
 package com.giusdp.htduels.hytale;
+import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.hytale.deck.DeckContainerUtils;
+import com.giusdp.htduels.match.CardRepo;
 import com.giusdp.htduels.match.DuelService;
 import com.giusdp.htduels.match.DuelRegistry;
+import com.giusdp.htduels.match.deck.DeckRules;
 import com.giusdp.htduels.hytale.camera.BoardCameraService;
 
 import com.giusdp.htduels.hytale.ecs.component.BoardLayoutComponent;
@@ -23,15 +27,22 @@ import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.asset.type.item.config.ItemStackContainerConfig;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.ItemStackItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class DuelPresentationService {
+public class DuelManager {
 
     public static final float CARD_Y_OFFSET = 1.1f;
 
@@ -40,7 +51,7 @@ public class DuelPresentationService {
     private final CardInteractionService cardInteractionService;
     private final Map<PlayerRef, DuelistSessionManager> playerSessions = new HashMap<>();
 
-    public DuelPresentationService(DuelService duelService, DuelRegistry registry, CardInteractionService cardInteractionService) {
+    public DuelManager(DuelService duelService, DuelRegistry registry, CardInteractionService cardInteractionService) {
         this.duelService = duelService;
         this.registry = registry;
         this.cardInteractionService = cardInteractionService;
@@ -86,7 +97,11 @@ public class DuelPresentationService {
         Duel duel = duelService.findDuel(duelComp.getDuelId());
         assert duel != null;
 
-        Duelist humanDuelist = duelService.addHumanDuelist(duel);
+        Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+        assert player != null;
+
+        List<String> cardIds = extractCardIdsFromHeldDeck(player);
+        Duelist humanDuelist = duelService.addHumanDuelist(duel, cardIds);
         boolean isOpponentSide = humanDuelist.isOpponentSide();
 
         float cameraYaw = (float) boardRotation.getRadians();
@@ -96,9 +111,6 @@ public class DuelPresentationService {
 
         Position cameraPos = BoardCameraService.calculateCameraPosition(boardPosition, boardRotation);
         float cardY = boardPosition.y + CARD_Y_OFFSET;
-
-        Player player = store.getComponent(playerEntityRef, Player.getComponentType());
-        assert player != null;
 
         BoardCameraService.activate(playerRef, cameraPos, cameraYaw);
 
@@ -115,7 +127,8 @@ public class DuelPresentationService {
         Duel duel = duelService.findDuel(duelComp.getDuelId());
         assert duel != null;
 
-        Duelist botDuelist = duelService.addBotDuelist(duel);
+        List<String> botCardIds = generateRandomDeck(duel.getCardRepo());
+        Duelist botDuelist = duelService.addBotDuelist(duel, botCardIds);
 
         DuelistSessionManager botSession = new DuelistSessionManager(duelRef, botDuelist, duel);
         duel.addContext(botSession);
@@ -213,5 +226,49 @@ public class DuelPresentationService {
         if (player != null) {
             player.getPageManager().setPage(playerEntityRef, store, Page.None);
         }
+    }
+
+    private List<String> extractCardIdsFromHeldDeck(Player player) {
+        ItemStack heldItem = player.getInventory().getActiveHotbarItem();
+        if (ItemStack.isEmpty(heldItem)) {
+            return Collections.emptyList();
+        }
+
+        ItemStackContainerConfig config = heldItem.getItem().getItemStackContainerConfig();
+        ItemContainer hotbar = player.getInventory().getHotbar();
+        byte activeSlot = player.getInventory().getActiveSlot((byte) -1);
+
+        ItemStackItemContainer deckContainer = ItemStackItemContainer.ensureConfiguredContainer(
+                hotbar, activeSlot, config);
+        if (deckContainer == null) {
+            return Collections.emptyList();
+        }
+
+        return DeckContainerUtils.extractCardIds(deckContainer);
+    }
+
+    private List<String> generateRandomDeck(CardRepo cardRepo) {
+        List<CardAsset> availableCards = new ArrayList<>(cardRepo.getAvailableCards());
+        if (availableCards.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Collections.shuffle(availableCards);
+        List<String> deckCardIds = new ArrayList<>();
+        Map<String, Integer> cardCounts = new HashMap<>();
+
+        int index = 0;
+        while (deckCardIds.size() < DeckRules.REQUIRED_CARD_COUNT && index < availableCards.size() * 2) {
+            CardAsset card = availableCards.get(index % availableCards.size());
+            int currentCount = cardCounts.getOrDefault(card.id(), 0);
+
+            if (currentCount < DeckRules.MAX_COPIES_PER_CARD) {
+                deckCardIds.add(card.id());
+                cardCounts.put(card.id(), currentCount + 1);
+            }
+            index++;
+        }
+
+        return deckCardIds;
     }
 }
