@@ -1,6 +1,6 @@
 package com.giusdp.htduels.hytale.ui;
 
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 import com.giusdp.htduels.hytale.input.BoardContext;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -21,9 +21,9 @@ import javax.annotation.Nonnull;
 public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelectionPage.ModeEventData> {
 
     private final BoardContext boardContext;
-    private final DuelPresentationService presentationService;
+    private final DuelManager presentationService;
 
-    public DuelModeSelectionPage(@Nonnull PlayerRef playerRef, BoardContext boardContext, DuelPresentationService presentationService) {
+    public DuelModeSelectionPage(@Nonnull PlayerRef playerRef, BoardContext boardContext, DuelManager presentationService) {
         super(playerRef, CustomPageLifetime.CanDismiss, ModeEventData.CODEC);
         this.boardContext = boardContext;
         this.presentationService = presentationService;

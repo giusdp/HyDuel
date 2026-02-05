@@ -1,6 +1,6 @@
 package com.giusdp.htduels.hytale.input;
 
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
@@ -11,10 +11,10 @@ import javax.annotation.Nonnull;
 public class PlayerMouseButtonHandler {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private final DuelPresentationService presentationService;
+    private final DuelManager presentationService;
     private final CardInteractionService cardInteractionService;
 
-    public PlayerMouseButtonHandler(DuelPresentationService presentationService, CardInteractionService cardInteractionService) {
+    public PlayerMouseButtonHandler(DuelManager presentationService, CardInteractionService cardInteractionService) {
         this.presentationService = presentationService;
         this.cardInteractionService = cardInteractionService;
     }

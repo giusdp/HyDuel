@@ -1,7 +1,7 @@
 package com.giusdp.htduels.hytale.input;
 
 import com.giusdp.htduels.hytale.camera.BoardCameraService;
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 import com.giusdp.htduels.hytale.layout.BoardLayout;
 import com.hypixel.hytale.math.Vec2f;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DuelPresentationServiceTest {
+class DuelManagerTest {
 
     @Nested
     class CreateBoardLayoutTests {
 
         @Test
         void noneRotationOffsetsZByHalf() {
-            BoardLayout layout = DuelPresentationService.createBoardLayout(new Vector3i(10, 5, 20), Rotation.None);
+            BoardLayout layout = DuelManager.createBoardLayout(new Vector3i(10, 5, 20), Rotation.None);
             Vec2f origin = layout.boardOrigin();
             assertEquals(10f, origin.x, 0.001f);
             assertEquals(20.5f, origin.y, 0.001f);
@@ -27,7 +27,7 @@ class DuelPresentationServiceTest {
 
         @Test
         void ninetyRotationOffsetsXByHalfAndZByOne() {
-            BoardLayout layout = DuelPresentationService.createBoardLayout(new Vector3i(10, 5, 20), Rotation.Ninety);
+            BoardLayout layout = DuelManager.createBoardLayout(new Vector3i(10, 5, 20), Rotation.Ninety);
             Vec2f origin = layout.boardOrigin();
             assertEquals(10.5f, origin.x, 0.001f);
             assertEquals(21f, origin.y, 0.001f);
@@ -35,7 +35,7 @@ class DuelPresentationServiceTest {
 
         @Test
         void oneEightyRotationOffsetsXByOneAndZByHalf() {
-            BoardLayout layout = DuelPresentationService.createBoardLayout(new Vector3i(10, 5, 20), Rotation.OneEighty);
+            BoardLayout layout = DuelManager.createBoardLayout(new Vector3i(10, 5, 20), Rotation.OneEighty);
             Vec2f origin = layout.boardOrigin();
             assertEquals(11f, origin.x, 0.001f);
             assertEquals(20.5f, origin.y, 0.001f);
@@ -43,7 +43,7 @@ class DuelPresentationServiceTest {
 
         @Test
         void twoSeventyRotationOffsetsXByHalf() {
-            BoardLayout layout = DuelPresentationService.createBoardLayout(new Vector3i(10, 5, 20), Rotation.TwoSeventy);
+            BoardLayout layout = DuelManager.createBoardLayout(new Vector3i(10, 5, 20), Rotation.TwoSeventy);
             Vec2f origin = layout.boardOrigin();
             assertEquals(10.5f, origin.x, 0.001f);
             assertEquals(20f, origin.y, 0.001f);
@@ -51,7 +51,7 @@ class DuelPresentationServiceTest {
 
         @Test
         void rotationIsPreserved() {
-            BoardLayout layout = DuelPresentationService.createBoardLayout(new Vector3i(0, 0, 0), Rotation.Ninety);
+            BoardLayout layout = DuelManager.createBoardLayout(new Vector3i(0, 0, 0), Rotation.Ninety);
             assertEquals(Rotation.Ninety, layout.rotation());
         }
     }

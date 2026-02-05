@@ -1,6 +1,6 @@
 package com.giusdp.htduels.hytale.ecs.system;
 
-import com.giusdp.htduels.hytale.DuelPresentationService;
+import com.giusdp.htduels.hytale.DuelManager;
 import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.giusdp.htduels.hytale.ecs.component.CardDragComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -17,9 +17,9 @@ import org.jspecify.annotations.Nullable;
 
 public class CardDragSystem extends EntityTickingSystem<EntityStore> {
 
-    private final DuelPresentationService presentationService;
+    private final DuelManager presentationService;
 
-    public CardDragSystem(DuelPresentationService presentationService) {
+    public CardDragSystem(DuelManager presentationService) {
         this.presentationService = presentationService;
     }
 
