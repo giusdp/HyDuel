@@ -28,6 +28,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,7 +87,8 @@ public class DuelPresentationService {
         Duel duel = duelService.findDuel(duelComp.getDuelId());
         assert duel != null;
 
-        Duelist humanDuelist = duelService.addHumanDuelist(duel);
+        // TODO: Pass actual card IDs from player's deck
+        Duelist humanDuelist = duelService.addHumanDuelist(duel, List.of());
         boolean isOpponentSide = humanDuelist.isOpponentSide();
 
         float cameraYaw = (float) boardRotation.getRadians();
@@ -115,7 +117,8 @@ public class DuelPresentationService {
         Duel duel = duelService.findDuel(duelComp.getDuelId());
         assert duel != null;
 
-        Duelist botDuelist = duelService.addBotDuelist(duel);
+        // TODO: Pass bot's card IDs
+        Duelist botDuelist = duelService.addBotDuelist(duel, List.of());
 
         DuelistSessionManager botSession = new DuelistSessionManager(duelRef, botDuelist, duel);
         duel.addContext(botSession);

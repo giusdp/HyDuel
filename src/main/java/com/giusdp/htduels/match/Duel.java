@@ -213,6 +213,10 @@ public class Duel {
         return duelists;
     }
 
+    public CardRepo getCardRepo() {
+        return cardRepo;
+    }
+
     public Vector3i getBoardPosition() {
         return boardPosition;
     }
