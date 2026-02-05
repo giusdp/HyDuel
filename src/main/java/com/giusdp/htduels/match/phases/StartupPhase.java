@@ -3,6 +3,7 @@ package com.giusdp.htduels.match.phases;
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.DuelPhase;
 import com.giusdp.htduels.match.event.DuelStarted;
+import com.giusdp.htduels.match.event.StartingDuelistSelected;
 
 public class StartupPhase extends DuelPhase {
     private int drawCount = 0;
@@ -12,6 +13,7 @@ public class StartupPhase extends DuelPhase {
         System.out.println("[Duel] Duel started!");
         duel.recordEvent(new DuelStarted(duel.getId()));
         duel.selectStartingDuelist();
+        duel.recordEvent(new StartingDuelistSelected(duel.getId()));
     }
 
     @Override

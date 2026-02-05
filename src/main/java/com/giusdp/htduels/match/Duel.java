@@ -131,11 +131,9 @@ public class Duel {
         } else {
             setActiveDuelist(getDuelist(1));
         }
-        recordEvent(new StartingDuelistSelected(this.id));
     }
 
     public void endMainPhase() {
-        recordEvent(new MainPhaseEnded(this.id));
         transitionTo(new TurnEndPhase());
     }
 
@@ -143,7 +141,6 @@ public class Duel {
         Duelist winner = getOpponent(forfeiter);
         int loserIndex = getDuelistIndex(forfeiter);
         int winnerIndex = getDuelistIndex(winner);
-        recordEvent(new MainPhaseEnded(this.id));
         transitionTo(new DuelEndPhase(DuelEndPhase.Reason.FORFEIT, winnerIndex, loserIndex));
     }
 
