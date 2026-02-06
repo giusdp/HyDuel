@@ -75,6 +75,9 @@ public class BoardInteraction extends SimpleBlockInteraction {
 
         Duel duel = registry.findDuel(duelComp.getDuelId());
         if (duel != null && duel.isInPhase(WaitingPhase.class)) {
+            if (!isValidDeck(player, itemInHand, context)) {
+                return;
+            }
             presentationService.joinAsPlayer(playerRef, boardContext, ref.getStore(), existingDuel);
         }
     }
