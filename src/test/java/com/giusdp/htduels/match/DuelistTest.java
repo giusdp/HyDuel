@@ -1,6 +1,6 @@
 package com.giusdp.htduels.match;
 
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.match.zone.Deck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

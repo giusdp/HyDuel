@@ -1,7 +1,7 @@
 package com.giusdp.htduels.match;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.match.event.DuelEvent;
 import com.giusdp.htduels.match.event.MainPhaseEnded;
 import com.giusdp.htduels.match.event.CardPlayed;

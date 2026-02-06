@@ -3,7 +3,7 @@ package com.giusdp.htduels.hytale.ecs.system;
 import com.giusdp.htduels.FakeCardRepo;
 
 import com.giusdp.htduels.TestBoardLayout;
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.hytale.ecs.component.CardComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardSpatialComponent;
 import com.giusdp.htduels.match.Card;

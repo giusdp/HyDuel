@@ -3,7 +3,7 @@ package com.giusdp.htduels.hytale.layout;
 import com.giusdp.htduels.FakeCardRepo;
 
 import com.giusdp.htduels.TestBoardLayout;
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.match.Card;
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.BotTurnStrategy;

@@ -30,7 +30,7 @@ The codebase has three layers. Think of it like a sandwich:
   +-------------------------------------------------+
   |               CATALOG LAYER                      |
   |   Card data loaded from JSON files               |
-  |   (com.giusdp.htduels.catalog)                   |
+  |   (com.giusdp.htduels.asset)                   |
   +-------------------------------------------------+
 ```
 

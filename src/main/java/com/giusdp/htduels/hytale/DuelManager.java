@@ -1,5 +1,5 @@
 package com.giusdp.htduels.hytale;
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.hytale.deck.DeckContainerUtils;
 import com.giusdp.htduels.match.CardRepo;
 import com.giusdp.htduels.match.DuelService;

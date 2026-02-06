@@ -3,9 +3,9 @@ import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.match.DuelService;
 import com.giusdp.htduels.hytale.DuelManager;
 
-import com.giusdp.htduels.catalog.CardAsset;
-import com.giusdp.htduels.catalog.CardAssetCodec;
-import com.giusdp.htduels.catalog.CardAssetStore;
+import com.giusdp.htduels.asset.CardAsset;
+import com.giusdp.htduels.asset.CardAssetCodec;
+import com.giusdp.htduels.asset.CardAssetStore;
 import com.giusdp.htduels.hytale.input.CardInteractionService;
 import com.giusdp.htduels.hytale.command.DuelCommand;
 import com.giusdp.htduels.hytale.ecs.component.BoardLayoutComponent;

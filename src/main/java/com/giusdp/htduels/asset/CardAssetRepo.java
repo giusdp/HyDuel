@@ -1,8 +1,6 @@
-package com.giusdp.htduels.catalog;
+package com.giusdp.htduels.asset;
 import com.giusdp.htduels.match.CardRepo;
 import com.giusdp.htduels.DuelsPlugin;
-
-import com.giusdp.htduels.catalog.CardAsset;
 
 import java.util.ArrayList;
 import java.util.Collection;
