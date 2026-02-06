@@ -9,6 +9,8 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.hypixel.hytale.protocol.packets.interface_.Page;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -23,10 +25,10 @@ public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelec
     private final BoardContext boardContext;
     private final DuelManager presentationService;
 
-    public DuelModeSelectionPage(@Nonnull PlayerRef playerRef, BoardContext boardContext, DuelManager presentationService) {
+    public DuelModeSelectionPage(@Nonnull PlayerRef playerRef, BoardContext boardContext, DuelManager duelManager) {
         super(playerRef, CustomPageLifetime.CanDismiss, ModeEventData.CODEC);
         this.boardContext = boardContext;
-        this.presentationService = presentationService;
+        this.presentationService = duelManager;
     }
 
     @Override
@@ -45,6 +47,10 @@ public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelec
                                 @Nonnull ModeEventData data) {
         switch (data.mode) {
             case "bot" -> {
+                if (presentationService.findDuelAt(boardContext.boardPosition()) != null) {
+                    closePage(ref, store);
+                    return;
+                }
                 Ref<EntityStore> duelRef = presentationService.createAndSpawnDuel(boardContext, store);
                 presentationService.joinAsPlayer(playerRef, boardContext, store, duelRef);
                 presentationService.joinAsBot(duelRef, store);
@@ -61,6 +67,13 @@ public class DuelModeSelectionPage extends InteractiveCustomUIPage<DuelModeSelec
             }
             case null, default -> {
             }
+        }
+    }
+
+    private void closePage(Ref<EntityStore> ref, Store<EntityStore> store) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null) {
+            player.getPageManager().setPage(ref, store, Page.None);
         }
     }
 
