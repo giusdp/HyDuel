@@ -28,9 +28,9 @@ The codebase has three layers. Think of it like a sandwich:
                         | gets card definitions from
                         |
   +-------------------------------------------------+
-  |               CATALOG LAYER                      |
+  |                ASSET LAYER                       |
   |   Card data loaded from JSON files               |
-  |   (com.giusdp.htduels.asset)                   |
+  |   (com.giusdp.htduels.asset)                     |
   +-------------------------------------------------+
 ```
 
@@ -299,7 +299,7 @@ Two UI pages:
 
 ---
 
-## The Catalog Layer (card definitions)
+## The Asset Layer (card definitions)
 
 Card stats come from JSON files loaded at startup:
 
@@ -382,11 +382,11 @@ com.giusdp.htduels/
 |   |-- phases/                        Phase state machine
 |   |-- zone/                          Hand, Battlefield, ZoneType enum
 |
-|-- catalog/                           CATALOG LAYER
+|-- asset/                             ASSET LAYER
 |   |-- CardAsset                      Card data record
 |   |-- CardAssetCodec                 JSON codec
 |   |-- CardAssetStore                 Asset loader
-|   |-- CardAssetRepo                  Bridges catalog -> domain CardRepo
+|   |-- CardAssetRepo                  Bridges asset -> domain CardRepo
 |
 |-- presentation/                      PRESENTATION LAYER
 |   |-- DuelPresentationService        Orchestrator: setup, join, cleanup
