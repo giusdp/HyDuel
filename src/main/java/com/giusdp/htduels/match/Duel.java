@@ -3,6 +3,7 @@ package com.giusdp.htduels.match;
 import com.giusdp.htduels.hytale.DuelistSessionManager;
 import com.giusdp.htduels.hytale.ui.BoardGameUi;
 import com.giusdp.htduels.match.event.*;
+import com.giusdp.htduels.match.phases.DuelCancelledPhase;
 import com.giusdp.htduels.match.phases.DuelEndPhase;
 import com.giusdp.htduels.match.phases.TurnEndPhase;
 import com.giusdp.htduels.match.phases.WaitingPhase;
@@ -73,7 +74,7 @@ public class Duel {
     }
 
     public boolean isFinished() {
-        return currentPhase instanceof DuelEndPhase;
+        return currentPhase instanceof DuelEndPhase || currentPhase instanceof DuelCancelledPhase;
     }
 
     public DuelEndPhase.Reason getEndReason() {
