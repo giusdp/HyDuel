@@ -78,12 +78,20 @@ public class DomainEventSync {
             float y = zoneType == ZoneType.BATTLEFIELD ? layout.battlefieldYOffset() : layout.handYOffset();
             Vector3d position = new Vector3d(pos2d.x, y, pos2d.y);
 
-            Vector3f rotation = opponentSide
-                    ? new Vector3f((float) Math.PI, yawRadians, 0)
-                    : new Vector3f(0, yawRadians, 0);
+            // All cards spawn face-down. CardPerPlayerFacingSystem sends correct per-player facing.
+            Vector3f rotation = new Vector3f((float) Math.PI, yawRadians, 0);
+
+            // Find owner PlayerRef for per-player visibility
+            PlayerRef ownerPlayerRef = null;
+            for (DuelistSessionManager ctx : duel.getContexts()) {
+                if (ctx.getDuelist() == owner) {
+                    ownerPlayerRef = ctx.getPlayerRef();
+                    break;
+                }
+            }
 
             Ref<EntityStore> cardRef = CardSpawner.spawn(commandBuffer, duelRef, cardId,
-                    zoneType, zoneIndex, zoneSize, opponentSide, position, rotation);
+                    zoneType, zoneIndex, zoneSize, opponentSide, position, rotation, ownerPlayerRef);
 
             if (cardRef != null) {
                 duelComp.addCardEntity(cardRef);

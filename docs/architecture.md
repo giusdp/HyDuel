@@ -162,11 +162,11 @@ Here's the key insight — **the domain is the source of truth**. The presentati
        |
        v
   5. ECS systems run each frame:
-       CardSpatialResolutionSystem -> calculates where the card should be
-       CardMovementSystem          -> moves it there
-       CardRotationSystem          -> flips opponent cards face-down
-       CardHoverSystem             -> lifts hovered cards slightly
-       CardDragSystem              -> dragged cards follow the mouse
+       CardSpatialResolutionSystem   -> calculates where the card should be
+       CardMovementSystem            -> moves it there
+       CardPerPlayerFacingSystem     -> sends per-player card facing updates
+       CardHoverSystem               -> lifts hovered cards slightly
+       CardDragSystem                -> dragged cards follow the mouse
 ```
 
 ### Card entities — what makes up a card on screen

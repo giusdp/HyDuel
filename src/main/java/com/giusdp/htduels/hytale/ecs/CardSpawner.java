@@ -3,9 +3,11 @@ package com.giusdp.htduels.hytale.ecs;
 import com.giusdp.htduels.hytale.ecs.component.CardComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardDragComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardHoverComponent;
+import com.giusdp.htduels.hytale.ecs.component.CardOwnerComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardSpatialComponent;
 import com.giusdp.htduels.match.CardId;
 import com.giusdp.htduels.match.zone.ZoneType;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Holder;
@@ -43,7 +45,8 @@ public final class CardSpawner {
             int zoneSize,
             boolean opponentSide,
             @Nonnull Vector3d position,
-            @Nonnull Vector3f rotation
+            @Nonnull Vector3f rotation,
+            @Nullable PlayerRef ownerPlayerRef
     ) {
         ModelAsset modelAsset = ModelAsset.getAssetMap().getAsset(CARD_MODEL_NAME);
         if (modelAsset == null) {
@@ -76,6 +79,7 @@ public final class CardSpawner {
         holder.addComponent(CardDragComponent.getComponentType(), new CardDragComponent());
         holder.addComponent(CardHoverComponent.getComponentType(), new CardHoverComponent());
         holder.addComponent(CardSpatialComponent.getComponentType(), new CardSpatialComponent());
+        holder.addComponent(CardOwnerComponent.getComponentType(), new CardOwnerComponent(ownerPlayerRef));
 
         return commandBuffer.addEntity(holder, AddReason.SPAWN);
     }

@@ -94,7 +94,7 @@ com.giusdp.htduels/
     │       ├── DuelTicker.java                  # Main loop: tick + event sync
     │       ├── CardSpatialResolutionSystem.java # Zone → target position
     │       ├── CardMovementSystem.java          # Smooth position interpolation
-    │       ├── CardRotationSystem.java          # Flip opponent cards
+    │       ├── CardPerPlayerFacingSystem.java   # Per-player card facing updates
     │       ├── CardDragSystem.java              # Follow mouse during drag
     │       └── CardHoverSystem.java             # Lift on hover
     │
