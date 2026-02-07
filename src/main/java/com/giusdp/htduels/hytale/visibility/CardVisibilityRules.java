@@ -9,6 +9,10 @@ public final class CardVisibilityRules {
     private CardVisibilityRules() {
     }
 
+    public static float resolveYaw(float boardYaw, boolean viewerOnOpponentSide) {
+        return viewerOnOpponentSide ? boardYaw + (float) Math.PI : boardYaw;
+    }
+
     public static float resolvePitch(ZoneType zone, boolean isOwner) {
         return switch (zone) {
             case HAND -> isOwner ? FACE_UP : FACE_DOWN;

@@ -70,12 +70,13 @@ public class CardPerPlayerFacingSystem extends EntityTickingSystem<EntityStore> 
         }
 
         float broadcastPitch = sentTransform.bodyOrientation.pitch;
-        float yaw = sentTransform.bodyOrientation.yaw;
+        float broadcastYaw = sentTransform.bodyOrientation.yaw;
         float roll = sentTransform.bodyOrientation.roll;
 
+        boolean opponentSide = cardComp.isOpponentSide();
         Ref<EntityStore> cardRef = archetypeChunk.getReferenceTo(index);
 
-        // For each viewer, check if the broadcast pitch differs from what they should see
+        // For each viewer, check if the broadcast pitch/yaw differs from what they should see
         for (var entry : visible.visibleTo.entrySet()) {
             Ref<EntityStore> viewerRef = entry.getKey();
             EntityTrackerSystems.EntityViewer viewer = entry.getValue();
@@ -85,15 +86,18 @@ public class CardPerPlayerFacingSystem extends EntityTickingSystem<EntityStore> 
 
             float expectedPitch = CardVisibilityRules.resolvePitch(zoneType, isOwner);
 
-            // Only send override if broadcast pitch differs from expected
-            if (Math.abs(broadcastPitch - expectedPitch) > EPSILON) {
+            boolean viewerOnOpponentSide = isOwner == opponentSide;
+            float expectedYaw = CardVisibilityRules.resolveYaw(broadcastYaw, viewerOnOpponentSide);
+
+            // Only send override if broadcast pitch or yaw differs from expected
+            if (Math.abs(broadcastPitch - expectedPitch) > EPSILON || Math.abs(broadcastYaw - expectedYaw) > EPSILON) {
                 ComponentUpdate update = new ComponentUpdate();
                 update.type = ComponentUpdateType.Transform;
                 update.transform = new ModelTransform();
                 // Copy position from the broadcast, only override orientation
                 update.transform.position = sentTransform.position;
                 update.transform.lookOrientation = sentTransform.lookOrientation;
-                update.transform.bodyOrientation = new Direction(yaw, expectedPitch, roll);
+                update.transform.bodyOrientation = new Direction(expectedYaw, expectedPitch, roll);
 
                 viewer.queueUpdate(cardRef, update);
             }

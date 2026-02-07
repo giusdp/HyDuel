@@ -54,4 +54,18 @@ class CardVisibilityRulesTest {
         float pitch = CardVisibilityRules.resolvePitch(ZoneType.DECK, false);
         assertEquals(CardVisibilityRules.FACE_DOWN, pitch, 0.001f);
     }
+
+    @Test
+    void normalSideViewerGetsUnchangedYaw() {
+        float boardYaw = 1.5f;
+        float yaw = CardVisibilityRules.resolveYaw(boardYaw, false);
+        assertEquals(boardYaw, yaw, 0.001f);
+    }
+
+    @Test
+    void opponentSideViewerGetsYawPlusPi() {
+        float boardYaw = 1.5f;
+        float yaw = CardVisibilityRules.resolveYaw(boardYaw, true);
+        assertEquals(boardYaw + (float) Math.PI, yaw, 0.001f);
+    }
 }
