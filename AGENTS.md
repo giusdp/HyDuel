@@ -18,11 +18,11 @@ The mod implements a turn-based card game where players build decks and battle u
 com.giusdp.htduels/
 ├── DuelsPlugin.java              # Entry point, wires all services via constructors
 │
-├── catalog/                      # CATALOG LAYER - Card definitions from JSON
+├── asset/                        # ASSET LAYER - Card definitions from JSON
 │   ├── CardAsset.java            # Record: id, name, cost, attack, health, type
 │   ├── CardAssetCodec.java       # JSON serialization
 │   ├── CardAssetStore.java       # Asset loader
-│   └── CardAssetRepo.java        # Bridges catalog → domain CardRepo interface
+│   └── CardAssetRepo.java        # Bridges asset → domain CardRepo interface
 │
 ├── match/                        # DOMAIN LAYER - Pure game logic (no Hytale imports)
 │   ├── Duel.java                 # Aggregate root: game state, rules, event recording
@@ -94,7 +94,7 @@ com.giusdp.htduels/
     │       ├── DuelTicker.java                  # Main loop: tick + event sync
     │       ├── CardSpatialResolutionSystem.java # Zone → target position
     │       ├── CardMovementSystem.java          # Smooth position interpolation
-    │       ├── CardRotationSystem.java          # Flip opponent cards
+    │       ├── CardPerPlayerFacingSystem.java   # Per-player card facing updates
     │       ├── CardDragSystem.java              # Follow mouse during drag
     │       └── CardHoverSystem.java             # Lift on hover
     │

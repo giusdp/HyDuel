@@ -54,7 +54,7 @@ class WaitingPhaseTest {
             assertTrue(duel.isInPhase(WaitingPhase.class));
         }
         duel.tick();
-        assertTrue(duel.isInPhase(DuelEndPhase.class));
+        assertTrue(duel.isInPhase(DuelCancelledPhase.class));
         assertTrue(duel.isFinished());
     }
 }

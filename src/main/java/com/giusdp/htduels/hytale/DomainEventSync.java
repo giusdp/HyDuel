@@ -9,6 +9,7 @@ import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.DuelId;
 import com.giusdp.htduels.match.event.CardPlayed;
 import com.giusdp.htduels.match.event.CardsDrawn;
+import com.giusdp.htduels.match.event.DuelCancelled;
 import com.giusdp.htduels.match.event.DuelEnded;
 import com.giusdp.htduels.match.event.DuelEvent;
 import com.giusdp.htduels.hytale.layout.BoardLayout;
@@ -52,6 +53,8 @@ public class DomainEventSync {
                 handleCardPlayed(played, duel, duelComp, duelRef);
             } else if (event instanceof DuelEnded ended) {
                 handleDuelEnded(ended, duel);
+            } else if (event instanceof DuelCancelled cancelled) {
+                handleDuelCancelled(cancelled, duel);
             }
         }
     }
@@ -75,12 +78,20 @@ public class DomainEventSync {
             float y = zoneType == ZoneType.BATTLEFIELD ? layout.battlefieldYOffset() : layout.handYOffset();
             Vector3d position = new Vector3d(pos2d.x, y, pos2d.y);
 
-            Vector3f rotation = opponentSide
-                    ? new Vector3f((float) Math.PI, yawRadians, 0)
-                    : new Vector3f(0, yawRadians, 0);
+            // All cards spawn face-down. CardPerPlayerFacingSystem sends correct per-player facing.
+            Vector3f rotation = new Vector3f((float) Math.PI, yawRadians, 0);
+
+            // Find owner PlayerRef for per-player visibility
+            PlayerRef ownerPlayerRef = null;
+            for (DuelistSessionManager ctx : duel.getContexts()) {
+                if (ctx.getDuelist() == owner) {
+                    ownerPlayerRef = ctx.getPlayerRef();
+                    break;
+                }
+            }
 
             Ref<EntityStore> cardRef = CardSpawner.spawn(commandBuffer, duelRef, cardId,
-                    zoneType, zoneIndex, zoneSize, opponentSide, position, rotation);
+                    zoneType, zoneIndex, zoneSize, opponentSide, position, rotation, ownerPlayerRef);
 
             if (cardRef != null) {
                 duelComp.addCardEntity(cardRef);
@@ -140,7 +151,6 @@ public class DomainEventSync {
         String reasonText = switch (ended.reason) {
             case DECK_OUT -> "ran out of cards";
             case FORFEIT -> "forfeited";
-            case TIMEOUT -> "timed out";
             case WIN -> "was defeated";
         };
 
@@ -160,6 +170,26 @@ public class DomainEventSync {
             } else if (ctx.getDuelist() == loser) {
                 player.sendMessage(Message.raw("You lose! You " + reasonText + "."));
             }
+        }
+    }
+
+    private void handleDuelCancelled(DuelCancelled cancelled, Duel duel) {
+        String reasonText = switch (cancelled.reason) {
+            case NO_OPPONENT -> "No opponent joined in time.";
+        };
+
+        for (DuelistSessionManager ctx : duel.getContexts()) {
+            PlayerRef playerRef = ctx.getPlayerRef();
+            if (playerRef == null) continue;
+
+            Ref<EntityStore> playerEntityRef = playerRef.getReference();
+            if (playerEntityRef == null) continue;
+
+            Store<EntityStore> store = playerEntityRef.getStore();
+            Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+            if (player == null) continue;
+
+            player.sendMessage(Message.raw("Duel cancelled: " + reasonText));
         }
     }
 }

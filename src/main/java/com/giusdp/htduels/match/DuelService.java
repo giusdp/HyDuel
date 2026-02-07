@@ -1,5 +1,5 @@
 package com.giusdp.htduels.match;
-import com.giusdp.htduels.catalog.CardAssetRepo;
+import com.giusdp.htduels.asset.CardAssetRepo;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;

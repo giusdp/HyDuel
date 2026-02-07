@@ -1,11 +1,12 @@
 package com.giusdp.htduels.match.phases;
 
 import com.giusdp.htduels.FakeCardRepo;
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.match.Card;
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.HumanTurnStrategy;
 import com.giusdp.htduels.match.Duelist;
+import com.giusdp.htduels.match.event.DuelCancelled;
 import com.giusdp.htduels.match.event.DuelEnded;
 import com.giusdp.htduels.match.event.DuelEvent;
 import org.junit.jupiter.api.Test;
@@ -85,14 +86,35 @@ public class DuelEndPhaseTest {
     }
 
     @Test
-    void timeoutReasonIsPreserved() {
+    void cancelledDuelIsNotFinished() {
         Duel duel = Duel.builder()
                 .cardRepo(new FakeCardRepo())
                 .build();
         duel.setup();
 
-        duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT, -1, -1));
-        assertEquals(DuelEndPhase.Reason.TIMEOUT, duel.getEndReason());
+        duel.transitionTo(new DuelCancelledPhase(DuelCancelled.Reason.NO_OPPONENT));
+        assertTrue(duel.isInPhase(DuelCancelledPhase.class));
+        assertTrue(duel.isFinished());
+    }
+
+    @Test
+    void cancelledDuelEmitsDuelCancelledEvent() {
+        Duel duel = Duel.builder()
+                .cardRepo(new FakeCardRepo())
+                .build();
+        duel.setup();
+        duel.flushEvents();
+
+        duel.transitionTo(new DuelCancelledPhase(DuelCancelled.Reason.NO_OPPONENT));
+
+        List<DuelEvent> events = duel.getAccumulatedEvents();
+        DuelCancelled cancelled = events.stream()
+                .filter(e -> e instanceof DuelCancelled)
+                .map(e -> (DuelCancelled) e)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(DuelCancelled.Reason.NO_OPPONENT, cancelled.reason);
     }
 
     @Test

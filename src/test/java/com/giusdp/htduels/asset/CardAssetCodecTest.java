@@ -1,4 +1,4 @@
-package com.giusdp.htduels.catalog;
+package com.giusdp.htduels.asset;
 
 import org.bson.BsonDocument;
 import org.bson.BsonInt32;

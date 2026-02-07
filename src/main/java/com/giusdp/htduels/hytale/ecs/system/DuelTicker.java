@@ -21,12 +21,12 @@ import java.util.List;
 
 public class DuelTicker extends EntityTickingSystem<EntityStore> {
 
-    private final DuelManager presentationService;
+    private final DuelManager duelManager;
     private final DuelRegistry registry;
     private final DomainEventSync domainEventSync;
 
-    public DuelTicker(DuelManager presentationService, DuelRegistry registry, DomainEventSync domainEventSync) {
-        this.presentationService = presentationService;
+    public DuelTicker(DuelManager duelManager, DuelRegistry registry, DomainEventSync domainEventSync) {
+        this.duelManager = duelManager;
         this.registry = registry;
         this.domainEventSync = domainEventSync;
     }
@@ -60,7 +60,7 @@ public class DuelTicker extends EntityTickingSystem<EntityStore> {
 
         if (duel.isFinished()) {
             Ref<EntityStore> duelRef = archetypeChunk.getReferenceTo(index);
-            presentationService.cleanup(duelRef, duelComp, duel, commandBuffer);
+            duelManager.cleanup(duelRef, duelComp, duel, commandBuffer);
         }
     }
 

@@ -3,15 +3,16 @@ import com.giusdp.htduels.match.DuelRegistry;
 import com.giusdp.htduels.match.DuelService;
 import com.giusdp.htduels.hytale.DuelManager;
 
-import com.giusdp.htduels.catalog.CardAsset;
-import com.giusdp.htduels.catalog.CardAssetCodec;
-import com.giusdp.htduels.catalog.CardAssetStore;
+import com.giusdp.htduels.asset.CardAsset;
+import com.giusdp.htduels.asset.CardAssetCodec;
+import com.giusdp.htduels.asset.CardAssetStore;
 import com.giusdp.htduels.hytale.input.CardInteractionService;
 import com.giusdp.htduels.hytale.command.DuelCommand;
 import com.giusdp.htduels.hytale.ecs.component.BoardLayoutComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardDragComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardHoverComponent;
+import com.giusdp.htduels.hytale.ecs.component.CardOwnerComponent;
 import com.giusdp.htduels.hytale.ecs.component.CardSpatialComponent;
 import com.giusdp.htduels.hytale.ecs.component.DuelComponent;
 import com.giusdp.htduels.hytale.input.PlayerMouseButtonHandler;
@@ -24,7 +25,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.giusdp.htduels.hytale.ecs.system.CardDragSystem;
 import com.giusdp.htduels.hytale.ecs.system.CardHoverSystem;
 import com.giusdp.htduels.hytale.ecs.system.CardMovementSystem;
-import com.giusdp.htduels.hytale.ecs.system.CardRotationSystem;
+import com.giusdp.htduels.hytale.ecs.system.CardPerPlayerFacingSystem;
 import com.giusdp.htduels.hytale.ecs.system.CardSpatialResolutionSystem;
 import com.giusdp.htduels.hytale.ecs.system.DuelTicker;
 import com.hypixel.hytale.component.ComponentType;
@@ -47,6 +48,7 @@ public class DuelsPlugin extends JavaPlugin {
     public static ComponentType<EntityStore, CardHoverComponent> cardHoverComponent;
     public static ComponentType<EntityStore, DuelComponent> duelComponent;
     public static ComponentType<EntityStore, CardSpatialComponent> cardSpatialComponent;
+    public static ComponentType<EntityStore, CardOwnerComponent> cardOwnerComponent;
     public static ComponentType<EntityStore, BoardLayoutComponent> boardLayoutComponent;
 
     public DuelsPlugin(JavaPluginInit init) {
@@ -68,7 +70,7 @@ public class DuelsPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new DuelTicker(presentationService, registry, domainEventSync));
         this.getEntityStoreRegistry().registerSystem(new CardSpatialResolutionSystem());
         this.getEntityStoreRegistry().registerSystem(new CardMovementSystem());
-        this.getEntityStoreRegistry().registerSystem(new CardRotationSystem());
+        this.getEntityStoreRegistry().registerSystem(new CardPerPlayerFacingSystem());
         this.getEntityStoreRegistry().registerSystem(new CardDragSystem(presentationService));
         this.getEntityStoreRegistry().registerSystem(new CardHoverSystem());
 
@@ -92,6 +94,7 @@ public class DuelsPlugin extends JavaPlugin {
         cardDragComponent = this.getEntityStoreRegistry().registerComponent(CardDragComponent.class, CardDragComponent::new);
         cardHoverComponent = this.getEntityStoreRegistry().registerComponent(CardHoverComponent.class, CardHoverComponent::new);
         cardSpatialComponent = this.getEntityStoreRegistry().registerComponent(CardSpatialComponent.class, CardSpatialComponent::new);
+        cardOwnerComponent = this.getEntityStoreRegistry().registerComponent(CardOwnerComponent.class, CardOwnerComponent::new);
         boardLayoutComponent = this.getEntityStoreRegistry().registerComponent(BoardLayoutComponent.class, BoardLayoutComponent::new);
 
         duelComponent = this.getEntityStoreRegistry().registerComponent(DuelComponent.class, DuelComponent::new);

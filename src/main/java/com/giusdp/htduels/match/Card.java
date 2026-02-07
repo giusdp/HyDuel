@@ -1,9 +1,8 @@
 package com.giusdp.htduels.match;
 
-import com.giusdp.htduels.catalog.CardAsset;
+import com.giusdp.htduels.asset.CardAsset;
 import com.giusdp.htduels.match.zone.Zone;
 import com.giusdp.htduels.match.zone.ZoneType;
-import com.giusdp.htduels.match.Duelist;
 
 public class Card {
     private final CardId id;

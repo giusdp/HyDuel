@@ -28,9 +28,9 @@ The codebase has three layers. Think of it like a sandwich:
                         | gets card definitions from
                         |
   +-------------------------------------------------+
-  |               CATALOG LAYER                      |
+  |                ASSET LAYER                       |
   |   Card data loaded from JSON files               |
-  |   (com.giusdp.htduels.catalog)                   |
+  |   (com.giusdp.htduels.asset)                     |
   +-------------------------------------------------+
 ```
 
@@ -162,11 +162,11 @@ Here's the key insight — **the domain is the source of truth**. The presentati
        |
        v
   5. ECS systems run each frame:
-       CardSpatialResolutionSystem -> calculates where the card should be
-       CardMovementSystem          -> moves it there
-       CardRotationSystem          -> flips opponent cards face-down
-       CardHoverSystem             -> lifts hovered cards slightly
-       CardDragSystem              -> dragged cards follow the mouse
+       CardSpatialResolutionSystem   -> calculates where the card should be
+       CardMovementSystem            -> moves it there
+       CardPerPlayerFacingSystem     -> sends per-player card facing updates
+       CardHoverSystem               -> lifts hovered cards slightly
+       CardDragSystem                -> dragged cards follow the mouse
 ```
 
 ### Card entities — what makes up a card on screen
@@ -299,7 +299,7 @@ Two UI pages:
 
 ---
 
-## The Catalog Layer (card definitions)
+## The Asset Layer (card definitions)
 
 Card stats come from JSON files loaded at startup:
 
@@ -382,11 +382,11 @@ com.giusdp.htduels/
 |   |-- phases/                        Phase state machine
 |   |-- zone/                          Hand, Battlefield, ZoneType enum
 |
-|-- catalog/                           CATALOG LAYER
+|-- asset/                             ASSET LAYER
 |   |-- CardAsset                      Card data record
 |   |-- CardAssetCodec                 JSON codec
 |   |-- CardAssetStore                 Asset loader
-|   |-- CardAssetRepo                  Bridges catalog -> domain CardRepo
+|   |-- CardAssetRepo                  Bridges asset -> domain CardRepo
 |
 |-- presentation/                      PRESENTATION LAYER
 |   |-- DuelPresentationService        Orchestrator: setup, join, cleanup

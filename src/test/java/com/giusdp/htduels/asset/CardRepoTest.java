@@ -1,4 +1,4 @@
-package com.giusdp.htduels.catalog;
+package com.giusdp.htduels.asset;
 
 import com.giusdp.htduels.FakeCardRepo;
 import com.giusdp.htduels.match.CardRepo;

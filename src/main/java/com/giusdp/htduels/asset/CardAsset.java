@@ -1,4 +1,4 @@
-package com.giusdp.htduels.catalog;
+package com.giusdp.htduels.asset;
 
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;

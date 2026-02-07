@@ -2,6 +2,7 @@ package com.giusdp.htduels.match.phases;
 
 import com.giusdp.htduels.match.Duel;
 import com.giusdp.htduels.match.DuelPhase;
+import com.giusdp.htduels.match.event.DuelCancelled;
 
 public class WaitingPhase extends DuelPhase {
     public static final String WAITING_MESSAGE = "Waiting for opponent...";
@@ -16,7 +17,7 @@ public class WaitingPhase extends DuelPhase {
     @Override
     public void tick(Duel duel) {
         if (ticksWaited >= MAX_WAIT_TICKS) {
-            duel.transitionTo(new DuelEndPhase(DuelEndPhase.Reason.TIMEOUT, -1, -1));
+            duel.transitionTo(new DuelCancelledPhase(DuelCancelled.Reason.NO_OPPONENT));
             return;
         }
         ticksWaited++;

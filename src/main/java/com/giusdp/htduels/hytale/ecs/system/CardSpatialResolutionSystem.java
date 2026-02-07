@@ -54,13 +54,6 @@ public class CardSpatialResolutionSystem extends EntityTickingSystem<EntityStore
         spatial.markResolved(cc);
     }
 
-    public static float resolveFacing(CardComponent cc) {
-        if (cc.getZoneType() == ZoneType.HAND && cc.isOpponentSide()) {
-            return (float) Math.PI;
-        }
-        return 0f;
-    }
-
     private static float resolveY(ZoneType zoneType, BoardLayout boardLayout) {
         if (zoneType == ZoneType.BATTLEFIELD) {
             return boardLayout.battlefieldYOffset();

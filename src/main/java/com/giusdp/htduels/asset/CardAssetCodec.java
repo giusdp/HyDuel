@@ -1,4 +1,4 @@
-package com.giusdp.htduels.catalog;
+package com.giusdp.htduels.asset;
 
 import com.hypixel.hytale.assetstore.AssetExtraInfo;
 import com.hypixel.hytale.assetstore.codec.AssetCodec;
