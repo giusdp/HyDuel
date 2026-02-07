@@ -13,6 +13,7 @@ public class CardSpatialComponent implements Component<EntityStore> {
     private float targetY;
     private @Nullable ZoneType lastResolvedZoneType;
     private int lastResolvedIndex = -1;
+    private int lastResolvedSize = -1;
 
     public static ComponentType<EntityStore, CardSpatialComponent> getComponentType() {
         return DuelsPlugin.cardSpatialComponent;
@@ -22,13 +23,15 @@ public class CardSpatialComponent implements Component<EntityStore> {
         if (cc.getZoneType() == null) return false;
         return lastResolvedZoneType == null
                 || cc.getZoneType() != lastResolvedZoneType
-                || cc.getZoneIndex() != lastResolvedIndex;
+                || cc.getZoneIndex() != lastResolvedIndex
+                || cc.getZoneSize() != lastResolvedSize;
     }
 
     public void markResolved(CardComponent cc) {
         if (cc.getZoneType() != null) {
             lastResolvedZoneType = cc.getZoneType();
             lastResolvedIndex = cc.getZoneIndex();
+            lastResolvedSize = cc.getZoneSize();
         }
     }
 

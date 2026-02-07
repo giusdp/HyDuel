@@ -62,6 +62,11 @@ public class DomainEventSync {
     private void handleCardsDrawn(CardsDrawn drawn, Duel duel, DuelComponent duelComp,
                                    BoardLayout layout, Ref<EntityStore> duelRef,
                                    CommandBuffer<EntityStore> commandBuffer) {
+        // Sync existing card entities first — the domain model is already updated,
+        // so their zoneIndex/zoneSize reflect the post-draw state.
+        // Must happen before spawning, because CommandBuffer refs aren't valid in the store yet.
+        syncAllCardComponents(duel, duelComp, duelRef);
+
         float yawRadians = (float) layout.rotation().getRadians();
 
         for (CardId cardId : drawn.cardIds) {
@@ -110,7 +115,10 @@ public class DomainEventSync {
         Card card = duel.findCard(played.cardId);
         if (card == null) return;
 
-        // Update moved card and recalculate siblings in affected zones
+        syncAllCardComponents(duel, duelComp, duelRef);
+    }
+
+    private void syncAllCardComponents(Duel duel, DuelComponent duelComp, Ref<EntityStore> duelRef) {
         var store = duelRef.getStore();
         for (Ref<EntityStore> entityRef : duelComp.getCardEntities()) {
             CardComponent cc = store.getComponent(entityRef, CardComponent.getComponentType());
@@ -121,7 +129,7 @@ public class DomainEventSync {
 
             ZoneType newZoneType = entityCard.getCurrentZoneType();
             if (newZoneType == null) {
-                LOGGER.atWarning().log("Card %s has null zone type during CardPlayed sync", cc.getCardId());
+                LOGGER.atWarning().log("Card %s has null zone type during sync", cc.getCardId());
                 continue;
             }
 

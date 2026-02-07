@@ -133,4 +133,42 @@ class CardSpatialResolutionSystemTest {
 
         assertTrue(spatial1.needsResolution(cc1));
     }
+
+    @Test
+    void resolvesWhenZoneSizeChangesButIndexStaysSame() {
+        Card card1 = new Card(new CardAsset("test1", "Test Card 1", 1, 2, 3, "Minion"));
+        Card card2 = new Card(new CardAsset("test2", "Test Card 2", 1, 2, 3, "Minion"));
+        Card card3 = new Card(new CardAsset("test3", "Test Card 3", 1, 2, 3, "Minion"));
+        duel.getDuelist(0).addToHand(card1);
+        duel.getDuelist(0).addToHand(card2);
+        duel.getDuelist(0).addToHand(card3);
+
+        // card1 is at the highest index (addToHand inserts at 0, pushing others up)
+        CardComponent cc3 = toCardComponent(card3);
+
+        CardSpatialComponent spatial3 = new CardSpatialComponent();
+        CardSpatialResolutionSystem.resolvePosition(cc3, spatial3, boardLayout);
+
+        assertFalse(spatial3.needsResolution(cc3));
+
+        // Remove card1 (at index 0). card3's index shifts but card2 keeps the same index.
+        // For the card whose index stays the same, only zoneSize changed (3 -> 2).
+        duel.getDuelist(0).getHand().remove(card1);
+
+        // Find a card whose index didn't change but zoneSize did
+        // card3 was at index 2, now at index 1 — that's an index change.
+        // card2 was at index 1, stays at index 1 — only zoneSize changed (3 -> 2).
+        CardComponent cc2 = toCardComponent(card2);
+        CardSpatialComponent spatial2 = new CardSpatialComponent();
+        // Pre-resolve with old size
+        cc2.setZoneSize(3);
+        spatial2.markResolved(cc2);
+        assertFalse(spatial2.needsResolution(cc2));
+
+        // Now update to new size (the actual current size is 2)
+        cc2.setZoneSize(card2.getZone().getCards().size());
+
+        assertTrue(spatial2.needsResolution(cc2),
+                "needsResolution should return true when only zoneSize changes");
+    }
 }
