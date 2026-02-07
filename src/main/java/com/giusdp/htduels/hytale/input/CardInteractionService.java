@@ -10,14 +10,12 @@ import com.giusdp.htduels.match.zone.ZoneType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Vec2f;
-import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.protocol.MouseButtonState;
 import com.hypixel.hytale.protocol.Position;
 import com.hypixel.hytale.protocol.Vector2f;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseMotionEvent;
-import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -29,6 +27,7 @@ import java.util.Map;
 public class CardInteractionService {
     private static final float FOV_RADIANS = (float) Math.toRadians(80);
     private static final float ASPECT_RATIO = 16f / 9f;
+    private static final float CARD_ASPECT_RATIO = 1.4f;
 
     private final Map<PlayerRef, Ref<EntityStore>> hoveredCards = new HashMap<>();
 
@@ -160,20 +159,23 @@ public class CardInteractionService {
     @Nullable
     public static Ref<EntityStore> findCardAt(DuelistSessionManager ctx, Vec2f worldPos) {
         Store<EntityStore> store = ctx.getDuelRef().getStore();
+        BoardLayout layout = getBoardLayout(store, ctx.getDuelRef());
+        if (layout == null) return null;
 
         for (Ref<EntityStore> cardRef : ctx.getCardEntities()) {
             CardComponent card = store.getComponent(cardRef, CardComponent.getComponentType());
-            if (card == null) {
-                continue;
-            }
+            if (card == null) continue;
 
             TransformComponent transform = store.getComponent(cardRef, TransformComponent.getComponentType());
-            BoundingBox bbox = store.getComponent(cardRef, BoundingBox.getComponentType());
-            if (transform == null || bbox == null) {
-                continue;
-            }
+            if (transform == null) continue;
 
-            // Transform world position into card-local space to handle rotated bounding boxes
+            // Card dimensions based on zone
+            float cardWidth = card.getZoneType() == ZoneType.HAND
+                    ? layout.handCardWidth() : layout.battlefieldCardWidth();
+            float halfW = cardWidth / 2f;
+            float halfD = (cardWidth * CARD_ASPECT_RATIO) / 2f;
+
+            // Transform world position into card-local space to handle rotation
             Vector3d pos = transform.getPosition();
             float dx = worldPos.x - (float) pos.x;
             float dz = worldPos.y - (float) pos.z;
@@ -184,9 +186,8 @@ public class CardInteractionService {
             float localX = dx * cos - dz * sin;
             float localZ = dx * sin + dz * cos;
 
-            Box box = bbox.getBoundingBox();
-            if (localX >= box.min.x && localX <= box.max.x &&
-                    localZ >= box.min.z && localZ <= box.max.z) {
+            if (localX >= -halfW && localX <= halfW &&
+                    localZ >= -halfD && localZ <= halfD) {
                 return cardRef;
             }
         }

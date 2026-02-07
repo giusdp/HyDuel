@@ -17,7 +17,6 @@ import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -69,10 +68,6 @@ public final class CardSpawner {
         Model model = Model.createScaledModel(modelAsset, CARD_MODEL_SCALE);
         holder.addComponent(PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
-
-        if (model.getBoundingBox() != null) {
-            holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(model.getBoundingBox()));
-        }
 
         // Game data
         holder.addComponent(CardComponent.getComponentType(), new CardComponent(cardId, duelEntityRef, zoneType, zoneIndex, zoneSize, opponentSide));
